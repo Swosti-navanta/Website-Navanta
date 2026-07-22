@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { motion, useMotionValue } from "framer-motion";
 import FadeIn from "./FadeIn";
 
 const MAIN_LINKS = [
@@ -22,6 +24,30 @@ const COMPANY_LINKS = [
 ];
 
 export default function Footer() {
+  const bandRef = useRef<HTMLDivElement>(null);
+  const scale = useMotionValue(1);
+
+  // Scroll-linked zoom on the rail-yard image: zoomed in as it enters (scroll
+  // up), settling to zoomed out as you scroll down to it.
+  useEffect(() => {
+    const update = () => {
+      const band = bandRef.current;
+      if (!band) return;
+      const r = band.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // progress 0 (band top at viewport bottom) → 1 (band top at viewport top)
+      const p = Math.min(1, Math.max(0, (vh - r.top) / vh));
+      scale.set(1 + (1 - p) * 0.25);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [scale]);
+
   return (
     <footer id="contact" className="bg-[#0c0b0a] text-white">
       <div className="mx-auto max-w-[1560px] px-6 pb-8 pt-24 lg:px-10">
@@ -86,12 +112,16 @@ export default function Footer() {
       </div>
 
       {/* Brand image band — rail-yard photo, curved top, sits below the legal bar */}
-      <div className="relative flex h-[440px] items-center justify-center overflow-hidden rounded-t-[40px] sm:h-[600px]">
+      <div
+        ref={bandRef}
+        className="relative flex h-[440px] items-center justify-center overflow-hidden rounded-t-[40px] sm:h-[600px]"
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <motion.img
           src="/figma/footer-railyard.jpg"
           alt=""
           aria-hidden
+          style={{ scale }}
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div aria-hidden className="absolute inset-0 bg-black/45" />
