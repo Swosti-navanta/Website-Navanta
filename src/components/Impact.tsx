@@ -2,14 +2,6 @@
 
 import FadeIn from "./FadeIn";
 
-/* Avatar cluster positions (percent-based) — placeholder people dots */
-const CLUSTERS = [
-  { x: "22%", y: "28%", colors: ["#f9a8d4", "#a7f3d0"] },
-  { x: "48%", y: "58%", colors: ["#fcd34d", "#c4b5fd"] },
-  { x: "68%", y: "34%", colors: ["#86efac", "#fdba74", "#93c5fd"] },
-  { x: "88%", y: "18%", colors: ["#7dd3fc"] },
-];
-
 export default function Impact() {
   return (
     <section id="impact" className="bg-[#0c0b0a] py-28">
@@ -28,32 +20,15 @@ export default function Impact() {
           </div>
         </FadeIn>
 
-        {/* Dotted world map placeholder — swap for the real dotted-map asset */}
+        {/* Dotted world map with community avatars — Figma asset */}
         <FadeIn delay={0.1} className="mt-14">
-          <div className="relative h-[420px] overflow-hidden rounded-xl bg-[#111010] [background-image:radial-gradient(#3a3a3a_1.5px,transparent_1.5px)] [background-size:16px_16px] sm:h-[520px]">
-            <div
-              aria-hidden
-              className="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(65% 80% at 50% 45%, transparent 55%, #0c0b0a 100%)",
-              }}
+          <div className="overflow-hidden rounded-xl">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/figma/impact-worldmap.png"
+              alt="Navanta clients across the globe"
+              className="w-full"
             />
-            {CLUSTERS.map((c, i) => (
-              <div
-                key={i}
-                className="absolute flex -translate-x-1/2 -translate-y-1/2"
-                style={{ left: c.x, top: c.y }}
-              >
-                {c.colors.map((col, j) => (
-                  <span
-                    key={j}
-                    className="h-10 w-10 rounded-full border-2 border-[#0c0b0a]"
-                    style={{ background: col, marginLeft: j > 0 ? -10 : 0 }}
-                  />
-                ))}
-              </div>
-            ))}
           </div>
         </FadeIn>
       </div>

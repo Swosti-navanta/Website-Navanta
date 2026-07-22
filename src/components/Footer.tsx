@@ -85,9 +85,16 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Brand image band — swap bg for the rail-yard photo asset later */}
-      <div className="relative flex h-[420px] items-center justify-center overflow-hidden bg-[radial-gradient(120%_100%_at_50%_0%,#3a2f22_0%,#241d14_50%,#15110c_100%)] sm:h-[520px]">
-        <div aria-hidden className="absolute inset-0 bg-black/30" />
+      {/* Brand image band — rail-yard photo from Figma */}
+      <div className="relative flex h-[420px] items-center justify-center overflow-hidden sm:h-[520px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/figma/footer-railyard.jpg"
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div aria-hidden className="absolute inset-0 bg-black/45" />
         <div className="relative flex items-center gap-6 px-6">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/navanta-logo.svg" alt="Navanta" className="h-12 w-auto sm:h-14" />

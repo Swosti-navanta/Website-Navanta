@@ -68,10 +68,18 @@ const TABS: Tab[] = [
   },
 ];
 
-/* Placeholder card media — swap for real imagery later */
+/* Card media — Figma photo asset */
 function CardMedia() {
   return (
-    <div className="h-[150px] w-full rounded-xl bg-[radial-gradient(120%_120%_at_30%_20%,#4a3a2a_0%,#2b2118_55%,#1a140e_100%)]" />
+    <div className="h-[150px] w-full overflow-hidden rounded-xl">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/figma/challenges-photo.jpg"
+        alt=""
+        aria-hidden
+        className="h-full w-full object-cover"
+      />
+    </div>
   );
 }
 

@@ -88,16 +88,25 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
   },
 ];
 
-/* Placeholder mockup media — swapped per-card later */
+/* Card media — Figma mockup: ETA card over a shipping-container strip */
 function CardMedia() {
   return (
     <div className="relative h-[190px] overflow-hidden rounded-xl bg-zinc-300">
-      <div className="absolute left-1/2 top-6 w-[240px] -translate-x-1/2 rounded-md bg-white p-3 shadow-md">
-        <p className="text-[11px] font-semibold text-zinc-900">Accurate ETA restored</p>
-        <p className="mt-1 text-[10px] text-zinc-500">🕓 ETA variance detected: 0 days</p>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/figma/outcome-strip.png"
+        alt=""
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 w-full"
+      />
+      <div className="absolute left-1/2 top-6 flex w-[240px] -translate-x-1/2 gap-2 rounded-md bg-white p-3 shadow-md">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/figma/outcome-map.png" alt="" aria-hidden className="h-10 w-10 rounded object-cover" />
+        <div>
+          <p className="text-[11px] font-semibold text-zinc-900">Accurate ETA restored</p>
+          <p className="mt-1 text-[10px] text-zinc-500">ETA variance detected: 0 days</p>
+        </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-10 bg-[repeating-linear-gradient(90deg,#eab308_0px,#eab308_14px,#ca8a04_14px,#ca8a04_16px)]" />
-      <div className="absolute inset-x-0 bottom-10 h-1.5 bg-red-800" />
     </div>
   );
 }
