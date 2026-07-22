@@ -127,7 +127,24 @@ export default function Outcomes() {
             From day one, our methodology and solutions work together across three pillars
             to turn intelligence into measurable business value.
           </p>
-          <div className="mt-8 h-px w-full bg-zinc-200" />
+          {/* Tab pills — above the cards */}
+          <div className="mt-8 flex">
+            <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
+              {TABS.map((t, i) => (
+                <button
+                  key={t.key}
+                  onClick={() => setActive(i)}
+                  className={`rounded-full px-5 py-2.5 text-[14px] transition-colors ${
+                    i === active
+                      ? "bg-zinc-900 font-medium text-white"
+                      : "text-zinc-500 hover:text-zinc-800"
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </FadeIn>
 
         <AnimatePresence mode="wait">
@@ -137,7 +154,7 @@ export default function Outcomes() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12, transition: { duration: 0.25 } }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4"
+            className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4"
           >
             {tab.cards.map((c) => (
               <div key={c.metric} className="rounded-2xl bg-zinc-50 p-5">
@@ -160,25 +177,6 @@ export default function Outcomes() {
             ))}
           </motion.div>
         </AnimatePresence>
-
-        {/* Tab pills */}
-        <div className="mt-12 flex justify-center">
-          <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
-            {TABS.map((t, i) => (
-              <button
-                key={t.key}
-                onClick={() => setActive(i)}
-                className={`rounded-full px-5 py-2.5 text-[14px] transition-colors ${
-                  i === active
-                    ? "bg-zinc-900 font-medium text-white"
-                    : "text-zinc-500 hover:text-zinc-800"
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );

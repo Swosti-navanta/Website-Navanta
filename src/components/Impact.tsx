@@ -4,7 +4,7 @@ import FadeIn from "./FadeIn";
 
 export default function Impact() {
   return (
-    <section id="impact" className="bg-[#0c0b0a] py-28">
+    <section id="impact" className="relative -mt-10 rounded-t-[40px] bg-[#0c0b0a] py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
           <div className="flex flex-wrap items-center justify-between gap-6">

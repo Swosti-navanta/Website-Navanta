@@ -24,7 +24,7 @@ const COMPANY_LINKS = [
 export default function Footer() {
   return (
     <footer id="contact" className="bg-[#0c0b0a] text-white">
-      <div className="mx-auto max-w-[1560px] px-6 py-24 lg:px-10">
+      <div className="mx-auto max-w-[1560px] px-6 pb-8 pt-24 lg:px-10">
         {/* Big primary links */}
         <FadeIn>
           <div className="grid gap-16 md:grid-cols-2">
@@ -85,8 +85,8 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Brand image band — rail-yard photo from Figma */}
-      <div className="relative flex h-[420px] items-center justify-center overflow-hidden sm:h-[520px]">
+      {/* Brand image band — rail-yard photo, curved top, sits below the legal bar */}
+      <div className="relative flex h-[440px] items-center justify-center overflow-hidden rounded-t-[40px] sm:h-[600px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/figma/footer-railyard.jpg"
