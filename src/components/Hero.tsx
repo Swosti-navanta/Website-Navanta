@@ -38,29 +38,36 @@ export default function Hero() {
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden bg-[#191512]">
       {/* --- Background media --------------------------------------------- */}
-      {/* Gradient fallback always renders; video overlays it when the asset
-          exists at /public/hero/hero.mp4 (drop in the final footage later). */}
+      {/* Gradient fallback shows until the video paints. */}
       <div
         aria-hidden
         className="absolute inset-0 bg-[radial-gradient(120%_90%_at_70%_20%,#3a2f26_0%,#241d17_45%,#120f0c_100%)]"
       />
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        src="/hero/hero.mp4"
         poster="/hero/poster.jpg"
         autoPlay
         muted
         loop
         playsInline
-      />
-      {/* Legibility overlays */}
+        preload="auto"
+      >
+        <source src="/hero/hero.mp4" type="video/mp4" />
+      </video>
+
+      {/* Legibility overlays — tuned to the reference: warehouse stays clearly
+          visible; darkening is moderate and weighted to the left where the
+          headline sits. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/25"
+        className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-black/10"
       />
+      {/* Gentle overall wash so white text always clears AA contrast */}
+      <div aria-hidden className="absolute inset-0 bg-black/15" />
+      {/* Soft bottom fade into the next section */}
       <div
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/50 to-transparent"
+        className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/40 to-transparent"
       />
 
       {/* --- Content -------------------------------------------------------- */}
