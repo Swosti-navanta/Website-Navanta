@@ -38,26 +38,50 @@ const NOTIFICATIONS = [
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Robust autoplay+loop: some browsers ignore the `autoplay` attribute unless
-  // muted is set as a property and play() is invoked explicitly. Retry on
-  // canplay so it always starts and keeps looping.
+  // Cross-browser autoplay. Safari blocks autoplay unless `muted`/`playsinline`
+  // are set on the element (React can omit the muted attribute), and blocks it
+  // entirely under Low Power Mode or a "Never Auto-Play" setting. So: force the
+  // attributes, try to play on load, and — if still blocked — start on the first
+  // user interaction. Also resume when the tab becomes visible again.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+
     v.muted = true;
-    const start = () => {
+    v.defaultMuted = true;
+    v.setAttribute("muted", "");
+    v.setAttribute("playsinline", "");
+    v.setAttribute("webkit-playsinline", "");
+
+    const play = () => {
       const p = v.play();
       if (p) p.catch(() => {});
     };
-    start();
-    v.addEventListener("canplay", start);
-    // Resume when the tab regains visibility (browsers pause bg video when hidden).
+
+    play();
+    v.addEventListener("canplay", play);
+    v.addEventListener("loadeddata", play);
+
+    // Autoplay blocked (Safari Low Power / site setting) → kick off on first gesture.
+    const onInteract = () => play();
+    const gestureOpts: AddEventListenerOptions = { once: true, passive: true };
+    window.addEventListener("pointerdown", onInteract, gestureOpts);
+    window.addEventListener("touchstart", onInteract, gestureOpts);
+    window.addEventListener("scroll", onInteract, gestureOpts);
+    window.addEventListener("keydown", onInteract, gestureOpts);
+
     const onVisible = () => {
-      if (!document.hidden) start();
+      if (!document.hidden) play();
     };
     document.addEventListener("visibilitychange", onVisible);
+
     return () => {
-      v.removeEventListener("canplay", start);
+      v.removeEventListener("canplay", play);
+      v.removeEventListener("loadeddata", play);
+      window.removeEventListener("pointerdown", onInteract);
+      window.removeEventListener("touchstart", onInteract);
+      window.removeEventListener("scroll", onInteract);
+      window.removeEventListener("keydown", onInteract);
       document.removeEventListener("visibilitychange", onVisible);
     };
   }, []);
