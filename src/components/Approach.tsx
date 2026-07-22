@@ -84,11 +84,16 @@ export default function Approach() {
             transformation engagements.
           </p>
         </FadeIn>
+      </div>
 
-        {/* Scroll-driven horizontal row */}
-        <div ref={rowRef} className="mt-12 overflow-hidden">
-          <motion.div style={{ x }} className="flex w-max gap-6">
-            {STEPS.map((s) => (
+      {/* Full-bleed scroll-driven row — starts offset right, glides edge-to-edge,
+          stops with the last card (Refine & Measure) at the right */}
+      <div ref={rowRef} className="mt-12 w-full overflow-hidden">
+        <motion.div
+          style={{ x }}
+          className="flex w-max gap-6 pl-6 pr-6 lg:pl-[42vw] lg:pr-10"
+        >
+          {STEPS.map((s) => (
               <div key={s.title} className="w-[300px] flex-shrink-0">
                 <div className="relative h-[240px] overflow-hidden rounded-xl bg-zinc-100">
                   {/* Mini-UI — official Figma card asset */}
@@ -103,11 +108,10 @@ export default function Approach() {
                     {s.title}
                   </span>
                 </div>
-                <p className="mt-4 text-[14.5px] leading-relaxed text-zinc-600">{s.caption}</p>
-              </div>
-            ))}
-          </motion.div>
-        </div>
+              <p className="mt-4 text-[14.5px] leading-relaxed text-zinc-600">{s.caption}</p>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
