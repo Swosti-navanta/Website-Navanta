@@ -131,15 +131,26 @@ export default function Challenges() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={tab.key}
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12, transition: { duration: 0.25 } }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.14 } },
+                }}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0, y: -12, transition: { duration: 0.22 } }}
                 className="grid gap-6 md:grid-cols-3"
               >
                 {tab.cards.map((c) => {
                   return (
-                    <div key={c.id} className="flex h-full flex-col rounded-2xl bg-zinc-100 p-5">
+                    <motion.div
+                      key={c.id}
+                      variants={{
+                        hidden: { opacity: 0, y: 26 },
+                        visible: { opacity: 1, y: 0 },
+                      }}
+                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      className="flex h-full flex-col rounded-2xl bg-zinc-100 p-5"
+                    >
                       <h3 className="text-[17px] font-medium text-zinc-900">{c.title}</h3>
                       {/* Media — official Navanta icon infographic (panel baked in) */}
                       <div className="mt-4 h-[170px] overflow-hidden rounded-xl">
@@ -152,7 +163,7 @@ export default function Challenges() {
                         />
                       </div>
                       <p className="mt-4 text-[13.5px] leading-relaxed text-zinc-500">{c.body}</p>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </motion.div>

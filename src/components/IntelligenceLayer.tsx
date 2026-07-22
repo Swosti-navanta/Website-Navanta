@@ -203,7 +203,25 @@ export default function IntelligenceLayer() {
             Our intelligence layer unifies your existing architecture, accelerating
             time-to-value without the $100M sunk cost.
           </p>
-          <div className="mt-8 h-px w-full bg-zinc-300" />
+
+          {/* Tab pills — above the section, left-aligned (Figma update) */}
+          <div className="mt-8 flex">
+            <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
+              {TABS.map((t, i) => (
+                <button
+                  key={t.key}
+                  onClick={() => setActive(i)}
+                  className={`rounded-full px-5 py-2.5 text-[14px] transition-colors ${
+                    i === active
+                      ? "bg-zinc-900 font-medium text-white"
+                      : "text-zinc-500 hover:text-zinc-800"
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </FadeIn>
 
         {/* Dark Lens container */}
@@ -249,24 +267,6 @@ export default function IntelligenceLayer() {
           </div>
         </FadeIn>
 
-        {/* Tab pills */}
-        <div className="mt-10 flex justify-center">
-          <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
-            {TABS.map((t, i) => (
-              <button
-                key={t.key}
-                onClick={() => setActive(i)}
-                className={`rounded-full px-5 py-2.5 text-[14px] transition-colors ${
-                  i === active
-                    ? "bg-zinc-900 font-medium text-white"
-                    : "text-zinc-500 hover:text-zinc-800"
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
