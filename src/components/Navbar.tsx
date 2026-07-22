@@ -36,14 +36,14 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-[72px] max-w-[1560px] items-center justify-between px-6 lg:px-10">
-        {/* Logo — swap for the real Navanta SVG lockup when provided */}
-        <a href="#" className="flex flex-col leading-none text-white">
-          <span className="text-[20px] font-semibold tracking-tight">
-            Navanta
-          </span>
-          <span className="mt-0.5 text-[8.5px] font-medium uppercase tracking-[0.14em] text-white/60">
-            Enabling Intelligent Enterprises
-          </span>
+        {/* Navanta logo lockup (white SVG) */}
+        <a href="#" className="flex items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/navanta-logo.svg"
+            alt="Navanta — Enabling Intelligent Enterprises"
+            className="h-9 w-auto"
+          />
         </a>
 
         {/* Desktop links */}

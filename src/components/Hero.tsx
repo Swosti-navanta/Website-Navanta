@@ -2,41 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import {
-  ArrowDown,
-  ClockCountdown,
-  Flag,
-  CheckCircle,
-} from "@phosphor-icons/react";
+import { ArrowDown } from "@phosphor-icons/react";
+import HeroNotifications from "./HeroNotifications";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/** Agent-activity cards — Navanta supply-chain content
- *  (replaces the placeholder PPF/detailing copy from the mockup) */
-const NOTIFICATIONS = [
-  {
-    icon: ClockCountdown,
-    title: "Demand shift detected",
-    body: "Midwest DC trending +18% on SKU 4482 — reorder point review suggested",
-  },
-  {
-    icon: Flag,
-    title: "Delay risk flagged",
-    body: "PO #4821 — Rotterdam ETA slipped 6 days on ocean leg",
-    nested: [
-      "Expedite via alternate carrier adds $2.1K.",
-      "Competitive quote requested.",
-    ],
-  },
-  {
-    icon: CheckCircle,
-    title: "Reorder executed",
-    body: "Auto-PO issued for 240 units — planner approved at 92% confidence",
-  },
-];
-
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
 
   // Cross-browser autoplay. Safari blocks autoplay unless `muted`/`playsinline`
   // are set on the element (React can omit the muted attribute), and blocks it
@@ -44,44 +16,59 @@ export default function Hero() {
   // attributes, try to play on load, and — if still blocked — start on the first
   // user interaction. Also resume when the tab becomes visible again.
   useEffect(() => {
-    const v = videoRef.current;
+    const v = videoWrapRef.current?.querySelector("video");
     if (!v) return;
 
     v.muted = true;
     v.defaultMuted = true;
+    v.autoplay = true;
     v.setAttribute("muted", "");
     v.setAttribute("playsinline", "");
     v.setAttribute("webkit-playsinline", "");
+    if (v.readyState === 0) v.load();
 
-    const play = () => {
+    const tryPlay = () => {
+      if (!v.paused) return;
       const p = v.play();
       if (p) p.catch(() => {});
     };
 
-    play();
-    v.addEventListener("canplay", play);
-    v.addEventListener("loadeddata", play);
+    tryPlay();
 
-    // Autoplay blocked (Safari Low Power / site setting) → kick off on first gesture.
-    const onInteract = () => play();
-    const gestureOpts: AddEventListenerOptions = { once: true, passive: true };
-    window.addEventListener("pointerdown", onInteract, gestureOpts);
-    window.addEventListener("touchstart", onInteract, gestureOpts);
-    window.addEventListener("scroll", onInteract, gestureOpts);
-    window.addEventListener("keydown", onInteract, gestureOpts);
+    // Retry every 350ms for the first 8s — covers Safari's late autoplay veto.
+    const iv = setInterval(() => {
+      if (v.paused) tryPlay();
+      else clearInterval(iv);
+    }, 350);
+    const ivStop = setTimeout(() => clearInterval(iv), 8000);
+
+    const mediaEvents = ["canplay", "loadeddata", "canplaythrough"] as const;
+    mediaEvents.forEach((e) => v.addEventListener(e, tryPlay));
+
+    // Any user gesture counts as activation → start playback immediately.
+    const gestures = [
+      "pointerdown",
+      "pointermove",
+      "touchstart",
+      "scroll",
+      "wheel",
+      "keydown",
+    ] as const;
+    const onGesture = () => tryPlay();
+    gestures.forEach((e) =>
+      window.addEventListener(e, onGesture, { passive: true })
+    );
 
     const onVisible = () => {
-      if (!document.hidden) play();
+      if (!document.hidden) tryPlay();
     };
     document.addEventListener("visibilitychange", onVisible);
 
     return () => {
-      v.removeEventListener("canplay", play);
-      v.removeEventListener("loadeddata", play);
-      window.removeEventListener("pointerdown", onInteract);
-      window.removeEventListener("touchstart", onInteract);
-      window.removeEventListener("scroll", onInteract);
-      window.removeEventListener("keydown", onInteract);
+      clearInterval(iv);
+      clearTimeout(ivStop);
+      mediaEvents.forEach((e) => v.removeEventListener(e, tryPlay));
+      gestures.forEach((e) => window.removeEventListener(e, onGesture));
       document.removeEventListener("visibilitychange", onVisible);
     };
   }, []);
@@ -94,16 +81,15 @@ export default function Hero() {
         aria-hidden
         className="absolute inset-0 bg-[radial-gradient(120%_90%_at_70%_20%,#3a2f26_0%,#241d17_45%,#120f0c_100%)]"
       />
-      <video
-        ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover"
-        src="/hero/hero.mp4"
-        poster="/hero/poster.jpg"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
+      {/* Raw HTML video: React strips the `muted` attribute from SSR output,
+          which makes Safari reject autoplay on a fresh page load. Rendering
+          the tag verbatim guarantees muted+autoplay are present at parse time. */}
+      <div
+        ref={videoWrapRef}
+        className="absolute inset-0"
+        dangerouslySetInnerHTML={{
+          __html: `<video class="absolute inset-0 h-full w-full object-cover pointer-events-none" src="/hero/hero.mp4" poster="/hero/poster.jpg" autoplay muted loop playsinline webkit-playsinline preload="auto" disableremoteplayback></video>`,
+        }}
       />
 
       {/* Legibility overlays — warehouse stays visible, with a slightly deeper
@@ -159,40 +145,8 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* --- Agent notification stack (desktop) ----------------------------- */}
-      <div className="absolute bottom-20 right-10 z-10 hidden w-[370px] flex-col gap-3 lg:flex">
-        {NOTIFICATIONS.map((n, i) => (
-          <motion.div
-            key={n.title}
-            initial={{ y: 28, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.7 + i * 0.18 }}
-            className="rounded-xl border border-white/10 bg-black/45 backdrop-blur-2xl"
-          >
-            <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
-              <n.icon size={15} className="text-white/70" />
-              <span className="text-[13px] font-medium text-white/90">
-                {n.title}
-              </span>
-            </div>
-            <div className="px-4 py-3">
-              <p className="text-[13px] leading-snug text-white/70">{n.body}</p>
-              {n.nested && (
-                <div className="mt-2.5 rounded-lg border border-white/[0.06] bg-black/30 px-3 py-2.5">
-                  {n.nested.map((line) => (
-                    <p
-                      key={line}
-                      className="text-[12.5px] leading-relaxed text-white/75"
-                    >
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              )}
-            </div>
-          </motion.div>
-        ))}
-      </div>
+      {/* --- Agent notification feed (rolling chat-style popup) ------------- */}
+      <HeroNotifications />
 
       {/* --- Scroll cue ------------------------------------------------------ */}
       <motion.a

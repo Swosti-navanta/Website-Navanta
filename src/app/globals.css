@@ -17,12 +17,11 @@
   --color-brand-accent: var(--brand-accent);
   --color-surface: var(--surface);
   --color-ink: var(--ink);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-primer);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-primer), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
