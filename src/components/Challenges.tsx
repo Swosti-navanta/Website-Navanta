@@ -135,16 +135,14 @@ export default function Challenges() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.25 } }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="grid gap-6 md:grid-cols-3 md:items-start"
+                className="grid gap-6 md:grid-cols-3"
               >
-                {tab.cards.map((c, i) => {
-                  // Staggered media heights: 1st tallest, 2nd smaller, 3rd ~2nd
-                  const mediaH = ["h-[220px]", "h-[168px]", "h-[156px]"][i] ?? "h-[156px]";
+                {tab.cards.map((c) => {
                   return (
-                    <div key={c.id} className="rounded-2xl bg-zinc-100 p-5">
+                    <div key={c.id} className="flex h-full flex-col rounded-2xl bg-zinc-100 p-5">
                       <h3 className="text-[17px] font-medium text-zinc-900">{c.title}</h3>
                       {/* Media — official Navanta icon infographic (panel baked in) */}
-                      <div className={`mt-4 overflow-hidden rounded-xl ${mediaH}`}>
+                      <div className="mt-4 h-[170px] overflow-hidden rounded-xl">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={`/figma/icons/${c.id}.png`}
