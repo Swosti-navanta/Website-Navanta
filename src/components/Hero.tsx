@@ -106,19 +106,16 @@ export default function Hero() {
         preload="auto"
       />
 
-      {/* Legibility overlays — tuned to the reference: warehouse stays clearly
-          visible; darkening is moderate and weighted to the left where the
-          headline sits. */}
+      {/* Legibility overlays — matched to the Figma: warehouse stays warm and
+          clearly visible, with only a light left-weighted scrim for the text. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-black/10"
+        className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/5"
       />
-      {/* Gentle overall wash so white text always clears AA contrast */}
-      <div aria-hidden className="absolute inset-0 bg-black/15" />
       {/* Soft bottom fade into the next section */}
       <div
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/40 to-transparent"
+        className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/30 to-transparent"
       />
 
       {/* --- Content -------------------------------------------------------- */}
