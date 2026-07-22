@@ -9,8 +9,8 @@ const NAV_LINKS = [
   { label: "Outcomes", href: "#outcomes" },
   { label: "Features", href: "#features" },
   { label: "Advantages", href: "#advantages" },
-  { label: "Career", href: "#career", caret: true },
-  { label: "Contact", href: "#contact" },
+  { label: "Career", href: "/careers" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -80,7 +80,7 @@ export default function Navbar() {
         {/* Desktop actions */}
         <div className="hidden items-center gap-3 lg:flex">
           <a
-            href="#contact"
+            href="/contact"
             className="flex items-center gap-1.5 rounded-lg border border-white/30 px-4 py-2.5 text-[14px] font-medium text-white transition-colors hover:border-white/60 hover:bg-white/5"
           >
             Contact Us
