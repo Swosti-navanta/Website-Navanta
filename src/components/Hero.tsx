@@ -136,7 +136,7 @@ export default function Hero() {
             className="mt-10"
           >
             <a
-              href="#demo"
+              href="/contact#demo"
               className="inline-block rounded-lg bg-white px-6 py-3.5 text-[15px] font-medium text-black transition-colors hover:bg-white/90"
             >
               Request a Demo

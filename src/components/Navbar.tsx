@@ -87,7 +87,7 @@ export default function Navbar() {
             <CaretDown size={12} weight="bold" className="text-white/70" />
           </a>
           <a
-            href="#demo"
+            href="/contact#demo"
             className="rounded-lg bg-white px-4 py-2.5 text-[14px] font-medium text-black transition-colors hover:bg-white/90"
           >
             Request a Demo
@@ -121,13 +121,13 @@ export default function Navbar() {
             ))}
             <li className="mt-3 flex gap-3">
               <a
-                href="#contact"
+                href="/contact"
                 className="flex-1 rounded-lg border border-white/30 px-4 py-2.5 text-center text-[14px] font-medium text-white"
               >
                 Contact Us
               </a>
               <a
-                href="#demo"
+                href="/contact#demo"
                 className="flex-1 rounded-lg bg-white px-4 py-2.5 text-center text-[14px] font-medium text-black"
               >
                 Request a Demo
