@@ -4,11 +4,13 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { CaretDown, List, X } from "@phosphor-icons/react";
 
+// Section links use "/#id" so they work from any page (jump home, then scroll).
 const NAV_LINKS = [
-  { label: "Intelligence", href: "#intelligence" },
-  { label: "Outcomes", href: "#outcomes" },
-  { label: "Features", href: "#features" },
-  { label: "Advantages", href: "#advantages" },
+  { label: "Challenges", href: "/#challenges" },
+  { label: "Approach", href: "/#features" },
+  { label: "Intelligence", href: "/#intelligence" },
+  { label: "Outcomes", href: "/#outcomes" },
+  { label: "Advantages", href: "/#advantages" },
   { label: "Career", href: "/careers" },
   { label: "Contact", href: "/contact" },
 ];
@@ -50,8 +52,8 @@ export default function Navbar() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-transparent" />
       </div>
       <nav className="relative z-10 mx-auto flex h-[72px] max-w-[1560px] items-center justify-between px-6 lg:px-10">
-        {/* Navanta logo lockup (white SVG) */}
-        <a href="#" className="flex items-center">
+        {/* Navanta logo lockup (white SVG) — always returns home */}
+        <a href="/" className="flex items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/navanta-logo.svg"
@@ -60,18 +62,16 @@ export default function Navbar() {
           />
         </a>
 
-        {/* Desktop links */}
+        {/* Desktop links — underline wipes in from the left on hover */}
         <ul className="hidden items-center gap-8 lg:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.label}>
               <a
                 href={link.href}
-                className="flex items-center gap-1 text-[14.5px] text-white/85 transition-colors hover:text-white"
+                className="group relative flex items-center gap-1 py-1 text-[14.5px] text-white/85 transition-colors hover:text-white"
               >
                 {link.label}
-                {link.caret && (
-                  <CaretDown size={12} weight="bold" className="text-white/60" />
-                )}
+                <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
               </a>
             </li>
           ))}
