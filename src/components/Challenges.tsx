@@ -135,7 +135,7 @@ export default function Challenges() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.25 } }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="grid gap-6 md:grid-cols-3"
+                className="grid gap-6 md:grid-cols-3 md:items-start"
               >
                 {tab.cards.map((c, i) => {
                   // Staggered media heights: 1st tallest, 2nd smaller, 3rd ~2nd
