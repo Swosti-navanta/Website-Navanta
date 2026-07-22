@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowDown,
@@ -35,6 +36,32 @@ const NOTIFICATIONS = [
 ];
 
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Robust autoplay+loop: some browsers ignore the `autoplay` attribute unless
+  // muted is set as a property and play() is invoked explicitly. Retry on
+  // canplay so it always starts and keeps looping.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    const start = () => {
+      const p = v.play();
+      if (p) p.catch(() => {});
+    };
+    start();
+    v.addEventListener("canplay", start);
+    // Resume when the tab regains visibility (browsers pause bg video when hidden).
+    const onVisible = () => {
+      if (!document.hidden) start();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      v.removeEventListener("canplay", start);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, []);
+
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden bg-[#191512]">
       {/* --- Background media --------------------------------------------- */}
@@ -44,16 +71,16 @@ export default function Hero() {
         className="absolute inset-0 bg-[radial-gradient(120%_90%_at_70%_20%,#3a2f26_0%,#241d17_45%,#120f0c_100%)]"
       />
       <video
+        ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
+        src="/hero/hero.mp4"
         poster="/hero/poster.jpg"
         autoPlay
         muted
         loop
         playsInline
         preload="auto"
-      >
-        <source src="/hero/hero.mp4" type="video/mp4" />
-      </video>
+      />
 
       {/* Legibility overlays — tuned to the reference: warehouse stays clearly
           visible; darkening is moderate and weighted to the left where the
