@@ -1,5 +1,13 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import Challenges from "@/components/Challenges";
+import Approach from "@/components/Approach";
+import IntelligenceLayer from "@/components/IntelligenceLayer";
+import HowWeEnable from "@/components/HowWeEnable";
+import Outcomes from "@/components/Outcomes";
+import Advantages from "@/components/Advantages";
+import Impact from "@/components/Impact";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -7,10 +15,15 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        {/* Sections land here one by one:
-            Challenges → Approach → Intelligence Layer → How We Enable Value
-            → Driving Outcomes → Advantages → Impact → KPIs → Footer */}
+        <Challenges />
+        <Approach />
+        <IntelligenceLayer />
+        <HowWeEnable />
+        <Outcomes />
+        <Advantages />
+        <Impact />
       </main>
+      <Footer />
     </>
   );
 }
