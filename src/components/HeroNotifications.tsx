@@ -87,7 +87,7 @@ export default function HeroNotifications() {
     >
       {/* Bottom-anchored window. No mask/overflow tricks — they break the
           cards' backdrop blur and paint a dark box behind the stack. */}
-      <div className="flex h-[440px] w-[460px] flex-col justify-end gap-4">
+      <div className="flex h-[440px] w-[460px] flex-col justify-end gap-3">
         <AnimatePresence mode="popLayout" initial={false}>
           {feed.map(({ id, note }) => (
             <motion.div
