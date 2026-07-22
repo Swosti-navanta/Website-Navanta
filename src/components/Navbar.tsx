@@ -49,7 +49,7 @@ export default function Navbar() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-transparent" />
       </div>
-      <nav className="mx-auto flex h-[72px] max-w-[1560px] items-center justify-between px-6 lg:px-10">
+      <nav className="relative z-10 mx-auto flex h-[72px] max-w-[1560px] items-center justify-between px-6 lg:px-10">
         {/* Navanta logo lockup (white SVG) */}
         <a href="#" className="flex items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -106,7 +106,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="border-t border-white/10 bg-black/90 backdrop-blur-md lg:hidden">
+        <div className="relative z-10 border-t border-white/10 bg-black/90 backdrop-blur-md lg:hidden">
           <ul className="flex flex-col gap-1 px-6 py-4">
             {NAV_LINKS.map((link) => (
               <li key={link.label}>
