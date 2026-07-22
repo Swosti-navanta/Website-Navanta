@@ -106,16 +106,16 @@ export default function Hero() {
         preload="auto"
       />
 
-      {/* Legibility overlays — matched to the Figma: warehouse stays warm and
-          clearly visible, with only a light left-weighted scrim for the text. */}
+      {/* Legibility overlays — warehouse stays visible, with a slightly deeper
+          left-weighted scrim for the text. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/5"
+        className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/30 to-black/12"
       />
       {/* Soft bottom fade into the next section */}
       <div
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/30 to-transparent"
+        className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/40 to-transparent"
       />
 
       {/* --- Content -------------------------------------------------------- */}
@@ -167,7 +167,7 @@ export default function Hero() {
             initial={{ y: 28, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.7, ease: EASE, delay: 0.7 + i * 0.18 }}
-            className="rounded-xl border border-white/12 bg-white/[0.07] backdrop-blur-md"
+            className="rounded-xl border border-white/10 bg-black/45 backdrop-blur-2xl"
           >
             <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
               <n.icon size={15} className="text-white/70" />
@@ -178,7 +178,7 @@ export default function Hero() {
             <div className="px-4 py-3">
               <p className="text-[13px] leading-snug text-white/70">{n.body}</p>
               {n.nested && (
-                <div className="mt-2.5 rounded-lg bg-white/[0.07] px-3 py-2.5">
+                <div className="mt-2.5 rounded-lg border border-white/[0.06] bg-black/30 px-3 py-2.5">
                   {n.nested.map((line) => (
                     <p
                       key={line}
