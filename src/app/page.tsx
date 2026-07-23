@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
+// HeroV2 = scroll-shrink experience; revert by importing Hero instead.
+import Hero from "@/components/HeroV2";
 import Challenges from "@/components/Challenges";
 import Approach from "@/components/Approach";
 import IntelligenceLayer from "@/components/IntelligenceLayer";
