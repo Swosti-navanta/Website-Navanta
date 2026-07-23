@@ -4,15 +4,27 @@ import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
 import DemoForm from "@/components/DemoForm";
 import FadeIn from "@/components/FadeIn";
-import { MapPin, EnvelopeSimple, Phone, LinkedinLogo } from "@phosphor-icons/react/dist/ssr";
+import {
+  MapPin,
+  EnvelopeSimple,
+  Phone,
+  LinkedinLogo,
+  ArrowUpRight,
+  NavigationArrow,
+} from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
   title: "Contact — Navanta",
   description: "Get in touch with the Navanta team, or request a demo on your own data.",
 };
 
+const ADDRESS = "8 The Green #8618, Dover, DE 19901";
+const MAP_EMBED = `https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS)}&z=15&output=embed`;
+const MAP_SEARCH = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`;
+const MAP_DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(ADDRESS)}`;
+
 const DETAILS = [
-  { icon: MapPin, label: "Address", value: "8 The Green #8618, Dover, DE 19901" },
+  { icon: MapPin, label: "Address", value: ADDRESS },
   { icon: EnvelopeSimple, label: "Email", value: "admin@navanta.ai", href: "mailto:admin@navanta.ai" },
   { icon: Phone, label: "Phone", value: "+1 (___) ___-____" },
 ];
@@ -47,6 +59,7 @@ export default function ContactPage() {
           eyebrow="Contact"
           title="Let's talk"
           sub="Share your challenges — within a week we'll show a live demo built on your industry data."
+          video
         />
 
         {/* Split: form left · brand image right */}
@@ -96,44 +109,67 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Details band + map strip */}
+        {/* Details beside a live map */}
         <section className="bg-[#fafaf9] py-20">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
-            <FadeIn>
-              <div className="grid gap-8 md:grid-cols-3">
-                {DETAILS.map((d) => (
-                  <div key={d.label} className="flex items-start gap-4">
-                    <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#efeaf9]">
-                      <d.icon size={19} className="text-[#5C3D97]" />
-                    </span>
-                    <div>
-                      <p className="text-[13px] font-medium uppercase tracking-wide text-zinc-400">
-                        {d.label}
-                      </p>
-                      {d.href ? (
-                        <a href={d.href} className="text-[16px] text-zinc-900 hover:text-[#5C3D97]">
-                          {d.value}
-                        </a>
-                      ) : (
-                        <p className="text-[16px] text-zinc-900">{d.value}</p>
-                      )}
+            <div className="grid gap-10 lg:grid-cols-2 lg:items-stretch">
+              {/* Left: contact details + map actions */}
+              <FadeIn>
+                <div className="flex h-full flex-col justify-center gap-7">
+                  {DETAILS.map((d) => (
+                    <div key={d.label} className="flex items-start gap-4">
+                      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#efeaf9]">
+                        <d.icon size={19} className="text-[#5C3D97]" />
+                      </span>
+                      <div>
+                        <p className="text-[13px] font-medium uppercase tracking-wide text-zinc-400">
+                          {d.label}
+                        </p>
+                        {d.href ? (
+                          <a href={d.href} className="text-[16px] text-zinc-900 hover:text-[#5C3D97]">
+                            {d.value}
+                          </a>
+                        ) : (
+                          <p className="text-[16px] text-zinc-900">{d.value}</p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </FadeIn>
+                  ))}
 
-            {/* Map strip — swap for embed / static map asset */}
-            <FadeIn delay={0.08} className="mt-10">
-              <div className="relative h-[220px] overflow-hidden rounded-2xl bg-[#eceae4] [background-image:radial-gradient(#cfccc3_1px,transparent_1px)] [background-size:18px_18px]">
-                <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
-                  <MapPin size={34} weight="fill" className="text-[#5C3D97]" />
-                  <span className="mt-1 rounded-md bg-white px-2.5 py-1 text-[12px] text-zinc-700 shadow">
-                    Dover, DE
-                  </span>
+                  <div className="flex flex-wrap gap-3 pt-1">
+                    <a
+                      href={MAP_SEARCH}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 rounded-lg bg-zinc-900 px-4 py-2.5 text-[13.5px] font-medium text-white transition-colors hover:bg-zinc-800"
+                    >
+                      Open in Google Maps <ArrowUpRight size={14} weight="bold" />
+                    </a>
+                    <a
+                      href={MAP_DIRECTIONS}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 rounded-lg border border-zinc-300 px-4 py-2.5 text-[13.5px] font-medium text-zinc-700 transition-colors hover:border-[#5C3D97] hover:text-[#5C3D97]"
+                    >
+                      <NavigationArrow size={14} weight="bold" /> Get directions
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </FadeIn>
+              </FadeIn>
+
+              {/* Right: live, interactive Google Map */}
+              <FadeIn delay={0.08}>
+                <div className="h-[360px] overflow-hidden rounded-2xl border border-zinc-200 shadow-sm lg:h-full lg:min-h-[420px]">
+                  <iframe
+                    title="Navanta — Dover, DE"
+                    src={MAP_EMBED}
+                    className="h-full w-full"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+              </FadeIn>
+            </div>
           </div>
         </section>
 

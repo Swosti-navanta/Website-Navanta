@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
 import CareersPositions from "@/components/CareersPositions";
+import BgVideo from "@/components/BgVideo";
 
 export const metadata: Metadata = {
   title: "Careers — Navanta",
@@ -24,11 +25,12 @@ export default function CareersPage() {
     <>
       <Navbar />
       <main>
-        {/* Centered hero — dark band */}
+        {/* Centered hero — dark band with background video */}
         <header className="relative overflow-hidden bg-[#0c0b0a] pb-24 pt-44 text-center">
+          <BgVideo />
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_0%,#2a2119_0%,#161210_55%,#0c0b0a_100%)]"
+            className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80"
           />
           <div className="relative mx-auto max-w-2xl px-6">
             <h1 className="text-[48px] font-medium tracking-tight text-white sm:text-[64px]">
@@ -59,9 +61,13 @@ export default function CareersPage() {
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <div className="flex h-[260px] items-center justify-center rounded-2xl bg-[radial-gradient(120%_120%_at_30%_20%,#7a5cb5_0%,#5C3D97_55%,#3d2766_100%)]">
+                <div className="h-[260px] overflow-hidden rounded-2xl">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/navanta-logo.svg" alt="Navanta" className="h-12 w-auto" />
+                  <img
+                    src="/hero/poster.jpg"
+                    alt="Inside a Navanta client warehouse"
+                    className="h-full w-full object-cover"
+                  />
                 </div>
                 <div className="h-[260px] overflow-hidden rounded-2xl">
                   {/* eslint-disable-next-line @next/next/no-img-element */}

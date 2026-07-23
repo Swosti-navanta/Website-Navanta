@@ -1,23 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
+import BgVideo from "./BgVideo";
 
 /** Dark header band for inner pages — gives the transparent nav a dark
- *  backdrop and sets up the page title. */
+ *  backdrop and sets up the page title. Pass `video` for a background clip. */
 export default function PageHeader({
   eyebrow,
   title,
   sub,
+  video = false,
 }: {
   eyebrow?: string;
   title: string;
   sub?: string;
+  video?: boolean;
 }) {
   return (
     <header className="relative overflow-hidden bg-[#0c0b0a] pb-20 pt-40">
+      {video && <BgVideo />}
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(120%_90%_at_70%_0%,#2a2119_0%,#161210_55%,#0c0b0a_100%)]"
+        className={
+          video
+            ? "absolute inset-0 bg-gradient-to-r from-black/80 via-black/65 to-black/55"
+            : "absolute inset-0 bg-[radial-gradient(120%_90%_at_70%_0%,#2a2119_0%,#161210_55%,#0c0b0a_100%)]"
+        }
       />
       <div className="relative mx-auto max-w-[1560px] px-6 lg:px-10">
         {eyebrow && (
