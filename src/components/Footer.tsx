@@ -5,22 +5,22 @@ import { motion, useMotionValue } from "framer-motion";
 import FadeIn from "./FadeIn";
 
 const MAIN_LINKS = [
-  { label: "About", href: "#" },
-  { label: "Careers", href: "#career" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "/about" },
+  { label: "Careers", href: "/careers" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const PRODUCT_LINKS = [
-  { label: "Navanta Lens", href: "#intelligence" },
-  { label: "Driving Outcomes", href: "#outcomes" },
-  { label: "The Approach", href: "#features" },
-  { label: "The Advantages", href: "#advantages" },
+  { label: "Navanta Lens", href: "/#intelligence" },
+  { label: "Driving Outcomes", href: "/#outcomes" },
+  { label: "The Approach", href: "/#features" },
+  { label: "The Advantages", href: "/#advantages" },
 ];
 
 const COMPANY_LINKS = [
-  { label: "About", href: "#" },
-  { label: "Team", href: "#" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "/about" },
+  { label: "Team", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Footer() {
@@ -104,7 +104,7 @@ export default function Footer() {
             <a href="#" className="hover:text-white/80">
               Terms &amp; Conditions
             </a>
-            <a href="#" className="hover:text-white/80">
+            <a href="/privacy" className="hover:text-white/80">
               Privacy Policy
             </a>
           </div>
