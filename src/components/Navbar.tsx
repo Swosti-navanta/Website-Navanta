@@ -104,10 +104,27 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — gradient smoky blur dissolving downward */}
       {open && (
-        <div className="relative z-10 border-t border-white/10 bg-black/90 backdrop-blur-md lg:hidden">
-          <ul className="flex flex-col gap-1 px-6 py-4">
+        <div className="relative z-10 border-t border-white/10 lg:hidden">
+          <div aria-hidden className="pointer-events-none absolute inset-0">
+            <div
+              className="absolute inset-0 backdrop-blur-[28px]"
+              style={{
+                WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+                maskImage: "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0 backdrop-blur-[10px]"
+              style={{
+                WebkitMaskImage: "linear-gradient(to bottom, black 40%, black 75%, transparent 100%)",
+                maskImage: "linear-gradient(to bottom, black 40%, black 75%, transparent 100%)",
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/55 to-black/10" />
+          </div>
+          <ul className="relative flex flex-col gap-1 px-6 py-4">
             {NAV_LINKS.map((link) => (
               <li key={link.label}>
                 <a
