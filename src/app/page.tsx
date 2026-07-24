@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 // HeroV2 = scroll-shrink experience; revert by importing Hero instead.
 import Hero from "@/components/HeroV2";
 import Challenges from "@/components/Challenges";
+import Lens from "@/components/Lens";
 import Approach from "@/components/Approach";
 import IntelligenceLayer from "@/components/IntelligenceLayer";
 import HowWeEnable from "@/components/HowWeEnable";
@@ -17,6 +18,7 @@ export default function Home() {
       <main>
         <Hero />
         <Challenges />
+        <Lens />
         <IntelligenceLayer />
         <HowWeEnable />
         <Outcomes />
