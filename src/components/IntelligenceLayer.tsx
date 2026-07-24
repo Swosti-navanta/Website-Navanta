@@ -14,17 +14,126 @@ import {
 } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
 
-const TABS = [
-  { key: "central", label: "Centralized Intelligence", heading: "Centralized Planning and Buying Intelligence" },
-  { key: "orders", label: "Inventory & Order Intelligence", heading: "Inventory and Order Intelligence" },
-  { key: "procurement", label: "Procurement Control", heading: "Procurement Control Tower" },
+type TabDef = {
+  key: string;
+  label: string;
+  heading: string;
+  callouts: { left: string[]; right: string[] };
+  card: {
+    title: string;
+    sub: string;
+    stats: [string, string][];
+    chartA: { label: string; bars: { d: string; v: number }[] };
+    chartB: { label: string };
+  };
+};
+
+const TABS: TabDef[] = [
+  {
+    key: "central",
+    label: "Centralized Intelligence",
+    heading: "Centralized Planning and Buying Intelligence",
+    callouts: {
+      left: ["Network & locations", "Demand signal", "On-hand position"],
+      right: ["One-click rebalance", "Confidence grade", "Stock cover"],
+    },
+    card: {
+      title: "SKU-4482 · Network plan",
+      sub: "Midwest network · 12 locations",
+      stats: [
+        ["Locations", "12"],
+        ["Fill rate", "96%"],
+        ["Confidence", "88%"],
+        ["Rebalance", "240 units"],
+        ["On-hand", "18.4K"],
+        ["Turns", "7.2"],
+      ],
+      chartA: {
+        label: "Weekly demand",
+        bars: [
+          { d: "Sun", v: 30 },
+          { d: "Mon", v: 36 },
+          { d: "Tue", v: 36 },
+          { d: "Wed", v: 31 },
+          { d: "Thu", v: 34 },
+          { d: "Fri", v: 37 },
+          { d: "Sat", v: 33 },
+        ],
+      },
+      chartB: { label: "Stock cover" },
+    },
+  },
+  {
+    key: "orders",
+    label: "Inventory & Order Intelligence",
+    heading: "Customer Inventory and Order Intelligence",
+    callouts: {
+      left: ["Live order status", "SKU cross-reference", "Stock by location"],
+      right: ["Proactive alerts", "Self-serve answers", "Guided resolution"],
+    },
+    card: {
+      title: "Order XC-2384 · Flooring",
+      sub: "Distributor portal · live",
+      stats: [
+        ["Status", "In transit"],
+        ["ETA", "Feb 1"],
+        ["Lines", "18"],
+        ["Backorder risk", "Low"],
+        ["Alt SKUs", "3"],
+        ["Updates", "Auto"],
+      ],
+      chartA: {
+        label: "Order volume",
+        bars: [
+          { d: "Sun", v: 24 },
+          { d: "Mon", v: 33 },
+          { d: "Tue", v: 29 },
+          { d: "Wed", v: 35 },
+          { d: "Thu", v: 32 },
+          { d: "Fri", v: 28 },
+          { d: "Sat", v: 22 },
+        ],
+      },
+      chartB: { label: "SLA health" },
+    },
+  },
+  {
+    key: "procurement",
+    label: "Procurement Control",
+    heading: "Procurement Control Tower",
+    callouts: {
+      left: ["Category & region", "Spend & suppliers", "Weekly demand"],
+      right: ["One-click RFP", "Savings target", "Stock cover"],
+    },
+    card: {
+      title: "OPP-005 · Chemicals",
+      sub: "Germany · 4 sites",
+      stats: [
+        ["Addressable", "$267K"],
+        ["Status", "Active"],
+        ["Confidence", "76%"],
+        ["Avg unit cost", "$0.53"],
+        ["Suppliers", "12"],
+        ["Savings target", "$21K"],
+      ],
+      chartA: {
+        label: "Weekly demand",
+        bars: [
+          { d: "Sun", v: 30 },
+          { d: "Mon", v: 36 },
+          { d: "Tue", v: 36 },
+          { d: "Wed", v: 31 },
+          { d: "Thu", v: 34 },
+          { d: "Fri", v: 37 },
+          { d: "Sat", v: 33 },
+        ],
+      },
+      chartB: { label: "Stock cover" },
+    },
+  },
 ];
 
-/* Left/right connector callouts around the centered card */
-const CALLOUTS_LEFT = ["Category & region", "Spend & suppliers", "Weekly demand"];
-const CALLOUTS_RIGHT = ["One-click RFP", "Savings target", "Stock cover"];
-
-/* 2×3 data-enrichment feature grid (Navanta supply-chain equivalents) */
+/* 2×3 data-enrichment feature grid */
 const FEATURES: { icon: Icon; title: string; body: string }[] = [
   { icon: Database, title: "Spend & category data", body: "One normalized view of spend across every category, site, and business unit." },
   { icon: ShieldCheck, title: "Supplier intelligence", body: "Continuous risk, delivery, and performance scoring on every vendor." },
@@ -34,24 +143,13 @@ const FEATURES: { icon: Icon; title: string; body: string }[] = [
   { icon: ClockCounterClockwise, title: "Audit & traceability", body: "Every decision logged, confidence-graded, and fully reversible." },
 ];
 
-const DEMAND = [
-  { d: "Sun", v: 30 },
-  { d: "Mon", v: 36 },
-  { d: "Tue", v: 36 },
-  { d: "Wed", v: 31 },
-  { d: "Thu", v: 34 },
-  { d: "Fri", v: 37 },
-  { d: "Sat", v: 33 },
-];
-
-/* Centered Navanta opportunity card — supply-chain analog of the Figma site card */
-function OpportunityCard() {
+function OpportunityCard({ card }: { card: TabDef["card"] }) {
   return (
     <div className="w-[420px] max-w-full rounded-2xl bg-white p-6 shadow-[0_24px_70px_rgba(0,0,0,0.10)]">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[16px] font-semibold text-zinc-900">OPP-005 · Chemicals</p>
-          <p className="text-[13px] text-zinc-500">Germany · 4 sites</p>
+          <p className="text-[16px] font-semibold text-zinc-900">{card.title}</p>
+          <p className="text-[13px] text-zinc-500">{card.sub}</p>
         </div>
         <span className="flex items-center gap-1 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-zinc-700">
           <Plus size={13} /> Report
@@ -59,14 +157,7 @@ function OpportunityCard() {
       </div>
 
       <div className="mt-5 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Addressable", "$267K"],
-          ["Status", "Active"],
-          ["Confidence", "76%"],
-          ["Avg unit cost", "$0.53"],
-          ["Suppliers", "12"],
-          ["Savings target", "$21K"],
-        ].map(([k, v]) => (
+        {card.stats.map(([k, v]) => (
           <div key={k}>
             <p className="text-[11.5px] text-zinc-400">{k}</p>
             <p className="text-[14px] font-medium text-zinc-900">{v}</p>
@@ -74,25 +165,20 @@ function OpportunityCard() {
         ))}
       </div>
 
-      {/* Weekly demand */}
-      <p className="mt-5 text-[11.5px] text-zinc-400">Weekly demand</p>
+      <p className="mt-5 text-[11.5px] text-zinc-400">{card.chartA.label}</p>
       <div className="mt-2 flex items-end justify-between gap-2">
-        {DEMAND.map((b) => (
+        {card.chartA.bars.map((b) => (
           <div key={b.d} className="flex flex-1 flex-col items-center gap-1.5">
             <span className="text-[9.5px] text-zinc-400">{b.v}%</span>
-            <div
-              className="w-full rounded-md bg-[#8b6bc7]"
-              style={{ height: b.v * 2.2 }}
-            />
+            <div className="w-full rounded-md bg-[#8b6bc7]" style={{ height: b.v * 2.2 }} />
             <span className="text-[9.5px] text-zinc-400">{b.d}</span>
           </div>
         ))}
       </div>
 
-      {/* Stock cover */}
-      <p className="mt-4 text-[11.5px] text-zinc-400">Stock cover</p>
+      <p className="mt-4 text-[11.5px] text-zinc-400">{card.chartB.label}</p>
       <div className="mt-2 flex justify-between gap-2">
-        {DEMAND.map((b) => (
+        {card.chartA.bars.map((b) => (
           <div key={b.d} className="flex-1 overflow-hidden rounded-md">
             <div className="h-3 bg-red-400" />
             <div className="h-4 bg-amber-300" />
@@ -106,9 +192,7 @@ function OpportunityCard() {
 
 function ConnectorLabel({ text, side }: { text: string; side: "left" | "right" }) {
   return (
-    <div
-      className={`flex items-center gap-3 ${side === "left" ? "flex-row-reverse" : ""}`}
-    >
+    <div className={`flex items-center gap-3 ${side === "left" ? "flex-row-reverse" : ""}`}>
       <span className="whitespace-nowrap text-[14px] text-zinc-500">{text}</span>
       <span className="h-px w-16 bg-zinc-300" />
     </div>
@@ -123,24 +207,22 @@ export default function IntelligenceLayer() {
     <section id="intelligence" className="bg-[#fafaf9] py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <p className="text-[17px] font-medium text-[#5C3D97]">Our Intelligence Layer</p>
           <AnimatePresence mode="wait">
             <motion.h2
               key={tab.heading}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}
-              className="mt-3 text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]"
+              className="text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]"
             >
               {tab.heading}
             </motion.h2>
           </AnimatePresence>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
-            Our intelligence layer unifies your existing architecture, accelerating
-            time-to-value without the $100M sunk cost.
+            One layer over your existing architecture — without the $100M sunk cost.
           </p>
 
-          {/* Tab pills — above the section, left-aligned */}
+          {/* Tab pills */}
           <div className="mt-8 flex">
             <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
               {TABS.map((t, i) => (
@@ -160,21 +242,30 @@ export default function IntelligenceLayer() {
           </div>
         </FadeIn>
 
-        {/* Centered card with connector callouts */}
+        {/* Centered card with connector callouts — swaps per tab */}
         <FadeIn delay={0.1} className="mt-16">
-          <div className="flex items-center justify-center gap-8">
-            <div className="hidden flex-col items-end gap-16 pt-8 xl:flex">
-              {CALLOUTS_LEFT.map((c) => (
-                <ConnectorLabel key={c} text={c} side="left" />
-              ))}
-            </div>
-            <OpportunityCard />
-            <div className="hidden flex-col items-start gap-16 pt-8 xl:flex">
-              {CALLOUTS_RIGHT.map((c) => (
-                <ConnectorLabel key={c} text={c} side="right" />
-              ))}
-            </div>
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={tab.key}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10, transition: { duration: 0.22 } }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-center justify-center gap-8"
+            >
+              <div className="hidden flex-col items-end gap-16 pt-8 xl:flex">
+                {tab.callouts.left.map((c) => (
+                  <ConnectorLabel key={c} text={c} side="left" />
+                ))}
+              </div>
+              <OpportunityCard card={tab.card} />
+              <div className="hidden flex-col items-start gap-16 pt-8 xl:flex">
+                {tab.callouts.right.map((c) => (
+                  <ConnectorLabel key={c} text={c} side="right" />
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </FadeIn>
 
         {/* 2×3 feature grid */}

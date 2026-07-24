@@ -15,22 +15,22 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
       {
         metric: "Fewer inbound status calls",
         sub: "customers self-serve live",
-        body: "Live order visibility with automated, exception-driven updates so customers and reps see status without a single phone call.",
+        body: "Live order visibility with exception-driven updates — no phone calls needed.",
       },
       {
         metric: "Faster claims resolution",
         sub: "auto part + warranty match",
-        body: "Lens identifies the part, verifies warranty, and matches the purchase automatically — turning multi-day claim triage into minutes.",
+        body: "Part identified, warranty verified, purchase matched — claims resolved in minutes.",
       },
       {
         metric: "Higher repeat revenue",
         sub: "engagement into lifetime",
-        body: "Turn every engagement signal into repeat purchases and higher lifetime value, with loyalty offers triggered at the right moment.",
+        body: "Engagement signals become repeat purchases and higher lifetime value.",
       },
       {
         metric: "Routine work, automated",
         sub: "one surface, every service desk",
-        body: "A single command surface that automates routine service work across every desk — freeing teams for the conversations that matter.",
+        body: "One command surface automating routine service work across every desk.",
       },
     ],
   },
@@ -41,22 +41,22 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
       {
         metric: "Confidence-graded POs",
         sub: "demand sensed, buying automated",
-        body: "Lens forecasts demand and drafts cost-optimized POs graded by confidence — the planner approves, the system executes.",
+        body: "Demand-sensed, cost-optimized POs — the planner approves, the system executes.",
       },
       {
         metric: "Risk flagged early",
         sub: "continuous supplier scoring",
-        body: "Every supplier scored continuously on risk, delivery, and performance — with alternates suggested before a disruption lands.",
+        body: "Continuous supplier scoring, with alternates suggested before disruption lands.",
       },
       {
         metric: "Savings you can defend",
         sub: "normalized spend, every category",
-        body: "One normalized view of spend, suppliers, and market signals across every category and site — quantifying validated, evidence-backed savings.",
+        body: "Normalized spend across every category — validated, evidence-backed savings.",
       },
       {
         metric: "Fewer expedites",
         sub: "early risk flags at PO level",
-        body: "Sense disruption early and route to the right play — consolidation, competitive RFP, or re-source — before it becomes an expedite premium.",
+        body: "Early risk flags routed to the right play before expedite premiums hit.",
       },
     ],
   },
@@ -67,22 +67,22 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
       {
         metric: "One view, every location",
         sub: "demand, supply, inventory, POs",
-        body: "Real-time inventory, demand, and PO insight across every warehouse and store — imbalances surfaced before they cost a sale.",
+        body: "Real-time inventory, demand, and PO insight across every location.",
       },
       {
         metric: "Higher fill rates",
         sub: "plans self-tune to signals",
-        body: "Detect demand and supply shifts early and self-tune stocking plans — so the right product is in the right place, right now.",
+        body: "Plans self-tune to demand shifts — right product, right place, right now.",
       },
       {
         metric: "Decisions in days",
         sub: "confidence-graded actions",
-        body: "AI detects risks and opportunities and recommends the optimal stocking action, graded by confidence — the planner stays in the loop.",
+        body: "Confidence-graded stocking recommendations — the planner stays in the loop.",
       },
       {
         metric: "Higher turns, lower cost",
         sub: "rebalance + reorder, automated",
-        body: "Rebalance stock across locations and trigger replenishment automatically — cutting expedite spend and freeing working capital.",
+        body: "Automatic rebalancing and replenishment — higher turns, less tied-up capital.",
       },
     ],
   },
@@ -119,13 +119,11 @@ export default function Outcomes() {
     <section id="outcomes" className="bg-white py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <p className="text-[17px] font-medium text-[#5C3D97]">The Value We Deliver</p>
           <h2 className="mt-3 text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]">
             Driving Outcomes
           </h2>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
-            From day one, our methodology and solutions work together across three pillars
-            to turn intelligence into measurable business value.
+            Three pillars turning intelligence into measurable business value.
           </p>
           {/* Tab pills — above the cards */}
           <div className="mt-8 flex">

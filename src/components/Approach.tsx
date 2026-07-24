@@ -75,13 +75,11 @@ export default function Approach() {
     <section id="features" ref={sectionRef} className="overflow-hidden bg-white py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <p className="text-[17px] font-medium text-[#5C3D97]">The Approach</p>
           <h2 className="mt-3 text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]">
             From vision to value
           </h2>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
-            A repeatable, AI-led delivery framework built from years of industrial
-            transformation engagements.
+            A repeatable, AI-led delivery framework.
           </p>
         </FadeIn>
       </div>

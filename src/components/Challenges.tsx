@@ -17,17 +17,17 @@ const TABS: Tab[] = [
       {
         id: "cx-1",
         title: "Disconnected experiences",
-        body: "Customers and field reps stitch together order status across phone, email, and portals. With no shared view, every channel tells a different story — eroding trust and stalling growth.",
+        body: "Status lives across phone, email, and portals — every channel tells a different story.",
       },
       {
         id: "cx-2",
         title: "No real-time order visibility",
-        body: "Orders and fulfillment move without a live view, so delays and stockouts surface only when a customer calls to complain — too late to protect the job or the relationship.",
+        body: "No live view of orders — you hear about delays when the customer does.",
       },
       {
         id: "cx-3",
         title: "High Call Volumes",
-        body: "Routine “where's my order” questions flood service teams with no single source of truth — driving long wait times, with reps buried in lookups instead of selling.",
+        body: "Routine “where's my order” calls bury service teams with no single source of truth.",
       },
     ],
   },
@@ -39,17 +39,17 @@ const TABS: Tab[] = [
       {
         id: "sf-1",
         title: "Fragmented data hides risk",
-        body: "Spend, supplier, inventory, and market data sit in separate ERPs and cubes with mismatched taxonomy. Risk stays hidden in the gaps until it surfaces as a disruption.",
+        body: "Spend and supplier data sit in disconnected systems — risk hides until it hits.",
       },
       {
         id: "sf-2",
         title: "Reactive vendor management",
-        body: "Suppliers are managed after the fact — no continuous view of risk or performance, and planning disconnected from buying, so problems are caught only once they hit.",
+        body: "Vendors managed after the fact, with no continuous view of risk or performance.",
       },
       {
         id: "sf-3",
         title: "Reacting vs anticipating",
-        body: "Teams respond to demand and supply shocks instead of sensing them early, driving expedite premiums, missed leverage, and value leakage across sites and business units.",
+        body: "Reacting to shocks instead of sensing them — expedite premiums and value leakage.",
       },
     ],
   },
@@ -61,23 +61,23 @@ const TABS: Tab[] = [
       {
         id: "inv-1",
         title: "Manual adjustment to every SKU",
-        body: "Planning happens SKU-by-SKU and site-by-site, by hand. Without consolidated buying, stock piles up in one location while another runs dry.",
+        body: "Planning by hand, SKU by SKU — stock piles up here while it runs dry there.",
       },
       {
         id: "inv-2",
         title: "Stockouts cut service & revenue",
-        body: "When demand outpaces a manual plan, shelves go empty — service levels drop, orders go unfilled, and the revenue walks straight to a competitor.",
+        body: "Empty shelves drop service levels and hand revenue to competitors.",
       },
       {
         id: "inv-3",
         title: "Excess stock locks up capital",
-        body: "Hedging against stockouts swings the other way: surplus safety stock ties up working capital and warehouse space, quietly eroding margin.",
+        body: "Surplus safety stock quietly ties up working capital and warehouse space.",
       },
     ],
   },
 ];
 
-const DURATION = 5000; // ms per tab before auto-advance
+const DURATION = 8000; // ms per tab before auto-advance
 
 export default function Challenges() {
   const [tabIdx, setTabIdx] = useState(0);

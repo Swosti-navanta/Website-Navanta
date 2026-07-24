@@ -79,8 +79,7 @@ export default function HowWeEnable() {
             How We Enable Value for Our Clients
           </h2>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
-            Our intelligence layer unifies your existing architecture, accelerating
-            time-to-value without the $100M sunk cost.
+            One intelligence layer, unifying the systems you already run.
           </p>
         </FadeIn>
 

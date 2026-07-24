@@ -9,21 +9,21 @@ const REGIONS = [
   {
     id: 1,
     name: "North America",
-    body: "A ~$1B trucking-equipment dealer, a ~$1B flooring OEM, and a ~$4B automotive components distributor run planning, orders, and procurement on the Lens.",
+    body: "A ~$1B trucking dealer, ~$1B flooring OEM, and ~$4B auto-components distributor run on the Lens.",
     cx: 15,
     cy: 6,
   },
   {
     id: 2,
     name: "Europe",
-    body: "Procurement control towers across chemicals categories and multi-site European operations — competitive RFPs, consolidated buys, savings tracked to target.",
+    body: "Procurement control across chemicals categories — RFPs, consolidated buys, tracked savings.",
     cx: 47.5,
     cy: 4.5,
   },
   {
     id: 3,
     name: "India",
-    body: "Navanta's scaled engineering and delivery hub — senior US leadership working alongside teams in India to ship outcomes for every engagement.",
+    body: "Our scaled engineering and delivery hub, working alongside senior US leadership.",
     cx: 61,
     cy: 12,
   },
@@ -51,9 +51,7 @@ export default function Impact() {
               Real impact for real clients
             </h2>
             <p className="max-w-md text-[15px] leading-relaxed text-white/55 lg:justify-self-end">
-              From plant floors in North America to procurement categories in
-              Europe — Navanta&apos;s intelligence layer runs where industry runs,
-              delivered by teams across the US and India.
+              Navanta runs where industry runs — delivered by teams across the US and India.
             </p>
           </div>
         </FadeIn>
