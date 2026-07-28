@@ -10,15 +10,30 @@ import {
   Stack,
   ClockCounterClockwise,
   Plus,
+  Buildings,
+  ArrowsClockwise,
+  Package,
+  Broadcast,
+  Barcode,
+  MapPinLine,
+  BellRinging,
+  ChatCircleText,
+  CheckCircle,
+  Tag,
+  Handshake,
+  Lightning,
+  Target,
   type Icon,
 } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
+
+type Callout = { icon: Icon; title: string; body: string };
 
 type TabDef = {
   key: string;
   label: string;
   heading: string;
-  callouts: { left: string[]; right: string[] };
+  callouts: { left: Callout[]; right: Callout[] };
   card: {
     title: string;
     sub: string;
@@ -34,8 +49,16 @@ const TABS: TabDef[] = [
     label: "Centralized Intelligence",
     heading: "Centralized Planning and Buying Intelligence",
     callouts: {
-      left: ["Network & locations", "Demand signal", "On-hand position"],
-      right: ["One-click rebalance", "Confidence grade", "Stock cover"],
+      left: [
+        { icon: Buildings, title: "Network & locations", body: "Every warehouse and store, mapped in one view." },
+        { icon: Waveform, title: "Demand signal", body: "Signals sensed early, before they become stockouts." },
+        { icon: Stack, title: "On-hand position", body: "Live inventory across every location, always current." },
+      ],
+      right: [
+        { icon: ArrowsClockwise, title: "One-click rebalance", body: "Move stock between sites in a single click." },
+        { icon: ChartLineUp, title: "Confidence grade", body: "Every recommendation scored, so you know when to trust it." },
+        { icon: Package, title: "Stock cover", body: "Days of cover tracked per SKU, per site." },
+      ],
     },
     card: {
       title: "SKU-4482 · Network plan",
@@ -68,8 +91,16 @@ const TABS: TabDef[] = [
     label: "Inventory & Order Intelligence",
     heading: "Customer Inventory and Order Intelligence",
     callouts: {
-      left: ["Live order status", "SKU cross-reference", "Stock by location"],
-      right: ["Proactive alerts", "Self-serve answers", "Guided resolution"],
+      left: [
+        { icon: Broadcast, title: "Live order status", body: "Real-time status on every order, no phone calls." },
+        { icon: Barcode, title: "SKU cross-reference", body: "Match part numbers instantly across every system." },
+        { icon: MapPinLine, title: "Stock by location", body: "See what's available, and where, in seconds." },
+      ],
+      right: [
+        { icon: BellRinging, title: "Proactive alerts", body: "Delays flagged before the customer has to ask." },
+        { icon: ChatCircleText, title: "Self-serve answers", body: "Customers find answers themselves, day or night." },
+        { icon: CheckCircle, title: "Guided resolution", body: "Every issue routed to the right fix, fast." },
+      ],
     },
     card: {
       title: "Order XC-2384 · Flooring",
@@ -102,8 +133,16 @@ const TABS: TabDef[] = [
     label: "Procurement Control",
     heading: "Procurement Control Tower",
     callouts: {
-      left: ["Category & region", "Spend & suppliers", "Weekly demand"],
-      right: ["One-click RFP", "Savings target", "Stock cover"],
+      left: [
+        { icon: Tag, title: "Category & region", body: "Spend organized by category and geography." },
+        { icon: Handshake, title: "Spend & suppliers", body: "Every supplier scored on cost, risk, and performance." },
+        { icon: Waveform, title: "Weekly demand", body: "Demand sensed early, so buying stays ahead of it." },
+      ],
+      right: [
+        { icon: Lightning, title: "One-click RFP", body: "Launch a competitive RFP in a single click." },
+        { icon: Target, title: "Savings target", body: "Track every dollar of savings against target." },
+        { icon: Package, title: "Stock cover", body: "Coverage tracked across every category and site." },
+      ],
     },
     card: {
       title: "OPP-005 · Chemicals",
@@ -190,11 +229,15 @@ function OpportunityCard({ card }: { card: TabDef["card"] }) {
   );
 }
 
-function ConnectorLabel({ text, side }: { text: string; side: "left" | "right" }) {
+function CalloutCard({ icon: CalloutIcon, title, body }: Callout) {
   return (
-    <div className={`flex items-center gap-3 ${side === "left" ? "flex-row-reverse" : ""}`}>
-      <span className="whitespace-nowrap text-[14px] text-zinc-500">{text}</span>
-      <span className="h-px w-16 bg-zinc-300" />
+    <div className="w-[236px] rounded-2xl bg-white p-5 shadow-sm">
+      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#efeaf9]">
+        <CalloutIcon size={17} className="text-[#5C3D97]" />
+      </span>
+      <p className="mt-3 text-[15px] font-medium text-zinc-900">{title}</p>
+      <p className="mt-1.5 text-[12.5px] leading-relaxed text-zinc-500">{body}</p>
+      <div className="mt-4 h-px w-full bg-zinc-200" />
     </div>
   );
 }
@@ -251,17 +294,17 @@ export default function IntelligenceLayer() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10, transition: { duration: 0.22 } }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="flex items-center justify-center gap-8"
+              className="flex items-center justify-center gap-10"
             >
-              <div className="hidden flex-col items-end gap-16 pt-8 xl:flex">
+              <div className="hidden flex-col gap-5 xl:flex">
                 {tab.callouts.left.map((c) => (
-                  <ConnectorLabel key={c} text={c} side="left" />
+                  <CalloutCard key={c.title} {...c} />
                 ))}
               </div>
               <OpportunityCard card={tab.card} />
-              <div className="hidden flex-col items-start gap-16 pt-8 xl:flex">
+              <div className="hidden flex-col gap-5 xl:flex">
                 {tab.callouts.right.map((c) => (
-                  <ConnectorLabel key={c} text={c} side="right" />
+                  <CalloutCard key={c.title} {...c} />
                 ))}
               </div>
             </motion.div>
