@@ -3,7 +3,8 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/HeroV2";
 import MissionStatement from "@/components/MissionStatement";
 import Challenges from "@/components/Challenges";
-import Lens from "@/components/Lens";
+// LensIntro = toggle scatter/flow concept; old agent-demo lives in Lens.tsx (revert by swapping back).
+import Lens from "@/components/LensIntro";
 import Approach from "@/components/Approach";
 import IntelligenceLayer from "@/components/IntelligenceLayer";
 import HowWeEnable from "@/components/HowWeEnable";
