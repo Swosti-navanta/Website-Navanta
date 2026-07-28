@@ -1,14 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Database,
-  ShieldCheck,
   ChartLineUp,
   Waveform,
   Stack,
-  ClockCounterClockwise,
   Plus,
   Buildings,
   ArrowsClockwise,
@@ -172,16 +169,6 @@ const TABS: TabDef[] = [
   },
 ];
 
-/* 2×3 data-enrichment feature grid */
-const FEATURES: { icon: Icon; title: string; body: string }[] = [
-  { icon: Database, title: "Spend & category data", body: "One normalized view of spend across every category, site, and business unit." },
-  { icon: ShieldCheck, title: "Supplier intelligence", body: "Continuous risk, delivery, and performance scoring on every vendor." },
-  { icon: ChartLineUp, title: "Market & pricing signals", body: "External commodity and pricing benchmarks, tracked in real time." },
-  { icon: Waveform, title: "Demand & forecast", body: "Signal-driven demand sensing per SKU and location, tuned to your history." },
-  { icon: Stack, title: "Inventory position", body: "Live stock, coverage, and imbalance across every warehouse and store." },
-  { icon: ClockCounterClockwise, title: "Audit & traceability", body: "Every decision logged, confidence-graded, and fully reversible." },
-];
-
 function OpportunityCard({ card }: { card: TabDef["card"] }) {
   return (
     <div className="w-[420px] max-w-full rounded-2xl bg-white p-6 shadow-[0_24px_70px_rgba(0,0,0,0.10)]">
@@ -229,22 +216,84 @@ function OpportunityCard({ card }: { card: TabDef["card"] }) {
   );
 }
 
-function CalloutCard({ icon: CalloutIcon, title, body }: Callout) {
+const FEATURE_MS = 3600;
+
+/* Left feature card — active one shows a filling progress bar, then advances */
+function FeatureCard({
+  icon: CalloutIcon,
+  title,
+  body,
+  active,
+  featureKey,
+  onSelect,
+}: Callout & { active: boolean; featureKey: string; onSelect: () => void }) {
   return (
-    <div className="w-[236px] rounded-2xl bg-white p-5 shadow-sm">
-      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#efeaf9]">
-        <CalloutIcon size={17} className="text-[#5C3D97]" />
+    <button
+      onClick={onSelect}
+      aria-pressed={active}
+      className={`block w-full rounded-2xl p-5 text-left transition-colors ${
+        active ? "bg-white shadow-sm" : "bg-zinc-100 hover:bg-zinc-100/70"
+      }`}
+    >
+      <span
+        className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+          active ? "bg-[#efeaf9]" : "bg-white"
+        }`}
+      >
+        <CalloutIcon size={17} className={active ? "text-[#5C3D97]" : "text-zinc-400"} />
       </span>
-      <p className="mt-3 text-[15px] font-medium text-zinc-900">{title}</p>
-      <p className="mt-1.5 text-[12.5px] leading-relaxed text-zinc-500">{body}</p>
-      <div className="mt-4 h-px w-full bg-zinc-200" />
+      <p className={`mt-3 text-[16px] font-medium ${active ? "text-zinc-900" : "text-zinc-500"}`}>
+        {title}
+      </p>
+      <p className={`mt-1.5 text-[13px] leading-relaxed ${active ? "text-zinc-500" : "text-zinc-400"}`}>
+        {body}
+      </p>
+      <div className="mt-4 h-px w-full overflow-hidden bg-zinc-200">
+        {active && (
+          <motion.div
+            key={featureKey}
+            className="h-full bg-zinc-900"
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{ duration: FEATURE_MS / 1000, ease: "linear" }}
+          />
+        )}
+      </div>
+    </button>
+  );
+}
+
+/* Right annotation — segmented leader line pointing left at the card + label.
+   Active one is black; inactive are light grey (matches the design). */
+function Annotation({ text, active }: { text: string; active: boolean }) {
+  const line = active ? "bg-zinc-900" : "bg-zinc-200";
+  const label = active ? "text-zinc-900" : "text-zinc-300";
+  return (
+    <div className="flex items-center gap-2 transition-colors duration-500">
+      {/* short segment nearest the card, then a gap, then the long line */}
+      <span className={`h-px w-2.5 flex-shrink-0 ${line}`} />
+      <span className={`h-px w-10 flex-shrink-0 ${line}`} />
+      <span className={`whitespace-nowrap text-[15px] ${label}`}>{text}</span>
     </div>
   );
 }
 
 export default function IntelligenceLayer() {
   const [active, setActive] = useState(0);
+  const [feature, setFeature] = useState(0);
   const tab = TABS[active];
+  const featureCount = tab.callouts.left.length;
+
+  // Reset feature when the tab changes
+  useEffect(() => {
+    setFeature(0);
+  }, [active]);
+
+  // Auto-advance the active feature (drives left progress bar + right annotation)
+  useEffect(() => {
+    const t = setTimeout(() => setFeature((f) => (f + 1) % featureCount), FEATURE_MS);
+    return () => clearTimeout(t);
+  }, [feature, active, featureCount]);
 
   return (
     <section id="intelligence" className="bg-[#fafaf9] py-28">
@@ -285,7 +334,7 @@ export default function IntelligenceLayer() {
           </div>
         </FadeIn>
 
-        {/* Centered card with connector callouts — swaps per tab */}
+        {/* Left features (with progress) · center product card · right annotations */}
         <FadeIn delay={0.1} className="mt-16">
           <AnimatePresence mode="wait">
             <motion.div
@@ -294,38 +343,34 @@ export default function IntelligenceLayer() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10, transition: { duration: 0.22 } }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="flex items-center justify-center gap-10"
+              className="grid items-center gap-8 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)_minmax(0,210px)]"
             >
-              <div className="hidden flex-col gap-5 xl:flex">
-                {tab.callouts.left.map((c) => (
-                  <CalloutCard key={c.title} {...c} />
+              {/* Left — rotating feature cards */}
+              <div className="flex flex-col gap-4">
+                {tab.callouts.left.map((c, i) => (
+                  <FeatureCard
+                    key={c.title}
+                    {...c}
+                    active={i === feature}
+                    featureKey={`${tab.key}-${feature}`}
+                    onSelect={() => setFeature(i)}
+                  />
                 ))}
               </div>
-              <OpportunityCard card={tab.card} />
-              <div className="hidden flex-col gap-5 xl:flex">
-                {tab.callouts.right.map((c) => (
-                  <CalloutCard key={c.title} {...c} />
+
+              {/* Center — product card */}
+              <div className="flex justify-center">
+                <OpportunityCard card={tab.card} />
+              </div>
+
+              {/* Right — annotations that follow the active feature */}
+              <div className="hidden flex-col justify-center gap-14 lg:flex">
+                {tab.callouts.right.map((c, i) => (
+                  <Annotation key={c.title} text={c.title} active={i === feature} />
                 ))}
               </div>
             </motion.div>
           </AnimatePresence>
-        </FadeIn>
-
-        {/* 2×3 feature grid */}
-        <FadeIn delay={0.15} className="mt-24">
-          <div className="grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
-            {FEATURES.map((f) => (
-              <div key={f.title}>
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#efeaf9]">
-                  <f.icon size={18} className="text-[#5C3D97]" />
-                </span>
-                <h3 className="mt-4 text-[17px] font-medium text-zinc-900">{f.title}</h3>
-                <p className="mt-2 max-w-xs text-[14px] leading-relaxed text-zinc-500">
-                  {f.body}
-                </p>
-              </div>
-            ))}
-          </div>
         </FadeIn>
       </div>
     </section>
