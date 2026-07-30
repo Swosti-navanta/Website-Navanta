@@ -62,53 +62,6 @@ export default function ContactPage() {
           video
         />
 
-        {/* Split: form left · brand image right */}
-        <section id="demo" className="bg-white py-20">
-          <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-              <FadeIn className="flex flex-col justify-center py-4">
-                <h2 className="text-[32px] font-medium tracking-tight text-zinc-900 sm:text-[40px]">
-                  Request a Demo
-                </h2>
-                <p className="mt-3 max-w-md text-[15.5px] leading-relaxed text-zinc-500">
-                  See Navanta on your data within a week — planning, procurement, and
-                  order flows running on your own systems.
-                </p>
-                <div className="mt-8 max-w-lg">
-                  <DemoForm />
-                </div>
-              </FadeIn>
-
-              <FadeIn delay={0.08}>
-                <div className="relative h-[420px] overflow-hidden rounded-2xl lg:h-full lg:min-h-[640px]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/figma/footer-railyard.jpg"
-                    alt="Industrial rail yard"
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/25" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/navanta-logo.svg"
-                    alt="Navanta"
-                    className="absolute left-6 top-6 h-8 w-auto"
-                  />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <p className="text-[20px] font-medium leading-snug text-white sm:text-[24px]">
-                      12–16 weeks from kickoff to operational launch — fixed fee,
-                      measured in your numbers.
-                    </p>
-                    <p className="mt-2 text-[13px] text-white/60">
-                      The supply chain intelligence layer for industrial enterprises
-                    </p>
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
-
         {/* Details beside a live map */}
         <section className="bg-[#fafaf9] py-20">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
@@ -167,6 +120,53 @@ export default function ContactPage() {
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                   />
+                </div>
+              </FadeIn>
+            </div>
+          </div>
+        </section>
+
+        {/* Request a Demo — form left · brand image right */}
+        <section id="demo" className="bg-white py-20">
+          <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
+            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+              <FadeIn className="flex flex-col justify-center py-4">
+                <h2 className="text-[32px] font-medium tracking-tight text-zinc-900 sm:text-[40px]">
+                  Request a Demo
+                </h2>
+                <p className="mt-3 max-w-md text-[15.5px] leading-relaxed text-zinc-500">
+                  See Navanta on your data within a week — planning, procurement, and
+                  order flows running on your own systems.
+                </p>
+                <div className="mt-8 max-w-lg">
+                  <DemoForm />
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.08}>
+                <div className="relative h-[420px] overflow-hidden rounded-2xl lg:h-full lg:min-h-[640px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/figma/footer-railyard.jpg"
+                    alt="Industrial rail yard"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/25" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/navanta-logo.svg"
+                    alt="Navanta"
+                    className="absolute left-6 top-6 h-8 w-auto"
+                  />
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <p className="text-[20px] font-medium leading-snug text-white sm:text-[24px]">
+                      12–16 weeks from kickoff to operational launch — fixed fee,
+                      measured in your numbers.
+                    </p>
+                    <p className="mt-2 text-[13px] text-white/60">
+                      The supply chain intelligence layer for industrial enterprises
+                    </p>
+                  </div>
                 </div>
               </FadeIn>
             </div>
