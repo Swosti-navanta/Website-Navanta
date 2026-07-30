@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import { ArrowDown } from "@phosphor-icons/react";
 import HeroNotifications from "./HeroNotifications";
+import { useDemoModal } from "./DemoModal";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -12,6 +13,7 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  *  (white gutters appear), and expands back on the way up.
  *  Revert: switch page.tsx back to importing Hero. */
 export default function HeroV2() {
+  const { open: openDemo } = useDemoModal();
   const videoWrapRef = useRef<HTMLDivElement>(null);
   const scale = useMotionValue(1);
   const radius = useMotionValue(0);
@@ -98,6 +100,7 @@ export default function HeroV2() {
   return (
     <section className="relative bg-white">
       <motion.div
+        data-nav-theme="dark"
         style={{ scale, borderRadius: radius }}
         className="relative flex min-h-screen items-center overflow-hidden bg-[#191512]"
       >
@@ -161,12 +164,12 @@ export default function HeroV2() {
             transition={{ duration: 0.8, ease: EASE, delay: 0.45 }}
             className="mt-10"
           >
-            <a
-              href="/contact#demo"
+            <button
+              onClick={openDemo}
               className="inline-block rounded-lg bg-white px-6 py-3.5 text-[15px] font-medium text-black transition-colors hover:bg-white/90"
             >
               Request a Demo
-            </a>
+            </button>
           </motion.div>
         </div>
       </div>

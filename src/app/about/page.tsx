@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
 import FadeIn from "@/components/FadeIn";
+import { OpenDemoButton } from "@/components/DemoModal";
 import { EnvelopeSimple, LinkedinLogo, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
@@ -201,12 +202,9 @@ export default function AboutPage() {
                     >
                       Open positions <ArrowRight size={14} weight="bold" />
                     </a>
-                    <a
-                      href="/contact#demo"
-                      className="rounded-lg border border-white/30 px-5 py-3 text-[14px] font-medium text-white transition-colors hover:border-white/60 hover:bg-white/5"
-                    >
+                    <OpenDemoButton className="rounded-lg border border-white/30 px-5 py-3 text-[14px] font-medium text-white transition-colors hover:border-white/60 hover:bg-white/5">
                       Request a Demo
-                    </a>
+                    </OpenDemoButton>
                   </div>
                 </div>
               </div>

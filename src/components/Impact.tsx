@@ -43,7 +43,7 @@ export default function Impact() {
   const pct = (v: number, total: number) => (v / total) * 100;
 
   return (
-    <section id="impact" className="relative -mt-10 rounded-t-[40px] bg-[#0c0b0a] py-28">
+    <section id="impact" data-nav-theme="dark" className="relative -mt-10 rounded-t-[40px] bg-[#0c0b0a] py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
           <div className="grid gap-8 lg:grid-cols-2 lg:items-end">

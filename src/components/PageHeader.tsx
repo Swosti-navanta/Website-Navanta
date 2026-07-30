@@ -17,7 +17,7 @@ export default function PageHeader({
   video?: boolean;
 }) {
   return (
-    <header className="relative overflow-hidden bg-[#0c0b0a] pb-20 pt-40">
+    <header data-nav-theme="dark" className="relative overflow-hidden bg-[#0c0b0a] pb-20 pt-40">
       {video && <BgVideo />}
       <div
         aria-hidden

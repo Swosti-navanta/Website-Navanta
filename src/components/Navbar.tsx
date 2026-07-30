@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { List, X } from "@phosphor-icons/react";
+import { useDemoModal } from "./DemoModal";
 
 // Section links use "/#id" so they work from any page (jump home, then scroll).
 const NAV_LINKS = [
@@ -21,6 +22,7 @@ const NAV_LINKS = [
      and a black demo button (the two themes crossfade);
    — returning to the top restores the smoky dark nav. */
 export default function Navbar() {
+  const { open: openDemo } = useDemoModal();
   const [open, setOpen] = useState(false);
   const [atTop, setAtTop] = useState(true); // very top → no frosted band at all
   const [light, setLight] = useState(false); // past the hero → light theme
@@ -28,14 +30,23 @@ export default function Navbar() {
   const lastY = useRef(0);
 
   useEffect(() => {
+    // The theme follows what's *behind* the bar: sections tagged
+    // data-nav-theme="dark" (the hero, the black Impact band, page headers)
+    // keep the smoky dark treatment; everything else is light. We probe a
+    // point just inside the bar (y ≈ 36) to see if a dark section is under it.
     const onScroll = () => {
       const y = window.scrollY;
       const delta = y - lastY.current;
-      const pastHero = y > window.innerHeight * 0.75;
+      const probeY = 36;
+      let overDark = false;
+      document.querySelectorAll("[data-nav-theme='dark']").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top <= probeY && r.bottom >= probeY) overDark = true;
+      });
       setAtTop(y < 16);
-      setLight(pastHero);
+      setLight(!overDark);
       // Small dead zone so tiny jitters don't toggle it; never hide near top.
-      if (!pastHero) setHidden(false);
+      if (y < window.innerHeight * 0.5) setHidden(false);
       else if (Math.abs(delta) > 4) setHidden(delta > 0);
       lastY.current = y;
     };
@@ -129,8 +140,8 @@ export default function Navbar() {
           >
             Contact Us
           </a>
-          <a
-            href="/contact#demo"
+          <button
+            onClick={openDemo}
             className={`rounded-lg px-4 py-2.5 text-[14px] font-medium transition-colors duration-300 ${
               light
                 ? "bg-zinc-950 text-white hover:bg-zinc-800"
@@ -138,7 +149,7 @@ export default function Navbar() {
             }`}
           >
             Request a Demo
-          </a>
+          </button>
         </div>
 
         {/* Mobile toggle */}
@@ -183,14 +194,17 @@ export default function Navbar() {
               >
                 Contact Us
               </a>
-              <a
-                href="/contact#demo"
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  openDemo();
+                }}
                 className={`flex-1 rounded-lg px-4 py-2.5 text-center text-[14px] font-medium ${
                   light ? "bg-zinc-950 text-white" : "bg-white text-black"
                 }`}
               >
                 Request a Demo
-              </a>
+              </button>
             </li>
           </ul>
         </div>

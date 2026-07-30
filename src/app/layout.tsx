@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import SmoothScroll from "@/components/SmoothScroll";
+import { DemoModalProvider } from "@/components/DemoModal";
 import "./globals.css";
 
 /** MD Primer (test cut) — site-wide type for now */
@@ -30,7 +31,7 @@ export default function RootLayout({
     <html lang="en" className={`${mdPrimer.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <SmoothScroll />
-        {children}
+        <DemoModalProvider>{children}</DemoModalProvider>
       </body>
     </html>
   );
