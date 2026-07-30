@@ -122,12 +122,11 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
   },
 ];
 
-/* Card media — per-card Figma mockup image. Interior padding sits the mockup
-   at ~80% of the tile with even breathing room on all four sides so it doesn't
-   look cramped against the tile edges. */
+/* Card media — per-card Figma mockup image. No background of its own: it sits
+   directly on the card so the mockup reads as part of the surface. */
 function CardMedia({ src }: { src?: string }) {
   return (
-    <div className="relative flex aspect-[1203/700] w-full items-center justify-center overflow-hidden rounded-xl bg-white p-5 sm:p-6">
+    <div className="relative flex aspect-[1203/700] w-full items-center justify-center overflow-hidden">
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt="" aria-hidden className="h-full w-full object-contain" />
@@ -182,22 +181,22 @@ export default function Outcomes() {
             className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4"
           >
             {tab.cards.map((c) => (
-              <div key={c.metric} className="rounded-2xl bg-zinc-50 p-5">
-                <div className="flex items-start gap-3">
-                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-                    <c.icon size={18} className="text-[#5C3D97]" />
+              <div key={c.metric} className="rounded-2xl bg-[#F6F6F6] p-6">
+                <div className="flex items-start gap-3.5">
+                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
+                    <c.icon size={20} className="text-[#5C3D97]" />
                   </span>
                   <div>
-                    <p className="text-[16px] font-medium leading-snug text-zinc-900">
+                    <p className="text-[17px] font-medium leading-snug text-zinc-900">
                       {c.metric}
                     </p>
-                    <p className="text-[14px] text-zinc-400">{c.sub}</p>
+                    <p className="text-[14.5px] text-zinc-400">{c.sub}</p>
                   </div>
                 </div>
-                <div className="mt-4">
+                <div className="mt-5">
                   <CardMedia src={c.media} />
                 </div>
-                <p className="mt-4 text-[13.5px] leading-relaxed text-zinc-600">{c.body}</p>
+                <p className="mt-5 text-[14px] leading-relaxed text-zinc-600">{c.body}</p>
               </div>
             ))}
           </motion.div>
