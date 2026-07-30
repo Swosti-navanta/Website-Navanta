@@ -3,8 +3,6 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/HeroV2";
 import MissionStatement from "@/components/MissionStatement";
 import Challenges from "@/components/Challenges";
-// LensIntro = toggle scatter/flow concept; old agent-demo lives in Lens.tsx (revert by swapping back).
-import Lens from "@/components/LensIntro";
 import Approach from "@/components/Approach";
 import IntelligenceLayer from "@/components/IntelligenceLayer";
 import HowWeEnable from "@/components/HowWeEnable";
@@ -21,10 +19,9 @@ export default function Home() {
         <Hero />
         <MissionStatement />
         <Challenges />
-        <Lens />
         <IntelligenceLayer />
-        <HowWeEnable />
         <Outcomes />
+        <HowWeEnable />
         <Approach />
         <Faq />
         <Impact />
