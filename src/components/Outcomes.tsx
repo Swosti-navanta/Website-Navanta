@@ -2,10 +2,24 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FileText } from "@phosphor-icons/react";
+import {
+  PhoneSlash,
+  ShieldCheck,
+  TrendUp,
+  Robot,
+  SealCheck,
+  WarningCircle,
+  PiggyBank,
+  Timer,
+  MapPinLine,
+  ChartLineUp,
+  Target,
+  ArrowsClockwise,
+  type Icon,
+} from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
 
-type Card = { metric: string; sub: string; body: string };
+type Card = { metric: string; sub: string; body: string; icon: Icon; media?: string };
 
 const TABS: { key: string; label: string; cards: Card[] }[] = [
   {
@@ -16,21 +30,29 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
         metric: "Fewer inbound status calls",
         sub: "customers self-serve live",
         body: "Live order visibility with exception-driven updates — no phone calls needed.",
+        icon: PhoneSlash,
+        media: "/outcomes/customer-status.png",
       },
       {
         metric: "Faster claims resolution",
         sub: "auto part + warranty match",
         body: "Part identified, warranty verified, purchase matched — claims resolved in minutes.",
+        icon: ShieldCheck,
+        media: "/outcomes/customer-claims.png",
       },
       {
         metric: "Higher repeat revenue",
         sub: "engagement into lifetime",
         body: "Engagement signals become repeat purchases and higher lifetime value.",
+        icon: TrendUp,
+        media: "/outcomes/customer-revenue.png",
       },
       {
         metric: "Routine work, automated",
         sub: "one surface, every service desk",
         body: "One command surface automating routine service work across every desk.",
+        icon: Robot,
+        media: "/outcomes/customer-automation.png",
       },
     ],
   },
@@ -42,21 +64,29 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
         metric: "Confidence-graded POs",
         sub: "demand sensed, buying automated",
         body: "Demand-sensed, cost-optimized POs — the planner approves, the system executes.",
+        icon: SealCheck,
+        media: "/outcomes/procurement-pos.png",
       },
       {
         metric: "Risk flagged early",
         sub: "continuous supplier scoring",
         body: "Continuous supplier scoring, with alternates suggested before disruption lands.",
+        icon: WarningCircle,
+        media: "/outcomes/procurement-risk.png",
       },
       {
         metric: "Savings you can defend",
         sub: "normalized spend, every category",
         body: "Normalized spend across every category — validated, evidence-backed savings.",
+        icon: PiggyBank,
+        media: "/outcomes/procurement-savings.png",
       },
       {
         metric: "Fewer expedites",
         sub: "early risk flags at PO level",
         body: "Early risk flags routed to the right play before expedite premiums hit.",
+        icon: Timer,
+        media: "/outcomes/procurement-expedites.png",
       },
     ],
   },
@@ -68,45 +98,42 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
         metric: "One view, every location",
         sub: "demand, supply, inventory, POs",
         body: "Real-time inventory, demand, and PO insight across every location.",
+        icon: MapPinLine,
       },
       {
         metric: "Higher fill rates",
         sub: "plans self-tune to signals",
         body: "Plans self-tune to demand shifts — right product, right place, right now.",
+        icon: ChartLineUp,
       },
       {
         metric: "Decisions in days",
         sub: "confidence-graded actions",
         body: "Confidence-graded stocking recommendations — the planner stays in the loop.",
+        icon: Target,
       },
       {
         metric: "Higher turns, lower cost",
         sub: "rebalance + reorder, automated",
         body: "Automatic rebalancing and replenishment — higher turns, less tied-up capital.",
+        icon: ArrowsClockwise,
       },
     ],
   },
 ];
 
-/* Card media — Figma mockup: ETA card over a shipping-container strip */
-function CardMedia() {
+/* Card media — per-card Figma mockup image. Interior padding sits the mockup
+   at ~80% of the tile with even breathing room on all four sides so it doesn't
+   look cramped against the tile edges. */
+function CardMedia({ src }: { src?: string }) {
   return (
-    <div className="relative h-[190px] overflow-hidden rounded-xl bg-zinc-300">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/figma/outcome-strip.png"
-        alt=""
-        aria-hidden
-        className="absolute inset-x-0 bottom-0 w-full"
-      />
-      <div className="absolute left-1/2 top-6 flex w-[240px] -translate-x-1/2 gap-2 rounded-md bg-white p-3 shadow-md">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/figma/outcome-map.png" alt="" aria-hidden className="h-10 w-10 rounded object-cover" />
-        <div>
-          <p className="text-[11px] font-semibold text-zinc-900">Accurate ETA restored</p>
-          <p className="mt-1 text-[10px] text-zinc-500">ETA variance detected: 0 days</p>
-        </div>
-      </div>
+    <div className="relative flex aspect-[1203/700] w-full items-center justify-center overflow-hidden rounded-xl bg-white p-5 sm:p-6">
+      {src ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt="" aria-hidden className="h-full w-full object-contain" />
+      ) : (
+        <span className="text-[12px] text-zinc-400">Mockup coming soon</span>
+      )}
     </div>
   );
 }
@@ -157,8 +184,8 @@ export default function Outcomes() {
             {tab.cards.map((c) => (
               <div key={c.metric} className="rounded-2xl bg-zinc-50 p-5">
                 <div className="flex items-start gap-3">
-                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#efeaf9]">
-                    <FileText size={18} className="text-[#5C3D97]" />
+                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
+                    <c.icon size={18} className="text-[#5C3D97]" />
                   </span>
                   <div>
                     <p className="text-[16px] font-medium leading-snug text-zinc-900">
@@ -168,7 +195,7 @@ export default function Outcomes() {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <CardMedia />
+                  <CardMedia src={c.media} />
                 </div>
                 <p className="mt-4 text-[13.5px] leading-relaxed text-zinc-600">{c.body}</p>
               </div>

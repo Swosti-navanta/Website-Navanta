@@ -237,7 +237,7 @@ function FeatureCard({
     >
       <span
         className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-          active ? "bg-[#efeaf9]" : "bg-white"
+          active ? "bg-[#EBE8F3]" : "bg-white"
         }`}
       >
         <CalloutIcon size={17} className={active ? "text-[#5C3D97]" : "text-zinc-400"} />

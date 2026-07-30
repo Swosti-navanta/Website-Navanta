@@ -102,7 +102,7 @@ export default function HowWeEnable() {
                         <div className="mt-4 flex items-center justify-center gap-8">
                           {b.items.map((it) => (
                             <div key={it.label} className="flex flex-col items-center gap-2">
-                              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#efeaf9]">
+                              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EBE8F3]">
                                 <it.icon size={18} className="text-[#5C3D97]" />
                               </span>
                               <span className="text-[11.5px] text-zinc-600">{it.label}</span>
@@ -130,7 +130,7 @@ export default function HowWeEnable() {
                     <Fragment key={p.title}>
                       <div className="h-full rounded-xl bg-white p-5">
                         <div className="flex items-center gap-3">
-                          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#efeaf9]">
+                          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EBE8F3]">
                             <p.icon size={18} className="text-[#5C3D97]" />
                           </span>
                           <p className="text-[14.5px] font-semibold leading-tight text-zinc-900">
@@ -153,10 +153,10 @@ export default function HowWeEnable() {
               <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-5">
                 <div className="grid gap-6 md:grid-cols-[1fr_auto_1fr]">
                   <div>
-                    <p className="text-[14px] font-semibold text-zinc-900">
+                    <p className="text-center text-[14px] font-semibold text-zinc-900">
                       30+ ERP&apos;s Enterprise Systems
                     </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
+                    <div className="mt-3 flex flex-wrap justify-center gap-2">
                       {ERPS.map((e) => (
                         <span
                           key={e}
@@ -175,10 +175,10 @@ export default function HowWeEnable() {
                     </span>
                   </div>
                   <div>
-                    <p className="text-[14px] font-semibold text-zinc-900">
+                    <p className="text-center text-[14px] font-semibold text-zinc-900">
                       50+ External Supply Chain Signals
                     </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
+                    <div className="mt-3 flex flex-wrap justify-center gap-2">
                       {SIGNALS.map((s) => (
                         <span
                           key={s}

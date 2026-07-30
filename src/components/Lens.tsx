@@ -243,7 +243,7 @@ export default function Lens() {
                     <div
                       key={r}
                       className={`mx-2 mb-1 flex items-center gap-2 rounded-lg px-3 py-2 text-[11.5px] transition-colors ${
-                        current.rail === r ? "bg-[#efeaf9] font-medium text-[#5C3D97]" : "text-zinc-400"
+                        current.rail === r ? "bg-[#EBE8F3] font-medium text-[#5C3D97]" : "text-zinc-400"
                       }`}
                     >
                       <Circle size={6} weight="fill" />

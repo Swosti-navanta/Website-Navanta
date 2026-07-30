@@ -16,24 +16,14 @@ const STEPS = [
     caption: "ROI targets locked and value milestones agreed up front.",
   },
   {
-    title: "Evaluate & Assess",
-    img: "evaluate-assess",
-    caption: "Real workflows mapped — including the unwritten rules.",
-  },
-  {
-    title: "Design & Develop",
+    title: "Assess & Design",
     img: "design-develop",
-    caption: "A future-state operating model, designed with you.",
+    caption: "Real workflows mapped, then redesigned into your future-state operating model.",
   },
   {
-    title: "Targeted Alignment",
+    title: "Tailored Launch",
     img: "targeted-alignment",
-    caption: "The Lens tailored to your data, your industry, your edge.",
-  },
-  {
-    title: "Operational Launch",
-    img: "operational-launch",
-    caption: "Live in months, not years — value from day one.",
+    caption: "The Lens tailored to your data and industry — live in months, not years.",
   },
   {
     title: "Refine & Measure",
@@ -47,19 +37,26 @@ export default function Approach() {
   const rowRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
 
-  // Scroll-driven horizontal translation: as the section moves through the
-  // viewport (enters at 85%, exits at 15%), the row slides left by however
-  // much it overflows. Manual listener — works reliably with Lenis.
+  // Scroll-driven horizontal translation, anchored to the ROW itself (not the
+  // whole section): progress runs from 0, when the row enters at 90% down the
+  // viewport, to 1, when the row's top reaches 10% down — comfortably still
+  // on-screen. Anchoring on the section instead (as this used to) ties
+  // completion to the section's total height, which includes the heading and
+  // padding above the row; on shorter viewports that let completion land
+  // after the row had already scrolled above the visible area, so the last
+  // card's fully-assembled position was never actually seen. Using the row's
+  // own position instead is correct at any viewport height by construction —
+  // no per-height tuning needed. Manual listener — works reliably with Lenis.
   useEffect(() => {
     const update = () => {
-      const el = sectionRef.current;
       const row = rowRef.current;
-      if (!el || !row) return;
+      if (!row) return;
       const travel = Math.max(0, row.scrollWidth - row.clientWidth);
-      const r = el.getBoundingClientRect();
+      const rect = row.getBoundingClientRect();
       const vh = window.innerHeight;
-      const total = r.height + vh * 0.7; // from top@85%vh → bottom@15%vh
-      const p = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / total));
+      const enter = vh * 0.9;
+      const exit = vh * 0.1;
+      const p = Math.min(1, Math.max(0, (enter - rect.top) / (enter - exit)));
       x.set(-travel * p);
     };
     update();
@@ -89,22 +86,19 @@ export default function Approach() {
       <div ref={rowRef} className="mt-12 w-full overflow-hidden">
         <motion.div
           style={{ x }}
-          className="flex w-max gap-6 pl-6 pr-6 lg:pl-[42vw] lg:pr-10"
+          className="flex w-max gap-6 pl-6 pr-6 lg:pl-[20vw] lg:pr-10"
         >
           {STEPS.map((s) => (
               <div key={s.title} className="w-[300px] flex-shrink-0">
-                <div className="relative h-[240px] overflow-hidden rounded-xl bg-zinc-100">
-                  {/* Mini-UI — official Figma card asset */}
+                {/* Official Figma card asset — title and mockup are baked into
+                    the image itself (5:4 aspect matches the 300×240 tile). */}
+                <div className="relative h-[240px] overflow-hidden rounded-xl bg-[#f5f5f7]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/figma/approach/${s.img}.png`}
-                    alt=""
-                    aria-hidden
-                    className="h-full w-full object-cover"
+                    alt={s.title}
+                    className="h-full w-full object-contain"
                   />
-                  <span className="absolute left-4 top-4 inline-block rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-[13px] font-medium text-zinc-800 shadow-sm">
-                    {s.title}
-                  </span>
                 </div>
               <p className="mt-4 text-[14.5px] leading-relaxed text-zinc-600">{s.caption}</p>
             </div>

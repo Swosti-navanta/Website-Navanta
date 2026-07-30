@@ -118,7 +118,7 @@ export default function ContactPage() {
                 <div className="flex h-full flex-col justify-center gap-7">
                   {DETAILS.map((d) => (
                     <div key={d.label} className="flex items-start gap-4">
-                      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#efeaf9]">
+                      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#EBE8F3]">
                         <d.icon size={19} className="text-[#5C3D97]" />
                       </span>
                       <div>
