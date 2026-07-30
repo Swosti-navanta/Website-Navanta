@@ -26,7 +26,7 @@ export default function CareersPage() {
       <Navbar />
       <main>
         {/* Centered hero — dark band with background video */}
-        <header className="relative overflow-hidden bg-[#0c0b0a] pb-24 pt-44 text-center">
+        <header data-nav-theme="dark" className="relative overflow-hidden bg-[#0c0b0a] pb-24 pt-44 text-center">
           <BgVideo />
           <div
             aria-hidden
