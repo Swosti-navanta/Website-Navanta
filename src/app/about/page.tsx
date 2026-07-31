@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
 import FadeIn from "@/components/FadeIn";
 import { OpenDemoButton } from "@/components/DemoModal";
+import AboutMissionHeading from "@/components/AboutMissionHeading";
 import { EnvelopeSimple, LinkedinLogo, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
@@ -75,11 +76,7 @@ export default function AboutPage() {
               <div className="grid gap-10 lg:grid-cols-[280px_1fr]">
                 <p className="text-[14px] font-medium text-[#5C3D97]">Our mission</p>
                 <div className="max-w-3xl">
-                  <h2 className="text-[28px] font-medium leading-snug tracking-tight text-zinc-900 sm:text-[36px]">
-                    Industrial supply chains run the physical world — yet they still
-                    run on fragmented systems, manual planning, and decisions made a
-                    step too late. We exist to change that.
-                  </h2>
+                  <AboutMissionHeading />
                   <p className="mt-6 text-[15.5px] leading-relaxed text-zinc-500">
                     Navanta connects the systems enterprises already own — ERPs,
                     planning tools, supplier networks, external signals — into one
