@@ -145,7 +145,7 @@ export default function HowWeEnable() {
                         <p className="mt-2 text-[11.5px] leading-snug text-zinc-500">{p.body}</p>
                       </div>
                       {i < 2 && (
-                        <ArrowRight size={16} className="mx-auto hidden text-white md:block" />
+                        <ArrowRight size={16} className="mx-auto hidden self-center text-white md:block" />
                       )}
                     </Fragment>
                   ))}
