@@ -4,11 +4,11 @@ import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
 import DemoForm from "@/components/DemoForm";
 import FadeIn from "@/components/FadeIn";
+import LeadershipCards from "@/components/LeadershipCards";
 import {
   MapPin,
   EnvelopeSimple,
   Phone,
-  LinkedinLogo,
   ArrowUpRight,
   NavigationArrow,
 } from "@phosphor-icons/react/dist/ssr";
@@ -29,26 +29,6 @@ const DETAILS = [
   { icon: Phone, label: "Phone", value: "+1 (___) ___-____" },
 ];
 
-const LEADERS = [
-  {
-    name: "Tanuj Gupta",
-    role: "Co-Founder",
-    email: "tanuj.gupta@navanta.ai",
-    bio: "Formerly EY Executive Director with 10 years leading AI & digital supply chain transformation for industrial enterprises across North America.",
-  },
-  {
-    name: "Gaurav Kohli",
-    role: "Co-Founder",
-    email: "gaurav.kohli@navanta.ai",
-    bio: "Formerly EY Partner with 20 years architecting enterprise AI & supply chain programs for global manufacturers — ERP foundations to autonomous operations.",
-  },
-  {
-    name: "Nitin Kumar",
-    role: "Head of India Operations",
-    email: "nitin.kumar@navanta.ai",
-    bio: "Leads Navanta's scaled engineering and delivery teams, turning the intelligence layer into production outcomes for every engagement.",
-  },
-];
 
 export default function ContactPage() {
   return (
@@ -181,34 +161,7 @@ export default function ContactPage() {
                 Leadership
               </h2>
             </FadeIn>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {LEADERS.map((l, i) => (
-                <FadeIn key={l.name} delay={i * 0.08}>
-                  <div className="h-full rounded-2xl border border-zinc-200 bg-white p-6">
-                    <div className="h-16 w-16 rounded-full bg-[radial-gradient(circle_at_30%_30%,#c9b8ec,#5C3D97)]" />
-                    <p className="mt-5 text-[18px] font-medium text-zinc-900">{l.name}</p>
-                    <p className="text-[14px] text-[#5C3D97]">{l.role}</p>
-                    <p className="mt-3 text-[13.5px] leading-relaxed text-zinc-500">{l.bio}</p>
-                    <div className="mt-5 flex items-center gap-3">
-                      <a
-                        href={`mailto:${l.email}`}
-                        aria-label={`Email ${l.name}`}
-                        className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 text-zinc-500 transition-colors hover:border-[#5C3D97] hover:text-[#5C3D97]"
-                      >
-                        <EnvelopeSimple size={16} />
-                      </a>
-                      <a
-                        href="#"
-                        aria-label={`${l.name} on LinkedIn`}
-                        className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 text-zinc-500 transition-colors hover:border-[#5C3D97] hover:text-[#5C3D97]"
-                      >
-                        <LinkedinLogo size={16} />
-                      </a>
-                    </div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
+            <LeadershipCards />
           </div>
         </section>
       </main>

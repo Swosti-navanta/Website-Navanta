@@ -1283,80 +1283,111 @@ const DASHBOARDS: Record<string, React.ComponentType[]> = {
 
 const DASH_MS = 9000;
 
-/* Left group card — one per dashboard, on the dark section. Lists the
-   features that live on that screen; hovering a feature lights it up, the
-   active card fills a progress bar and the rotation advances. */
-function GroupCard({
-  name,
-  features,
-  active,
+/* Use-case accordion row — one per dashboard. Full-width rows separated by
+   hairline dividers; the open row expands to its feature list (left) and the
+   live dashboard (right) while a progress line fills along its bottom divider
+   and the rotation advances. Collapsed rows keep a faint ghost of their
+   dashboard bleeding through, like a screen waiting off-stage. */
+function GroupRow({
+  group,
+  index,
+  open,
   progressWidth,
   onSelect,
-}: FeatureGroup & {
-  active: boolean;
+  Dash,
+}: {
+  group: FeatureGroup;
+  index: number;
+  open: boolean;
   progressWidth?: import("framer-motion").MotionValue<string>;
   onSelect: () => void;
+  Dash: React.ComponentType;
 }) {
   return (
-    <button
-      onClick={onSelect}
-      aria-pressed={active}
-      className={`block w-full rounded-2xl p-4 text-left ring-1 transition-colors ${
-        active
-          ? "bg-white/[0.07] ring-white/10"
-          : "bg-white/[0.02] ring-white/5 hover:bg-white/[0.05]"
-      }`}
-    >
-      <p
-        className={`px-2 pt-1 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors ${
-          active ? "text-[#b9a3e3]" : "text-zinc-500"
-        }`}
-      >
-        {name}
-      </p>
-      <div className="mt-2 flex flex-col gap-1">
-        {features.map((f) => (
-          <div
-            key={f.title}
-            className="group/feat flex items-start gap-3 rounded-xl p-2 transition-colors hover:bg-white/[0.06]"
-          >
-            <span
-              className={`mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg transition-colors group-hover/feat:bg-[#5C3D97] ${
-                active ? "bg-[#EBE8F3]" : "bg-white/10"
-              }`}
-            >
-              <f.icon
-                size={15}
-                className={`transition-colors group-hover/feat:text-white ${
-                  active ? "text-[#5C3D97]" : "text-zinc-500"
-                }`}
-              />
-            </span>
-            <div>
-              <p
-                className={`text-[14.5px] font-medium transition-colors group-hover/feat:text-white ${
-                  active ? "text-white" : "text-zinc-400"
-                }`}
-              >
-                {f.title}
-              </p>
-              <p
-                className={`mt-0.5 text-[12px] leading-snug transition-colors group-hover/feat:text-zinc-300 ${
-                  active ? "text-zinc-400" : "text-zinc-600"
-                }`}
-              >
-                {f.body}
-              </p>
-            </div>
+    <div className="relative">
+      {/* Ghost of this row's dashboard behind the collapsed title */}
+      {!open && (
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -top-6 right-0 w-[58%] opacity-[0.06] saturate-0 [mask-image:linear-gradient(to_left,black_55%,transparent)]">
+            <Dash />
           </div>
-        ))}
-      </div>
-      <div className="mt-3 h-px w-full overflow-hidden bg-white/10">
-        {active && progressWidth && (
-          <motion.div className="h-full bg-white" style={{ width: progressWidth }} />
+        </div>
+      )}
+
+      <button
+        onClick={onSelect}
+        aria-expanded={open}
+        className="group relative z-10 flex w-full items-baseline gap-5 py-7 text-left"
+      >
+        <span
+          className={`font-mono text-[12px] tabular-nums transition-colors duration-300 ${
+            open ? "text-[#b9a3e3]" : "text-zinc-600"
+          }`}
+        >
+          0{index + 1}
+        </span>
+        <span
+          className={`text-[21px] font-medium tracking-tight transition-colors duration-300 sm:text-[25px] ${
+            open ? "text-white" : "text-zinc-500 group-hover:text-zinc-300"
+          }`}
+        >
+          {group.name}
+        </span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="grid gap-10 pb-12 pt-2 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:items-center">
+              {/* Features that live on this screen */}
+              <div className="flex flex-col gap-2">
+                {group.features.map((f) => (
+                  <div
+                    key={f.title}
+                    className="group/feat -mx-2.5 flex items-start gap-3.5 rounded-xl p-2.5 transition-colors hover:bg-white/[0.05]"
+                  >
+                    <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3] transition-colors group-hover/feat:bg-[#5C3D97]">
+                      <f.icon
+                        size={16}
+                        className="text-[#5C3D97] transition-colors group-hover/feat:text-white"
+                      />
+                    </span>
+                    <div>
+                      <p className="text-[15px] font-medium text-white">{f.title}</p>
+                      <p className="mt-0.5 text-[12.5px] leading-snug text-zinc-400">
+                        {f.body}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* The dashboard these features live on */}
+              <div className="flex justify-center">
+                <Dash />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Divider — doubles as the advance timer on the open row */}
+      <div className="relative h-px w-full bg-white/10">
+        {open && progressWidth && (
+          <motion.div
+            className="absolute inset-y-0 left-0 bg-white"
+            style={{ width: progressWidth }}
+          />
         )}
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -1408,8 +1439,8 @@ export default function IntelligenceLayer() {
           </div>
         </FadeIn>
 
-        {/* Left feature-group cards · right consolidated product dashboard */}
-        <FadeIn delay={0.1} className="mt-16">
+        {/* Use-case accordion — one row per dashboard, auto-advancing */}
+        <FadeIn delay={0.1} className="mt-14">
           <AnimatePresence mode="wait">
             <motion.div
               key={tab.key}
@@ -1417,47 +1448,21 @@ export default function IntelligenceLayer() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10, transition: { duration: 0.22 } }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="grid items-center gap-10 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]"
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
             >
-              {/* Left — one group card per dashboard (bento 2-up below lg) */}
-              <div
-                className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1"
-                onMouseEnter={() => setPaused(true)}
-                onMouseLeave={() => setPaused(false)}
-              >
-                {tab.groups.map((g, i) => (
-                  <GroupCard
-                    key={g.name}
-                    {...g}
-                    active={i === dashIdx}
-                    progressWidth={i === dashIdx ? progressWidth : undefined}
-                    onSelect={() => setDashIdx(i)}
-                  />
-                ))}
-              </div>
-
-              {/* Right — the dashboard the active group lives on. Hover pauses. */}
-              <div
-                className="flex min-h-[600px] items-center justify-center"
-                onMouseEnter={() => setPaused(true)}
-                onMouseLeave={() => setPaused(false)}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`${tab.key}-${dashIdx}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0, y: -12, scale: 0.99, transition: { duration: 0.2 } }}
-                    transition={{ duration: 0.3 }}
-                    className="flex w-full justify-center"
-                  >
-                    {(() => {
-                      const Visual = screens[dashIdx] ?? screens[0];
-                      return <Visual />;
-                    })()}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+              <div className="h-px w-full bg-white/10" />
+              {tab.groups.map((g, i) => (
+                <GroupRow
+                  key={g.name}
+                  group={g}
+                  index={i}
+                  open={i === dashIdx}
+                  progressWidth={i === dashIdx ? progressWidth : undefined}
+                  onSelect={() => setDashIdx(i)}
+                  Dash={screens[i] ?? screens[0]}
+                />
+              ))}
             </motion.div>
           </AnimatePresence>
         </FadeIn>
