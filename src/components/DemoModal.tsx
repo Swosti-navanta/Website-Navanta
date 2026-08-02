@@ -137,7 +137,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
               </p>
 
               {/* Step card */}
-              <div className="mt-8 rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm sm:p-7">
+              <div className="mt-8 rounded-2xl border border-zinc-100 bg-white p-7 shadow-sm sm:p-9">
                 {step > 0 && !booked && (
                   <button
                     onClick={back}
@@ -170,7 +170,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                 )}
 
                 {/* Body */}
-                <div className="mt-6">
+                <div className="mt-8">
                   <AnimatePresence mode="wait">
                   {booked ? (
                     <motion.div
@@ -218,7 +218,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                           </button>
                         ))}
                       </div>
-                      <p className="mb-2 mt-6 text-[13px] font-medium text-zinc-700">
+                      <p className="mb-2 mt-8 text-[13px] font-medium text-zinc-700">
                         Available times
                       </p>
                       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -250,7 +250,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                         e.preventDefault();
                         setBooked(true);
                       }}
-                      className="space-y-3"
+                      className="space-y-4"
                     >
                       <Input label="Full Name" type="text" required />
                       <Input label="Work Email" type="email" required />
