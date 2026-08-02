@@ -12,30 +12,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   X,
   CaretLeft,
-  Clock,
   CheckCircle,
   ArrowRight,
 } from "@phosphor-icons/react";
 
 /* ── Content (Navanta-specific; swap freely) ─────────────────────────────── */
-
-const SERVICES = [
-  {
-    title: "Platform Overview",
-    duration: "30 min",
-    desc: "A guided tour of the intelligence layer and where it fits.",
-  },
-  {
-    title: "Live Demo on Your Data",
-    duration: "60 min",
-    desc: "See planning, procurement, and order flows on your systems.",
-  },
-  {
-    title: "Deep-Dive Working Session",
-    duration: "90 min",
-    desc: "Map your use cases and a path to operational launch.",
-  },
-];
 
 // Placeholder available slots (UI-only).
 const DATES = ["Mon 3", "Tue 4", "Wed 5", "Thu 6", "Fri 7", "Mon 10"];
@@ -47,7 +28,7 @@ const KPIS = [
   { value: "50+", label: "supply-chain signals" },
 ];
 
-const STEPS = ["Service", "Date & Time", "Your Details"] as const;
+const STEPS = ["Date & Time", "Your Details"] as const;
 
 /* ── Context so any CTA can open the modal ───────────────────────────────── */
 
@@ -94,7 +75,6 @@ export function DemoModalProvider({ children }: { children: React.ReactNode }) {
 
 function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [step, setStep] = useState(0);
-  const [service, setService] = useState<number | null>(null);
   const [date, setDate] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
   const [booked, setBooked] = useState(false);
@@ -113,7 +93,6 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
     // small delay avoids a flash of step 0 while the close animation plays
     const t = setTimeout(() => {
       setStep(0);
-      setService(null);
       setDate(null);
       setTime(null);
       setBooked(false);
@@ -122,9 +101,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
   }, [isOpen, onClose]);
 
   const canAdvance =
-    (step === 0 && service !== null) ||
-    (step === 1 && date !== null && time !== null) ||
-    step === 2;
+    (step === 0 && date !== null && time !== null) || step === 1;
 
   const back = () => setStep((s) => Math.max(0, s - 1));
 
@@ -219,37 +196,6 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                     </motion.div>
                   ) : step === 0 ? (
                     <motion.div
-                      key="s0"
-                      initial={{ opacity: 0, x: 14 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -14 }}
-                      transition={{ duration: 0.22 }}
-                      className="space-y-3"
-                    >
-                      {SERVICES.map((s, i) => (
-                        <button
-                          key={s.title}
-                          onClick={() => setService(i)}
-                          className={`flex w-full items-start justify-between gap-4 rounded-xl border p-4 text-left transition-all ${
-                            service === i
-                              ? "border-[#5C3D97] bg-[#f7f4fc] ring-1 ring-[#5C3D97]"
-                              : "border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50"
-                          }`}
-                        >
-                          <div>
-                            <p className="text-[15px] font-medium text-zinc-900">{s.title}</p>
-                            <p className="mt-1 text-[13px] leading-relaxed text-zinc-500">
-                              {s.desc}
-                            </p>
-                          </div>
-                          <span className="mt-0.5 flex flex-shrink-0 items-center gap-1 rounded-md bg-zinc-100 px-2 py-1 text-[12px] font-medium text-zinc-600">
-                            <Clock size={12} weight="bold" /> {s.duration}
-                          </span>
-                        </button>
-                      ))}
-                    </motion.div>
-                  ) : step === 1 ? (
-                    <motion.div
                       key="s1"
                       initial={{ opacity: 0, x: 14 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -335,15 +281,14 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
               {/* Primary action — full-width below the step card */}
               {!booked && (
                 <div className="mt-4">
-                  {(service !== null || (date && time)) && (
+                  {date && time && (
                     <p className="mb-2.5 text-center text-[12.5px] text-zinc-400">
-                      {service !== null && `${SERVICES[service].title}`}
-                      {date && time && ` · ${date}, ${time}`}
+                      {date}, {time}
                     </p>
                   )}
                   <button
                     onClick={() =>
-                      step === 2
+                      step === 1
                         ? document
                             .querySelector<HTMLFormElement>("#demo-modal-form")
                             ?.requestSubmit()
@@ -352,7 +297,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                     disabled={!canAdvance}
                     className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-zinc-900 px-5 py-4 text-[14.5px] font-medium text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-300"
                   >
-                    {step === 2 ? "Confirm Booking" : "Continue"}
+                    {step === 1 ? "Confirm Booking" : "Continue"}
                     <ArrowRight size={15} weight="bold" />
                   </button>
                 </div>

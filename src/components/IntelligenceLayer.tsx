@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Children, useState } from "react";
 import { AnimatePresence, motion, useTransform } from "framer-motion";
 import {
   Package,
@@ -15,14 +15,13 @@ import {
   GraduationCap,
   WarningCircle,
   TrendUp,
-  FileText,
   PushPin,
   Star,
   ArrowsClockwise,
   ArrowRight,
-  User,
   Sparkle,
-  Headset,
+  CaretDown,
+  Gauge,
   type Icon,
 } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
@@ -30,11 +29,14 @@ import { useAdvanceTimer } from "@/hooks/useAdvanceTimer";
 
 type Callout = { icon: Icon; title: string; body: string };
 
+/* One group card per dashboard — the features that live on that screen. */
+type FeatureGroup = { name: string; features: Callout[] };
+
 type TabDef = {
   key: string;
   label: string;
   heading: string;
-  callouts: { left: Callout[]; right: Callout[] };
+  groups: FeatureGroup[];
 };
 
 const TABS: TabDef[] = [
@@ -42,1033 +44,1111 @@ const TABS: TabDef[] = [
     key: "central",
     label: "Centralized Intelligence",
     heading: "Centralized Planning and Buying Intelligence",
-    /* The five Navanta Lens pillars — how we bring intelligence to planning.
-       Each drives its own product-UI card in the center (Structure 1). */
-    callouts: {
-      left: [
-        {
-          icon: SquaresFour,
-          title: "Unified Visibility",
-          body: "Real-time inventory, demand, supply and PO insight across all locations.",
-        },
-        {
-          icon: Brain,
-          title: "Intelligent Analysis",
-          body: "AI models detect signals, risks, opportunities and optimal actions.",
-        },
-        {
-          icon: Lightning,
-          title: "Agentic Actions",
-          body: "Lens plans and executes stocking decisions by confidence level.",
-        },
-        {
-          icon: UserCircleCheck,
-          title: "Planner in the Loop",
-          body: "Cost-optimized vendor POs and exceptions routed to you for approval.",
-        },
-        {
-          icon: GraduationCap,
-          title: "Continuous Learning",
-          body: "Every decision improves future recommendations and outcomes.",
-        },
-      ],
-      right: [
-        { icon: SquaresFour, title: "One live view", body: "" },
-        { icon: Brain, title: "Signals scored", body: "" },
-        { icon: Lightning, title: "Confidence-gated", body: "" },
-        { icon: UserCircleCheck, title: "You approve", body: "" },
-        { icon: GraduationCap, title: "Compounding accuracy", body: "" },
-      ],
-    },
+    groups: [
+      {
+        name: "Parts Planning",
+        features: [
+          {
+            icon: SquaresFour,
+            title: "Unified Visibility",
+            body: "Real-time inventory, demand, supply and PO insight across all locations.",
+          },
+          {
+            icon: Brain,
+            title: "Intelligent Analysis",
+            body: "AI models detect signals, risks, opportunities and optimal actions.",
+          },
+          {
+            icon: UserCircleCheck,
+            title: "Planner in the Loop",
+            body: "Cost-optimized vendor POs and exceptions routed to you for approval.",
+          },
+        ],
+      },
+      {
+        name: "Autonomous Buying",
+        features: [
+          {
+            icon: Lightning,
+            title: "Agentic Actions",
+            body: "Lens plans and executes stocking decisions by confidence level.",
+          },
+          {
+            icon: GraduationCap,
+            title: "Continuous Learning",
+            body: "Every decision improves future recommendations and outcomes.",
+          },
+        ],
+      },
+    ],
   },
   {
     key: "orders",
     label: "Inventory & Order Intelligence",
     heading: "Customer Inventory and Order Intelligence",
-    /* The Lens pillars for customer inventory & orders — one data foundation,
-       every customer answer. Each drives its own card in the center. */
-    callouts: {
-      left: [
-        {
-          icon: SquaresFour,
-          title: "Unified Visibility",
-          body: "Every order, shipment, and location's inventory in one view — SKU cross-reference built in.",
-        },
-        {
-          icon: MagnifyingGlass,
-          title: "Intelligent Self-Service",
-          body: "Search by name, SKU, or image — live availability, alternatives, full detail.",
-        },
-        {
-          icon: BellRinging,
-          title: "Proactive Notifications",
-          body: "Delay, backorder, and back-in-stock alerts pushed before the customer asks.",
-        },
-        {
-          icon: ChatCircleText,
-          title: "Guided Resolution",
-          body: "Issues raised in context — Lens suggests alternatives and keeps everyone on one thread.",
-        },
-        {
-          icon: GraduationCap,
-          title: "Continuous Learning",
-          body: "Personalized dashboards, saved searches, and favorites sharpen every visit.",
-        },
-      ],
-      right: [
-        { icon: SquaresFour, title: "One live view", body: "" },
-        { icon: MagnifyingGlass, title: "Self-serve answers", body: "" },
-        { icon: BellRinging, title: "Pushed before asked", body: "" },
-        { icon: ChatCircleText, title: "One thread to fix", body: "" },
-        { icon: GraduationCap, title: "Sharper every visit", body: "" },
-      ],
-    },
+    groups: [
+      {
+        name: "Order Tracking",
+        features: [
+          {
+            icon: SquaresFour,
+            title: "Unified Visibility",
+            body: "Every order, shipment, and location's inventory in one view — SKU cross-reference built in.",
+          },
+          {
+            icon: BellRinging,
+            title: "Proactive Notifications",
+            body: "Delay, backorder, and back-in-stock alerts pushed before the customer asks.",
+          },
+          {
+            icon: ChatCircleText,
+            title: "Guided Resolution",
+            body: "Issues raised in context — Lens suggests alternatives and keeps everyone on one thread.",
+          },
+        ],
+      },
+      {
+        name: "Customer Workspace",
+        features: [
+          {
+            icon: MagnifyingGlass,
+            title: "Intelligent Self-Service",
+            body: "Search by name, SKU, or image — live availability, alternatives, full detail.",
+          },
+          {
+            icon: GraduationCap,
+            title: "Continuous Learning",
+            body: "Personalized dashboards, saved searches, and favorites sharpen every visit.",
+          },
+        ],
+      },
+    ],
   },
   {
     key: "procurement",
     label: "Procurement Control",
     heading: "Procurement Control Tower",
-    /* The Lens pillars for procurement, each answering a named problem:
-       fragmented spend & no single source of truth → Unified Visibility;
-       reactive, habit-based buying → Intelligent Analysis; decentralized
-       buying → Agentic Actions (pooled volume); approvals stay human →
-       Planner in the Loop; one-off stale reports → Continuous Learning. */
-    callouts: {
-      left: [
-        {
-          icon: SquaresFour,
-          title: "Unified Visibility",
-          body: "Spend, contract, and vendor data from every ERP, spreadsheet, and site — one source of truth.",
-        },
-        {
-          icon: Brain,
-          title: "Intelligent Analysis",
-          body: "Data-driven signals replace habit buying — price variance, leakage, and missed discounts surfaced.",
-        },
-        {
-          icon: Lightning,
-          title: "Agentic Actions",
-          body: "Volume pooled across sites and business units into consolidated, competitive buys.",
-        },
-        {
-          icon: UserCircleCheck,
-          title: "Planner in the Loop",
-          body: "Category managers validate, adjust and approve every award inside the Lens.",
-        },
-        {
-          icon: GraduationCap,
-          title: "Continuous Learning",
-          body: "A continuous engine, not one-off reports — savings tracked live, never stale.",
-        },
-      ],
-      right: [
-        { icon: SquaresFour, title: "One source of truth", body: "" },
-        { icon: Brain, title: "Data over habit", body: "" },
-        { icon: Lightning, title: "Full buying power", body: "" },
-        { icon: UserCircleCheck, title: "You approve awards", body: "" },
-        { icon: GraduationCap, title: "Never stale", body: "" },
-      ],
-    },
+    groups: [
+      {
+        name: "Spend Intelligence",
+        features: [
+          {
+            icon: SquaresFour,
+            title: "Unified Visibility",
+            body: "Spend, contract, and vendor data from every ERP, spreadsheet, and site — one source of truth.",
+          },
+          {
+            icon: Brain,
+            title: "Intelligent Analysis",
+            body: "Data-driven signals replace habit buying — price variance, leakage, and missed discounts surfaced.",
+          },
+        ],
+      },
+      {
+        name: "Sourcing & Award",
+        features: [
+          {
+            icon: Lightning,
+            title: "Agentic Actions",
+            body: "Volume pooled across sites and business units into consolidated, competitive buys.",
+          },
+          {
+            icon: UserCircleCheck,
+            title: "Planner in the Loop",
+            body: "Category managers validate, adjust and approve every award inside the Lens.",
+          },
+          {
+            icon: GraduationCap,
+            title: "Continuous Learning",
+            body: "A continuous engine, not one-off reports — savings tracked live, never stale.",
+          },
+        ],
+      },
+    ],
   },
 ];
 
-/* ── Per-feature product-UI cards (Centralized Intelligence · Structure 1) ──
-   One card per Lens pillar, all in the same design language as the network
-   card, so the customer watches the layer work: see everything → detect
-   signals → execute above confidence → route the rest to the planner → learn. */
+/* ── SaaS dashboard primitives ──────────────────────────────────────────────
+   Each tab shows a small number of complete product dashboards — a slim icon
+   sidebar, a top bar with page title + filters + "Ask Lens", and a soft work
+   canvas of white panels — in the site's design language (white surfaces,
+   #EBE8F3 tiles, #5C3D97 accents). Several features live on one dashboard. */
 
-function CardShell({
-  title,
-  sub,
-  badge,
+/* Presentation cascade — when a dashboard loads, its top bar settles in and
+   the canvas panels stagger up one after another, like the product is being
+   demoed live. */
+const canvasStagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.16, delayChildren: 0.15 } },
+};
+const canvasBlock = {
+  hidden: { opacity: 0, y: 22, scale: 0.985 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
+function DashShell({
+  page,
+  controls,
   children,
 }: {
-  title: string;
-  sub: string;
-  badge: React.ReactNode;
+  page: string;
+  controls?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-[420px] max-w-full rounded-2xl bg-white p-6 shadow-[0_24px_70px_rgba(0,0,0,0.10)]">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-[16px] font-semibold text-zinc-900">{title}</p>
-          <p className="text-[13px] text-zinc-500">{sub}</p>
+    <div className="w-full max-w-[1060px] overflow-hidden rounded-2xl bg-white shadow-[0_32px_90px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
+      <div className="flex">
+        {/* App sidebar */}
+        <div className="flex w-11 flex-shrink-0 flex-col items-center gap-2.5 border-r border-zinc-100 py-3.5">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-900 text-[10px] font-semibold text-white">
+            N
+          </span>
+          <span className="mt-2 flex h-7 w-7 items-center justify-center rounded-md bg-[#EBE8F3]">
+            <SquaresFour size={14} className="text-[#5C3D97]" />
+          </span>
+          <span className="flex h-7 w-7 items-center justify-center rounded-md">
+            <ChatCircleText size={14} className="text-zinc-300" />
+          </span>
+          <span className="flex h-7 w-7 items-center justify-center rounded-md">
+            <Gauge size={14} className="text-zinc-300" />
+          </span>
         </div>
-        {badge}
+        <div className="min-w-0 flex-1">
+          {/* Top bar */}
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-center justify-between gap-3 border-b border-zinc-100 px-4 py-2.5"
+          >
+            <p className="truncate text-[13px] font-semibold text-zinc-900">{page}</p>
+            <div className="flex flex-shrink-0 items-center gap-1.5">{controls}</div>
+          </motion.div>
+          {/* Work canvas — panels cascade in one after another */}
+          <motion.div
+            variants={canvasStagger}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-3 bg-zinc-50/70 p-4"
+          >
+            {Children.map(children, (child) => (
+              <motion.div variants={canvasBlock}>{child}</motion.div>
+            ))}
+          </motion.div>
+        </div>
       </div>
+    </div>
+  );
+}
+
+/* Top-bar filter dropdown (static) */
+function Select({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="flex items-center gap-1 whitespace-nowrap rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-[11px] font-medium text-zinc-600">
+      {children} <CaretDown size={9} className="text-zinc-400" />
+    </span>
+  );
+}
+
+/* Branded AI entry point — mirrors the "Ask …" button in the product */
+function AskLens() {
+  return (
+    <span className="flex items-center gap-1 whitespace-nowrap rounded-lg bg-[#4b3382] px-2.5 py-1.5 text-[11px] font-medium text-white">
+      <Sparkle size={11} weight="fill" /> Ask Lens
+    </span>
+  );
+}
+
+/* White content panel on the canvas */
+function Panel({
+  title,
+  right,
+  children,
+  className,
+}: {
+  title?: string;
+  right?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`rounded-xl bg-white p-3.5 ring-1 ring-zinc-100 ${className ?? ""}`}>
+      {(title || right) && (
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <p className="text-[12px] font-semibold text-zinc-900">{title}</p>
+          {right}
+        </div>
+      )}
       {children}
     </div>
   );
 }
 
-function Chip({ tone, children }: { tone: "violet" | "amber" | "green" | "zinc"; children: React.ReactNode }) {
+/* Violet-tinted AI summary panel — the "Lens Summary" */
+function LensPanel({
+  title,
+  headline,
+  children,
+  className,
+}: {
+  title: string;
+  headline?: string;
+  children?: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`rounded-xl border border-[#e4dcf3] bg-gradient-to-b from-[#faf7ff] to-[#f3edfb] p-3.5 ${className ?? ""}`}
+    >
+      <div className="flex items-center gap-1.5">
+        <Sparkle size={13} weight="fill" className="text-[#5C3D97]" />
+        <p className="text-[12px] font-semibold text-zinc-900">{title}</p>
+      </div>
+      {headline && <p className="mt-1.5 text-[11px] leading-relaxed text-zinc-600">{headline}</p>}
+      {children}
+    </div>
+  );
+}
+
+/* Violet KPI tile — the metric cards along the top of the product screens */
+function KpiTile({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="rounded-lg border border-[#e8e2f4] bg-[#faf8fd] px-3 py-2.5">
+      <p className="whitespace-nowrap text-[14px] font-semibold text-zinc-900">{value}</p>
+      <p className="mt-0.5 text-[10px] leading-tight text-zinc-500">{label}</p>
+    </div>
+  );
+}
+
+/* Larger KPI card (Buying screen) */
+function KpiPanel({
+  label,
+  value,
+  sub,
+  violet,
+}: {
+  label: React.ReactNode;
+  value: string;
+  sub: string;
+  violet?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-xl px-3.5 py-3 ring-1 ${
+        violet
+          ? "bg-gradient-to-br from-[#faf7ff] to-[#f1eafa] ring-[#e4dcf3]"
+          : "bg-white ring-zinc-100"
+      }`}
+    >
+      <p className="flex items-center gap-1 text-[10.5px] font-medium text-zinc-500">{label}</p>
+      <p className="mt-1.5 text-[19px] font-semibold leading-none text-zinc-900">{value}</p>
+      <p className="mt-1.5 text-[10px] text-zinc-400">{sub}</p>
+    </div>
+  );
+}
+
+/* In-panel tab row — "Feed 26 · Act 3 · Parked 1" */
+function SegTabs({ items }: { items: { label: string; count?: number; active?: boolean }[] }) {
+  return (
+    <div className="flex items-center gap-4">
+      {items.map((t) => (
+        <span
+          key={t.label}
+          className={`flex items-center gap-1.5 whitespace-nowrap pb-2 text-[11px] font-medium ${
+            t.active
+              ? "border-b-2 border-zinc-900 text-zinc-900"
+              : "border-b-2 border-transparent text-zinc-400"
+          }`}
+        >
+          {t.label}
+          {t.count != null && (
+            <span
+              className={`rounded-full px-1.5 py-px text-[9px] ${
+                t.active ? "bg-zinc-900 text-white" : "bg-zinc-100 text-zinc-500"
+              }`}
+            >
+              {t.count}
+            </span>
+          )}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/* Confidence bar + % (the green scoring bars in the product tables) */
+function ConfBar({ pct }: { pct: number }) {
+  return (
+    <span className="flex items-center gap-1.5">
+      <span className="h-1 w-12 overflow-hidden rounded-full bg-zinc-100">
+        <span className="block h-full rounded-full bg-emerald-500" style={{ width: `${pct}%` }} />
+      </span>
+      <span className="text-[10.5px] font-medium text-zinc-700">{pct}%</span>
+    </span>
+  );
+}
+
+/* Dense product table */
+function MiniTable({ head, rows }: { head: string[]; rows: React.ReactNode[][] }) {
+  return (
+    <div className="overflow-x-auto overflow-y-hidden rounded-lg ring-1 ring-zinc-100">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="bg-zinc-50/80">
+            {head.map((h) => (
+              <th
+                key={h}
+                className="whitespace-nowrap px-3 py-2 text-left text-[10px] font-medium text-zinc-400"
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-zinc-100 bg-white">
+          {rows.map((r, i) => (
+            <tr key={i}>
+              {r.map((c, j) => (
+                <td key={j} className="whitespace-nowrap px-3 py-2.5 align-middle text-[11px] text-zinc-700">
+                  {c}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* Screen-level caption — the one-line takeaway under each dashboard */
+function Caption({ children }: { children: React.ReactNode }) {
+  return <p className="px-0.5 text-[10.5px] text-zinc-400">{children}</p>;
+}
+
+function Chip({
+  tone,
+  children,
+}: {
+  tone: "violet" | "amber" | "green" | "zinc" | "red";
+  children: React.ReactNode;
+}) {
   const tones = {
     violet: "bg-[#EBE8F3] text-[#5C3D97]",
     amber: "bg-amber-100 text-amber-700",
     green: "bg-emerald-100 text-emerald-700",
     zinc: "bg-zinc-100 text-zinc-500",
+    red: "bg-red-100 text-red-600",
   } as const;
   return (
-    <span className={`whitespace-nowrap rounded-md px-2 py-1 text-[11px] font-medium ${tones[tone]}`}>
+    <span className={`whitespace-nowrap rounded-md px-2 py-1 text-[10.5px] font-medium ${tones[tone]}`}>
       {children}
     </span>
   );
 }
 
-/* 1 · Unified Visibility — the whole network in one live view */
-function VisibilityCard() {
+/* Small outline / dark action buttons for top bars and table rows */
+function GhostBtn({ children }: { children: React.ReactNode }) {
   return (
-    <CardShell
-      title="Midwest network · One view"
-      sub="12 locations · demand, supply, POs"
-      badge={
-        <span className="flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-zinc-700">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> Live
-        </span>
-      }
-    >
-      <div className="mt-5 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Locations", "12"],
-          ["On-hand", "18.4K"],
-          ["In transit", "3.2K"],
-          ["Open POs", "14"],
-          ["Demand · 7d", "+8%"],
-          ["Fill rate", "96%"],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[11.5px] text-zinc-400">{k}</p>
-            <p className="text-[14px] font-medium text-zinc-900">{v}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-5 text-[11.5px] text-zinc-400">Weekly demand</p>
-      <div className="mt-2 flex items-end justify-between gap-2">
-        {[
-          ["Sun", 30], ["Mon", 36], ["Tue", 36], ["Wed", 31], ["Thu", 34], ["Fri", 37], ["Sat", 33],
-        ].map(([d, v]) => (
-          <div key={d as string} className="flex flex-1 flex-col items-center gap-1.5">
-            <span className="text-[9.5px] text-zinc-400">{v}%</span>
-            <div className="w-full rounded-md bg-[#8b6bc7]" style={{ height: (v as number) * 2.2 }} />
-            <span className="text-[9.5px] text-zinc-400">{d}</span>
-          </div>
-        ))}
-      </div>
-      <p className="mt-4 text-[11.5px] text-zinc-400">Stock cover</p>
-      <div className="mt-2 flex justify-between gap-2">
-        {Array.from({ length: 7 }).map((_, i) => (
-          <div key={i} className="flex-1 overflow-hidden rounded-md">
-            <div className="h-3 bg-red-400" />
-            <div className="h-4 bg-amber-300" />
-            <div className="h-5 bg-emerald-400" />
-          </div>
-        ))}
-      </div>
-    </CardShell>
+    <span className="whitespace-nowrap rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-[11px] font-medium text-zinc-600">
+      {children}
+    </span>
+  );
+}
+function DarkBtn({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="flex items-center gap-1 whitespace-nowrap rounded-lg bg-zinc-900 px-2.5 py-1.5 text-[11px] font-medium text-white">
+      {children}
+    </span>
   );
 }
 
-/* 2 · Intelligent Analysis — signals detected and scored */
-function AnalysisCard() {
-  const signals = [
+/* ── Centralized Intelligence ───────────────────────────────────────────────
+   Dashboard 1 · Parts Planning — see the whole network, signals scored
+   overnight, exceptions routed to the planner (Visibility · Analysis ·
+   Planner in the Loop). */
+function PlanningDashboard() {
+  const cols = [
+    { key: "X", desc: "Smooth" },
+    { key: "Y", desc: "Erratic" },
+    { key: "Z", desc: "Lumpy" },
+  ];
+  const rows: {
+    label: string;
+    sub: string;
+    cells: { skus: string; fill: string; risk?: string; tone: "ok" | "warn" | "hot" }[];
+  }[] = [
     {
-      icon: TrendUp,
-      name: "Demand shift detected",
-      detail: "SKU-4482 · +18% WoW across 4 stores",
-      chip: <Chip tone="violet">Act</Chip>,
+      label: "A",
+      sub: "Top 80% rev",
+      cells: [
+        { skus: "142 SKUs", fill: "99.6%", tone: "ok" },
+        { skus: "64 SKUs", fill: "98.9%", risk: "$12k", tone: "warn" },
+        { skus: "22 SKUs", fill: "97.4%", risk: "$31k", tone: "hot" },
+      ],
     },
     {
-      icon: WarningCircle,
-      name: "Stockout risk",
-      detail: "DC-Chicago · 9 days to zero cover",
-      chip: <Chip tone="amber">High</Chip>,
+      label: "B",
+      sub: "Next 15%",
+      cells: [
+        { skus: "96 SKUs", fill: "99.2%", tone: "ok" },
+        { skus: "40 SKUs", fill: "98.1%", risk: "$8k", tone: "warn" },
+        { skus: "18 SKUs", fill: "96.8%", risk: "$9k", tone: "warn" },
+      ],
     },
     {
-      icon: Package,
-      name: "Overstock building",
-      detail: "DC-Columbus · 31 days of cover",
-      chip: <Chip tone="zinc">Watch</Chip>,
+      label: "C",
+      sub: "Bottom 5%",
+      cells: [
+        { skus: "88 SKUs", fill: "99.0%", tone: "ok" },
+        { skus: "35 SKUs", fill: "98.4%", tone: "ok" },
+        { skus: "13 SKUs", fill: "95.1%", risk: "$6k", tone: "warn" },
+      ],
     },
   ];
+  const cellTone = {
+    ok: "bg-white ring-zinc-100",
+    warn: "bg-amber-50/80 ring-amber-100",
+    hot: "bg-red-50/80 ring-red-100",
+  } as const;
+  const sku = (id: string, name: string) => (
+    <div>
+      <p className="font-medium text-zinc-900">{id}</p>
+      <p className="text-[9.5px] text-zinc-400">{name}</p>
+    </div>
+  );
+  const insight = (conf: string, risk: string) => (
+    <div className="text-[10px] font-medium leading-snug text-[#5C3D97]">
+      {conf} confidence
+      <br />
+      {risk} at risk
+    </div>
+  );
   return (
-    <CardShell
-      title="Signal scan · Midwest"
-      sub="142 SKUs analyzed · this morning"
-      badge={
-        <span className="flex items-center gap-1 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-zinc-700">
-          <Brain size={13} /> AI
-        </span>
+    <DashShell
+      page="Parts Planning"
+      controls={
+        <>
+          <Select>Texas (TX)</Select>
+          <Select>Dallas (DAL)</Select>
+          <Select>All vendors</Select>
+          <AskLens />
+        </>
       }
     >
-      <div className="mt-5 flex flex-col gap-3 border-t border-zinc-100 pt-4">
-        {signals.map((s) => (
-          <div key={s.name} className="flex items-start justify-between gap-3 rounded-xl bg-zinc-50 p-3.5">
-            <div className="flex items-start gap-3">
-              <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-                <s.icon size={15} className="text-[#5C3D97]" />
-              </span>
-              <div>
-                <p className="text-[13.5px] font-medium text-zinc-900">{s.name}</p>
-                <p className="mt-0.5 text-[12px] text-zinc-500">{s.detail}</p>
-              </div>
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+        {/* Unified Visibility — the network classified in one live view */}
+        <Panel
+          title="ABC × XYZ classification"
+          right={<p className="text-[10px] text-zinc-400">518 products · revenue × demand pattern</p>}
+        >
+          <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-[64px_1fr_1fr_1fr] gap-2">
+              <span />
+              {cols.map((c) => (
+                <p key={c.key} className="pb-0.5 text-center text-[10px] text-zinc-400">
+                  <span className="font-semibold text-zinc-600">{c.key}</span> · {c.desc}
+                </p>
+              ))}
             </div>
-            {s.chip}
+            {rows.map((r) => (
+              <div key={r.label} className="grid grid-cols-[64px_1fr_1fr_1fr] items-stretch gap-2">
+                <div className="flex flex-col justify-center">
+                  <p className="text-[12px] font-semibold text-zinc-800">{r.label}</p>
+                  <p className="text-[9px] leading-tight text-zinc-400">{r.sub}</p>
+                </div>
+                {r.cells.map((c, i) => (
+                  <div key={i} className={`rounded-lg p-2.5 ring-1 ${cellTone[c.tone]}`}>
+                    <p className="text-[11.5px] font-semibold text-zinc-900">{c.skus}</p>
+                    <div className="mt-1 flex items-center justify-between gap-1">
+                      <p className="text-[9.5px] text-zinc-500">{c.fill} fill</p>
+                      {c.risk && <p className="text-[9.5px] font-medium text-red-500">{c.risk} at risk</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
-        ))}
+        </Panel>
+
+        {/* Intelligent Analysis — the overnight Lens review */}
+        <LensPanel title="Lens Summary" headline="Reviewed 734 SKUs overnight — every signal scored and ranked by impact.">
+          <div className="mt-3 flex flex-col gap-2">
+            <div className="rounded-lg bg-white/70 px-3 py-2.5 ring-1 ring-[#e8e2f4]">
+              <p className="text-[17px] font-semibold leading-none text-zinc-900">57</p>
+              <p className="mt-1.5 text-[10px] leading-snug text-zinc-500">
+                Exceptions need you — 10 critical · 37 high · 10 medium
+              </p>
+            </div>
+            <div className="rounded-lg bg-white/70 px-3 py-2.5 ring-1 ring-[#e8e2f4]">
+              <p className="text-[17px] font-semibold leading-none text-zinc-900">12</p>
+              <p className="mt-1.5 text-[10px] leading-snug text-zinc-500">
+                Ready for PO review — 4 branch transfers · 8 alternate vendors
+              </p>
+            </div>
+            <div className="rounded-lg bg-white/70 px-3 py-2.5 ring-1 ring-[#e8e2f4]">
+              <p className="flex items-center gap-1 text-[17px] font-semibold leading-none text-zinc-900">
+                <TrendUp size={13} className="text-emerald-600" /> +18%
+              </p>
+              <p className="mt-1.5 text-[10px] leading-snug text-zinc-500">
+                Demand shift on SKU-4482 — WoW across 4 stores
+              </p>
+            </div>
+          </div>
+        </LensPanel>
       </div>
-      <div className="mt-5">
-        <div className="flex items-center justify-between">
-          <p className="text-[11.5px] text-zinc-400">Model confidence</p>
-          <p className="text-[11.5px] font-medium text-zinc-900">88%</p>
+
+      {/* Planner in the Loop — only the exceptions reach you, drafted */}
+      <Panel
+        right={
+          <div className="flex items-center gap-1.5">
+            <GhostBtn>Critical · 10</GhostBtn>
+            <GhostBtn>High · 37</GhostBtn>
+            <GhostBtn>Customize</GhostBtn>
+          </div>
+        }
+        title="Planner Review"
+      >
+        <div className="-mt-1 mb-3 border-b border-zinc-100">
+          <SegTabs
+            items={[
+              { label: "Action Center", count: 7, active: true },
+              { label: "Watchlist", count: 1 },
+              { label: "Approved", count: 5 },
+              { label: "Overstock", count: 5 },
+            ]}
+          />
         </div>
-        <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-zinc-100">
-          <div className="h-full rounded-full bg-[#8b6bc7]" style={{ width: "88%" }} />
-        </div>
-      </div>
-      <p className="mt-4 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        3 signals → 3 recommended actions, ranked by impact.
-      </p>
-    </CardShell>
+        <MiniTable
+          head={["Product", "Branch", "Exception", "Req. qty", "Value", "Lens insight", ""]}
+          rows={[
+            [
+              sku("30-60049-20PK24", "Carrier 90 evaporator coil"),
+              <Chip key="b" tone="zinc">DAL · AY</Chip>,
+              <Chip key="e" tone="red">Critical</Chip>,
+              "12 units",
+              "$9,000",
+              insight("80%", "$1.2k"),
+              <GhostBtn key="a">Review</GhostBtn>,
+            ],
+            [
+              sku("30-60049-20PK18", "Carrier 90 evaporator coil"),
+              <Chip key="b" tone="zinc">DAL · AY</Chip>,
+              <Chip key="e" tone="amber">High</Chip>,
+              "8 units",
+              "$7,000",
+              insight("76%", "$0.9k"),
+              <GhostBtn key="a">Review</GhostBtn>,
+            ],
+            [
+              sku("30-58811-04PK06", "Copeland scroll compressor"),
+              <Chip key="b" tone="zinc">HOU · BX</Chip>,
+              <Chip key="e" tone="zinc">Medium</Chip>,
+              "5 units",
+              "$5,000",
+              insight("72%", "$0.4k"),
+              <GhostBtn key="a">Review</GhostBtn>,
+            ],
+          ]}
+        />
+      </Panel>
+      <Caption>
+        One classified view of the network, signals scored overnight — and only the exceptions routed to your planner.
+      </Caption>
+    </DashShell>
   );
 }
 
-/* 3 · Agentic Actions — executed above the confidence threshold */
-function AgenticCard() {
-  const steps = [
-    "Plan generated from live signals",
-    "Confidence 92% — above 85% threshold",
-    "Transfer order created & released",
-    "Stores and carrier notified",
-  ];
+/* Dashboard 2 · Buying — Lens executes above the confidence bar, the planner
+   reviews the rest, and calibration compounds (Agentic · Learning). */
+function BuyingDashboard() {
   return (
-    <CardShell
-      title="Rebalance · auto-executed"
-      sub="SKU-4482 · Columbus → Chicago"
-      badge={<Chip tone="green">Executed</Chip>}
-    >
-      <div className="mt-5 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Units", "240"],
-          ["Confidence", "92%"],
-          ["Threshold", "85%"],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[11.5px] text-zinc-400">{k}</p>
-            <p className="text-[14px] font-medium text-zinc-900">{v}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-4">
-        <div className="relative mt-1.5 h-1.5 rounded-full bg-zinc-100">
-          <div className="h-full rounded-full bg-[#8b6bc7]" style={{ width: "92%" }} />
-          {/* threshold marker */}
-          <span className="absolute -top-1 h-3.5 w-px bg-zinc-900" style={{ left: "85%" }} />
-        </div>
-        <div className="mt-1 flex justify-between text-[10px] text-zinc-400">
-          <span>0%</span>
-          <span>threshold 85%</span>
-          <span>100%</span>
-        </div>
-      </div>
-      <div className="mt-5 flex flex-col gap-3">
-        {steps.map((s) => (
-          <div key={s} className="flex items-center gap-2.5">
-            <CheckCircle size={16} weight="fill" className="flex-shrink-0 text-emerald-500" />
-            <p className="text-[13px] text-zinc-700">{s}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-5 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        Below the threshold? Nothing moves without you — see next.
-      </p>
-    </CardShell>
-  );
-}
-
-/* 4 · Planner in the Loop — cost-optimized PO routed for approval */
-function PlannerCard() {
-  return (
-    <CardShell
-      title="Vendor PO · awaiting approval"
-      sub="PO-78291 · Acme Industries"
-      badge={<Chip tone="amber">Review</Chip>}
-    >
-      <div className="mt-5 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Units", "500"],
-          ["Unit cost", "$0.53"],
-          ["vs last buy", "−6%"],
-          ["Total", "$12.4K"],
-          ["Confidence", "84%"],
-          ["Delivery", "Feb 12"],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[11.5px] text-zinc-400">{k}</p>
-            <p className="text-[14px] font-medium text-zinc-900">{v}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-5 rounded-xl bg-zinc-50 p-3.5">
-        <p className="text-[12px] leading-relaxed text-zinc-600">
-          Confidence 84% sits below your 85% threshold — Lens drafted the
-          cost-optimized PO and routed it to you instead of executing.
-        </p>
-      </div>
-      <div className="mt-5 flex gap-2.5">
-        <span className="flex-1 rounded-lg bg-zinc-900 px-4 py-2.5 text-center text-[13px] font-medium text-white">
-          Approve
-        </span>
-        <span className="flex-1 rounded-lg border border-zinc-200 px-4 py-2.5 text-center text-[13px] font-medium text-zinc-700">
-          Adjust
-        </span>
-      </div>
-      <p className="mt-4 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        You stay in command — the system executes only what you&apos;d sign.
-      </p>
-    </CardShell>
-  );
-}
-
-/* 5 · Continuous Learning — accuracy compounds quarter over quarter */
-function LearningCard() {
-  const quarters = [
-    ["Q1", 78],
-    ["Q2", 84],
-    ["Q3", 89],
-    ["Q4", 94],
-  ] as const;
-  return (
-    <CardShell
-      title="Model performance"
-      sub="1,240 decisions learned this quarter"
-      badge={
-        <span className="flex items-center gap-1 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-zinc-700">
-          <TrendUp size={13} /> Improving
-        </span>
+    <DashShell
+      page="Buying"
+      controls={
+        <>
+          <Select>Texas (TX)</Select>
+          <Select>All branches</Select>
+          <AskLens />
+        </>
       }
     >
-      <p className="mt-5 border-t border-zinc-100 pt-4 text-[11.5px] text-zinc-400">
-        Forecast accuracy
-      </p>
-      <div className="mt-2 flex items-end justify-between gap-3">
-        {quarters.map(([q, v]) => (
-          <div key={q} className="flex flex-1 flex-col items-center gap-1.5">
-            <span className="text-[10px] font-medium text-zinc-600">{v}%</span>
-            <div className="w-full rounded-md bg-[#8b6bc7]" style={{ height: (v - 60) * 3.4, opacity: 0.55 + (v - 78) * 0.028 }} />
-            <span className="text-[9.5px] text-zinc-400">{q}</span>
-          </div>
-        ))}
+      {/* Agentic Actions — most POs never need a touch */}
+      <div className="grid gap-3 sm:grid-cols-3">
+        <KpiPanel label="Pending your review" value="4" sub="$21K total · 3 branches" />
+        <KpiPanel label="Approved today" value="5" sub="$4K total · 1 vendor" />
+        <KpiPanel
+          label={
+            <>
+              <Sparkle size={10} weight="fill" className="text-[#5C3D97]" /> Auto-approval rate · 30d
+            </>
+          }
+          value="85%"
+          sub="well within calibration"
+          violet
+        />
       </div>
-      <div className="mt-5 flex flex-col gap-3 border-t border-zinc-100 pt-4">
-        {[
-          ["Override rate", "11% → 4%"],
-          ["Expedite spend", "−42%"],
-          ["Stockout events", "−31%"],
-        ].map(([k, v]) => (
-          <div key={k} className="flex items-center justify-between">
-            <p className="text-[13px] text-zinc-500">{k}</p>
-            <p className="text-[13.5px] font-medium text-emerald-600">{v}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-4 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        Every decision sharpens the next recommendation.
-      </p>
-    </CardShell>
+      <Panel
+        title="Buyer review"
+        right={
+          <SegTabs
+            items={[
+              { label: "Buying queue", count: 7, active: true },
+              { label: "Approved POs" },
+              { label: "Rejected" },
+            ]}
+          />
+        }
+      >
+        <MiniTable
+          head={["Req. number", "Source", "Branch", "Avg lead time", "Total", "Type", "Action"]}
+          rows={[
+            [
+              <span key="r" className="font-medium text-zinc-900">REQ-2026-1300</span>,
+              <Chip key="s" tone="zinc">CT</Chip>,
+              "DAL",
+              "7 days",
+              "$9,000",
+              <Chip key="t" tone="violet">Lens pre-cleared</Chip>,
+              <CheckCircle key="a" size={16} weight="fill" className="text-[#5C3D97]" />,
+            ],
+            [
+              <span key="r" className="font-medium text-zinc-900">REQ-2026-1301</span>,
+              <Chip key="s" tone="zinc">AMA</Chip>,
+              "DAL",
+              "—",
+              "$14,000",
+              <Chip key="t" tone="amber">2 products need review</Chip>,
+              <GhostBtn key="a">Review</GhostBtn>,
+            ],
+            [
+              <span key="r" className="font-medium text-zinc-900">REQ-2026-1302</span>,
+              <Chip key="s" tone="zinc">CT</Chip>,
+              "HOU",
+              "7 days",
+              "$7,000",
+              <Chip key="t" tone="violet">Lens pre-cleared</Chip>,
+              <CheckCircle key="a" size={16} weight="fill" className="text-[#5C3D97]" />,
+            ],
+            [
+              <span key="r" className="font-medium text-zinc-900">REQ-2026-1303</span>,
+              <Chip key="s" tone="zinc">CT</Chip>,
+              "DAL",
+              "5 days",
+              "$7,000",
+              <Chip key="t" tone="amber">1 product needs review</Chip>,
+              <GhostBtn key="a">Review</GhostBtn>,
+            ],
+          ]}
+        />
+      </Panel>
+
+      {/* Continuous Learning — calibration compounds quarter over quarter */}
+      <Panel
+        title="Model calibration · trailing 12 months"
+        right={
+          <span className="flex items-center gap-1 rounded-md border border-zinc-200 px-2 py-1 text-[10px] text-emerald-700">
+            <TrendUp size={11} /> Improving
+          </span>
+        }
+      >
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            ["Auto-approval rate", "62% → 85%"],
+            ["Planner override rate", "11% → 4%"],
+            ["Forecast accuracy", "94%"],
+            ["Expedite spend", "−42%"],
+          ].map(([k, v]) => (
+            <div key={k}>
+              <p className="text-[10px] text-zinc-400">{k}</p>
+              <p className="mt-0.5 text-[13px] font-semibold text-emerald-600">{v}</p>
+            </div>
+          ))}
+        </div>
+      </Panel>
+      <Caption>
+        Above the confidence bar, Lens buys on its own — every planner decision sharpens the next call.
+      </Caption>
+    </DashShell>
   );
 }
 
-/* ── Customer Inventory & Order Intelligence — per-feature cards ─────────── */
-
-/* 1 · Unified Visibility — one live view of an order, stock, and specs */
-function OrderViewCard() {
+/* ── Customer Inventory & Order Intelligence ────────────────────────────────
+   Dashboard 1 · Order Tracking — one live view of the order, alerts pushed
+   before the customer asks, issues fixed in context (Visibility ·
+   Notifications · Resolution). */
+function OrderTrackingDashboard() {
   const steps = [
-    { label: "Open", date: "Jan 14", done: true },
+    { label: "Open", date: "Jan 12", done: true },
     { label: "In process", date: "Jan 16", done: true },
     { label: "Shipped", date: "—", done: false },
     { label: "Delivered", date: "—", done: false },
   ];
+  const status = (
+    <span className="flex items-center gap-1.5">
+      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> In process
+    </span>
+  );
+  const info: [string, string][] = [
+    ["Halstead order #", "3097082"],
+    ["Customer PO", "23981029"],
+    ["PO date", "Jan 12, 2026"],
+    ["Warehouse", "Savannah"],
+    ["Ship to", "8119 · Matt Powers"],
+    ["Shipper", "DHL"],
+  ];
   return (
-    <CardShell
-      title="Order XC-2384 · One view"
-      sub="Distributor portal · 18 lines"
-      badge={
-        <span className="flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-zinc-700">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> Live
-        </span>
+    <DashShell
+      page="Order Tracking · #3096652"
+      controls={
+        <>
+          <GhostBtn>Raise an issue</GhostBtn>
+          <DarkBtn>
+            <Star size={11} /> Add to Watchlist
+          </DarkBtn>
+        </>
       }
     >
-      <div className="mt-5 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Status", "In transit"],
-          ["ETA", "Feb 1"],
-          ["Lines", "18"],
-          ["On-hand", "2.1K"],
-          ["Alt SKUs", "3"],
-          ["Specs", "Attached"],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[11.5px] text-zinc-400">{k}</p>
-            <p className="text-[14px] font-medium text-zinc-900">{v}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-5 text-[11.5px] text-zinc-400">Order progress</p>
-      <div className="mt-3 flex items-start">
-        {steps.map((s, i) => (
-          <div key={s.label} className="flex flex-1 flex-col items-center">
-            <div className="flex w-full items-center">
-              <div className={`h-px flex-1 ${i === 0 ? "bg-transparent" : s.done ? "bg-emerald-500" : "bg-zinc-200"}`} />
-              {s.done ? (
-                <CheckCircle size={20} weight="fill" className="flex-shrink-0 text-emerald-500" />
-              ) : (
-                <span className="h-4 w-4 flex-shrink-0 rounded-full border-2 border-zinc-200 bg-white" />
-              )}
-              <div className={`h-px flex-1 ${i === steps.length - 1 ? "bg-transparent" : steps[i + 1].done ? "bg-emerald-500" : "bg-zinc-200"}`} />
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="flex min-w-0 flex-col gap-3">
+          {/* Unified Visibility — the order, every line and ETA */}
+          <Panel title="Order status" right={<p className="text-[10px] text-zinc-400">4 items · placed Jan 12</p>}>
+            <div className="flex items-start">
+              {steps.map((s, i) => (
+                <div key={s.label} className="flex flex-1 flex-col items-center">
+                  <div className="flex w-full items-center">
+                    <div className={`h-px flex-1 ${i === 0 ? "bg-transparent" : s.done ? "bg-emerald-500" : "bg-zinc-200"}`} />
+                    {s.done ? (
+                      <CheckCircle size={19} weight="fill" className="flex-shrink-0 text-emerald-500" />
+                    ) : (
+                      <span className="h-4 w-4 flex-shrink-0 rounded-full border-2 border-zinc-200 bg-white" />
+                    )}
+                    <div
+                      className={`h-px flex-1 ${
+                        i === steps.length - 1 ? "bg-transparent" : steps[i + 1].done ? "bg-emerald-500" : "bg-zinc-200"
+                      }`}
+                    />
+                  </div>
+                  <p className={`mt-1.5 text-[10.5px] font-medium ${s.done ? "text-zinc-900" : "text-zinc-400"}`}>
+                    {s.label}
+                  </p>
+                  <p className="text-[9.5px] text-zinc-400">{s.date}</p>
+                </div>
+              ))}
             </div>
-            <p className={`mt-1.5 text-[11px] font-medium ${s.done ? "text-zinc-900" : "text-zinc-400"}`}>{s.label}</p>
-            <p className="text-[10px] text-zinc-400">{s.date}</p>
-          </div>
-        ))}
+            <div className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-[11px] font-medium text-emerald-700">
+              In process — order ETA: Feb 1, 2026
+            </div>
+          </Panel>
+          <Panel title="Products · 4">
+            <MiniTable
+              head={["SKU", "Product", "Status", "Qty", "ETA"]}
+              rows={[
+                ["I4445101L7", "Barlee Brook plank", status, "240", "Mar 05"],
+                ["I4445102L7", "Barlee Brook plank", status, "160", "Mar 05"],
+                ["I4445108L2", "Oak stair nose 42″", status, "80", "Mar 03"],
+              ]}
+            />
+          </Panel>
+        </div>
+
+        <div className="flex min-w-0 flex-col gap-3">
+          <Panel title="Order information">
+            <div className="flex flex-col gap-2">
+              {info.map(([k, v]) => (
+                <div key={k} className="flex items-center justify-between gap-2">
+                  <p className="text-[10.5px] text-zinc-400">{k}</p>
+                  <p className="text-[11px] font-medium text-zinc-800">{v}</p>
+                </div>
+              ))}
+            </div>
+          </Panel>
+
+          {/* Proactive Notifications — pushed before the customer asks */}
+          <Panel title="Notifications" right={<Chip tone="violet">Proactive</Chip>}>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-start gap-2.5 rounded-lg bg-zinc-50 p-2.5">
+                <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
+                  <WarningCircle size={13} className="text-[#5C3D97]" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-medium text-zinc-900">Delay flagged</p>
+                  <p className="mt-0.5 text-[10px] leading-snug text-zinc-500">
+                    ETA slipped 2 days — customer notified 09:12
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2.5 rounded-lg bg-zinc-50 p-2.5">
+                <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
+                  <BellRinging size={13} className="text-[#5C3D97]" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-medium text-zinc-900">Back in stock · SKU-7719</p>
+                  <p className="mt-0.5 text-[10px] leading-snug text-zinc-500">3 waiting customers alerted</p>
+                </div>
+              </div>
+            </div>
+          </Panel>
+
+          {/* Guided Resolution — raised in context, fixed on one thread */}
+          <Panel title="Issue #1842" right={<Chip tone="green">Resolved</Chip>}>
+            <p className="text-[10.5px] leading-relaxed text-zinc-600">
+              Short shipment on SKU-8841 — Lens matched invoice, ASN, and receipt,
+              queued 2 replacement units, and credit was issued. Fixed in 26 min,
+              one thread, zero handoffs.
+            </p>
+          </Panel>
+        </div>
       </div>
-      <div className="mt-4 rounded-lg bg-emerald-50 px-3 py-2 text-[12px] text-emerald-700">
-        Order ETA: Feb 1 — every line, shipment, and spec in one place.
-      </div>
-      <p className="mt-4 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        SKU cross-reference built in — part numbers match across systems.
-      </p>
-    </CardShell>
+      <Caption>
+        Every line, shipment, and ETA in one view — alerts pushed before the customer asks, issues fixed in context.
+      </Caption>
+    </DashShell>
   );
 }
 
-/* 2 · Intelligent Self-Service — search by name, SKU, or image */
-function SelfServiceCard() {
+/* Dashboard 2 · Customer Workspace — self-serve search and a workspace that
+   sharpens every visit (Self-Service · Learning). */
+function WorkspaceDashboard() {
   const results = [
     { name: "SKU-8841 · Oak plank 8mm", detail: "1.2K units · ships today", chip: <Chip tone="green">In stock</Chip> },
     { name: "SKU-8842 · Oak plank 10mm", detail: "Suggested alternative · same spec", chip: <Chip tone="violet">Alt</Chip> },
     { name: "SKU-7719 · Oak laminate", detail: "240 units · restock Feb 4", chip: <Chip tone="amber">Low</Chip> },
   ];
-  return (
-    <CardShell
-      title="Search · self-service"
-      sub="By name, SKU, or image"
-      badge={
-        <span className="flex items-center gap-1 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-zinc-700">
-          <MagnifyingGlass size={13} /> 24/7
-        </span>
-      }
-    >
-      <div className="mt-5 flex items-center gap-2 rounded-xl border border-zinc-200 px-3.5 py-2.5">
-        <MagnifyingGlass size={15} className="text-zinc-400" />
-        <p className="text-[13.5px] text-zinc-900">
-          oak plank 8mm<span className="animate-pulse text-zinc-400">|</span>
-        </p>
-      </div>
-      <div className="mt-4 flex flex-col gap-3">
-        {results.map((r) => (
-          <div key={r.name} className="flex items-start justify-between gap-3 rounded-xl bg-zinc-50 p-3.5">
-            <div>
-              <p className="text-[13.5px] font-medium text-zinc-900">{r.name}</p>
-              <p className="mt-0.5 text-[12px] text-zinc-500">{r.detail}</p>
-            </div>
-            {r.chip}
-          </div>
-        ))}
-      </div>
-      <p className="mt-5 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        Live availability, alternatives, and full product detail — no phone call.
-      </p>
-    </CardShell>
-  );
-}
-
-/* 3 · Proactive Notifications — pushed before the customer asks */
-function NotificationsCard() {
-  const alerts = [
-    {
-      icon: WarningCircle,
-      name: "Delay flagged · XC-2384",
-      detail: "ETA slipped 2 days — customer notified 09:12",
-      chip: <Chip tone="amber">Pushed</Chip>,
-    },
-    {
-      icon: Package,
-      name: "Backorder risk · SKU-8841",
-      detail: "Alternative suggested before cutoff",
-      chip: <Chip tone="violet">Auto</Chip>,
-    },
-    {
-      icon: BellRinging,
-      name: "Back in stock · SKU-7719",
-      detail: "3 waiting customers alerted",
-      chip: <Chip tone="green">Sent</Chip>,
-    },
+  const saved = [
+    { icon: PushPin, label: "Oak plank family", meta: "12 SKUs · pinned" },
+    { icon: Star, label: "Riverside HW · reorder pack", meta: "Q3 favorites" },
+    { icon: ArrowsClockwise, label: "Auto-reorder · SKU-8841", meta: "every 4 wks" },
   ];
-  return (
-    <CardShell
-      title="Alerts · pushed to customers"
-      sub="Lens watches every order"
-      badge={<Chip tone="violet">Proactive</Chip>}
-    >
-      <div className="mt-5 flex flex-col gap-3 border-t border-zinc-100 pt-4">
-        {alerts.map((a) => (
-          <div key={a.name} className="flex items-start justify-between gap-3 rounded-xl bg-zinc-50 p-3.5">
-            <div className="flex items-start gap-3">
-              <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-                <a.icon size={15} className="text-[#5C3D97]" />
-              </span>
-              <div>
-                <p className="text-[13.5px] font-medium text-zinc-900">{a.name}</p>
-                <p className="mt-0.5 text-[12px] text-zinc-500">{a.detail}</p>
-              </div>
-            </div>
-            {a.chip}
-          </div>
-        ))}
-      </div>
-      <div className="mt-5 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Alerts today", "38"],
-          ["Before asked", "100%"],
-          ["Calls avoided", "31"],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[11.5px] text-zinc-400">{k}</p>
-            <p className="text-[14px] font-medium text-zinc-900">{v}</p>
-          </div>
-        ))}
-      </div>
-    </CardShell>
-  );
-}
-
-/* 4 · Guided Resolution — an actual chat thread that shows "raised in context"
-   and "one thread" instead of just telling it. Three participants (customer,
-   Lens, service rep), a live-attached context card, and a resolved footer. */
-function ResolutionCard() {
-  const messages: {
-    icon: Icon;
-    name: string;
-    time: string;
-    text: string;
-    lens?: boolean;
-    attached?: React.ReactNode;
-  }[] = [
-    {
-      icon: User,
-      name: "Ana · Riverside HW",
-      time: "9:14",
-      text: "Short shipment on PO-4881 — receiving 38 of 40 boxes on SKU-8841.",
-    },
-    {
-      icon: Sparkle,
-      lens: true,
-      name: "Navanta Lens",
-      time: "9:14",
-      text: "Matched invoice, ASN, and receipt. 2 units short at DC-Chicago.",
-      attached: (
-        <div className="mt-2 flex items-center gap-2.5 rounded-lg border border-zinc-200 bg-white px-3 py-2">
-          <FileText size={14} className="text-zinc-400" />
-          <p className="flex-1 text-[11.5px] font-medium text-zinc-800">
-            PO-4881 · ASN #24-118
-          </p>
-          <span className="text-[10.5px] text-zinc-400">Δ 2 units</span>
-        </div>
-      ),
-    },
-    {
-      icon: Sparkle,
-      lens: true,
-      name: "Navanta Lens",
-      time: "9:15",
-      text: "Replacement · 2 units queued from DC-Columbus. Ships today.",
-    },
-    {
-      icon: Headset,
-      name: "Jordan · Service",
-      time: "9:40",
-      text: "Credit issued. Ana notified. Closing.",
-    },
-  ];
-  return (
-    <CardShell
-      title="Issue #1842 · resolved"
-      sub="Raised in context · one thread"
-      badge={<Chip tone="green">Resolved</Chip>}
-    >
-      <div className="mt-5 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Time to fix", "26 min"],
-          ["Handoffs", "0"],
-          ["Thread", "1"],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[11.5px] text-zinc-400">{k}</p>
-            <p className="text-[14px] font-medium text-zinc-900">{v}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* The thread itself — system-style icon tiles, bubbles, timestamps */}
-      <div className="mt-5 flex flex-col gap-3">
-        {messages.map((m, i) => (
-          <div key={i} className="flex items-start gap-2.5">
-            <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-              <m.icon size={15} className="text-[#5C3D97]" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-baseline gap-2">
-                <p className="truncate text-[11.5px] font-medium text-zinc-900">{m.name}</p>
-                <p className="text-[10.5px] text-zinc-400">{m.time}</p>
-              </div>
-              <div className={`mt-1 rounded-lg px-3 py-2 text-[12.5px] leading-snug text-zinc-800 ${m.lens ? "bg-[#f4f0fa]" : "bg-zinc-50"}`}>
-                {m.text}
-                {m.attached}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-5 flex items-center gap-2 rounded-xl bg-emerald-50 px-3.5 py-2.5">
-        <CheckCircle size={15} weight="fill" className="flex-shrink-0 text-emerald-600" />
-        <p className="text-[12px] leading-snug text-emerald-800">
-          One thread. Customer, Lens, and team stayed in the same context — no
-          email chain, no handoffs.
-        </p>
-      </div>
-    </CardShell>
-  );
-}
-
-/* 5 · Continuous Learning — a personalized customer dashboard that shows
-   the workspace sharpening: a named account header, a real bar chart with a
-   Y-axis, and a live list of what's been saved this month. */
-function CustomerLearningCard() {
   const quarters = [
     ["Q1", 54],
     ["Q2", 63],
     ["Q3", 74],
     ["Q4", 82],
   ] as const;
-  const CHART_H = 96;
-  const MAX = 100;
-  const yTicks = [100, 75, 50, 25, 0];
-  const saved = [
-    { icon: PushPin, label: "Oak plank family", meta: "12 SKUs · pinned" },
-    { icon: Star, label: "Riverside HW · reorder pack", meta: "Q3 favorites" },
-    { icon: ArrowsClockwise, label: "Auto-reorder · SKU-8841", meta: "every 4 wks" },
-  ];
   return (
-    <CardShell
-      title="Riverside HW · workspace"
-      sub="Personalized · sharpens each visit"
-      badge={
-        <span className="flex items-center gap-1 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-emerald-700">
-          <TrendUp size={13} /> +28% YoY
-        </span>
+    <DashShell
+      page="Riverside HW · Workspace"
+      controls={
+        <>
+          <Select>All categories</Select>
+          <AskLens />
+        </>
       }
     >
-      <div className="mt-5 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Saved", "12"],
-          ["Favorites", "28"],
-          ["Reorders", "2 clicks"],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[11.5px] text-zinc-400">{k}</p>
-            <p className="text-[14px] font-medium text-zinc-900">{v}</p>
-          </div>
-        ))}
+      {/* Intelligent Self-Service — search by name, SKU, or image */}
+      <div className="flex items-center gap-2.5 rounded-xl bg-white px-3.5 py-2.5 ring-1 ring-zinc-100">
+        <MagnifyingGlass size={14} className="text-zinc-400" />
+        <p className="text-[12px] text-zinc-900">
+          oak plank 8mm<span className="animate-pulse text-zinc-400">|</span>
+        </p>
+        <span className="ml-auto whitespace-nowrap rounded-md bg-zinc-100 px-2 py-1 text-[9.5px] font-medium text-zinc-500">
+          name · SKU · image
+        </span>
       </div>
 
-      <div className="mt-5 flex items-center justify-between">
-        <p className="text-[11.5px] font-medium text-zinc-700">Self-serve rate</p>
-        <p className="text-[11px] text-zinc-400">last 4 quarters</p>
-      </div>
-
-      {/* Real chart — Y-axis ticks + gridlines behind the bars */}
-      <div className="mt-3 flex gap-3">
-        <div className="flex flex-col justify-between" style={{ height: CHART_H }}>
-          {yTicks.map((t) => (
-            <span key={t} className="text-[9px] leading-none text-zinc-300">
-              {t}
-            </span>
-          ))}
-        </div>
-        <div className="relative flex-1">
-          <div className="absolute inset-0 flex flex-col justify-between">
-            {yTicks.map((t) => (
-              <span key={t} className="h-px w-full bg-zinc-100" />
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <Panel title="Results · 3 matches">
+          <div className="flex flex-col gap-2">
+            {results.map((r) => (
+              <div key={r.name} className="flex items-start justify-between gap-3 rounded-lg bg-zinc-50 p-3">
+                <div className="flex items-start gap-2.5">
+                  <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
+                    <Package size={14} className="text-[#5C3D97]" />
+                  </span>
+                  <div>
+                    <p className="text-[12px] font-medium text-zinc-900">{r.name}</p>
+                    <p className="mt-0.5 text-[10.5px] text-zinc-500">{r.detail}</p>
+                  </div>
+                </div>
+                {r.chip}
+              </div>
             ))}
           </div>
-          <div className="relative flex h-full items-end justify-between gap-2.5" style={{ height: CHART_H }}>
+        </Panel>
+
+        {/* Continuous Learning — the workspace remembers */}
+        <Panel title="Saved this month">
+          <div className="flex flex-col gap-2">
+            {saved.map((s) => (
+              <div key={s.label} className="flex items-center gap-2.5 rounded-lg bg-zinc-50 px-2.5 py-2">
+                <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
+                  <s.icon size={13} className="text-[#5C3D97]" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[11px] font-medium text-zinc-800">{s.label}</p>
+                  <p className="text-[9.5px] text-zinc-400">{s.meta}</p>
+                </div>
+                <ArrowRight size={11} className="text-zinc-300" />
+              </div>
+            ))}
+          </div>
+        </Panel>
+      </div>
+
+      <Panel
+        title="Self-serve rate"
+        right={
+          <span className="flex items-center gap-1 rounded-md border border-zinc-200 px-2 py-1 text-[10px] text-emerald-700">
+            <TrendUp size={11} /> +28% YoY
+          </span>
+        }
+      >
+        <div className="flex items-center gap-6">
+          <div className="flex max-w-[440px] flex-1 items-end justify-between gap-3 px-1 pt-1">
             {quarters.map(([q, v], i) => (
               <div key={q} className="flex flex-1 flex-col items-center gap-1">
-                <span className={`text-[10px] font-medium ${i === quarters.length - 1 ? "text-[#5C3D97]" : "text-zinc-500"}`}>
-                  {v}%
-                </span>
+                <span className="text-[10px] font-medium text-zinc-600">{v}%</span>
                 <div
                   className={`w-full rounded-t-md ${i === quarters.length - 1 ? "bg-[#5C3D97]" : "bg-[#8b6bc7]"}`}
-                  style={{ height: (v / MAX) * (CHART_H - 12), opacity: 0.55 + i * 0.13 }}
+                  style={{ height: v * 0.8, opacity: 0.55 + i * 0.15 }}
                 />
+                <span className="text-[9px] text-zinc-400">{q}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col gap-2.5 border-l border-zinc-100 pl-6">
+            {[
+              ["Saved searches", "12"],
+              ["Favorites", "28"],
+              ["Reorders", "2 clicks"],
+            ].map(([k, v]) => (
+              <div key={k} className="flex items-center justify-between gap-6">
+                <p className="text-[10.5px] text-zinc-400">{k}</p>
+                <p className="text-[12px] font-semibold text-zinc-900">{v}</p>
               </div>
             ))}
           </div>
         </div>
-      </div>
-      <div className="mt-1 grid grid-cols-4 gap-2.5 pl-8">
-        {quarters.map(([q]) => (
-          <span key={q} className="text-center text-[9.5px] text-zinc-400">
-            {q}
-          </span>
-        ))}
-      </div>
-
-      <p className="mt-5 border-t border-zinc-100 pt-4 text-[11.5px] font-medium text-zinc-700">
-        Saved this month
-      </p>
-      <div className="mt-2 flex flex-col gap-2">
-        {saved.map((s) => (
-          <div key={s.label} className="flex items-center gap-2.5 rounded-lg bg-zinc-50 px-3 py-2">
-            <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-              <s.icon size={15} className="text-[#5C3D97]" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[12px] font-medium text-zinc-800">{s.label}</p>
-              <p className="text-[10.5px] text-zinc-400">{s.meta}</p>
-            </div>
-            <ArrowRight size={12} className="text-zinc-300" />
-          </div>
-        ))}
-      </div>
-    </CardShell>
+      </Panel>
+      <Caption>
+        Live availability, alternatives, and full detail 24/7 — a workspace that sharpens with every visit.
+      </Caption>
+    </DashShell>
   );
 }
 
-/* ── Procurement Control Tower — per-feature cards ───────────────────────── */
-
-/* 1 · Unified Visibility — answers "fragmented spend" and "no single source
-   of truth": separate ERPs, spreadsheets, and sites unified into one view. */
-function SpendViewCard() {
+/* ── Procurement Control Tower ──────────────────────────────────────────────
+   Dashboard 1 · Spend Intelligence — every system unified, opportunities
+   quantified and scored (Visibility · Analysis). */
+function SpendDashboard() {
   const sources = ["SAP", "Oracle", "D365", "Sheets"];
+  const opp = (name: string, id: string) => (
+    <div>
+      <p className="font-medium text-zinc-900">{name}</p>
+      <p className="text-[9.5px] text-zinc-400">{id}</p>
+    </div>
+  );
   return (
-    <CardShell
-      title="Spend · one source of truth"
-      sub="Every ERP, spreadsheet, and site — unified"
-      badge={
-        <span className="flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-zinc-700">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> Live
-        </span>
+    <DashShell
+      page="Spend Intelligence"
+      controls={
+        <>
+          <Select>All sub-categories</Select>
+          <AskLens />
+        </>
       }
     >
-      {/* Fragmented sources → connected */}
-      <div className="mt-5 flex items-center gap-2 border-t border-zinc-100 pt-4">
-        {sources.map((s) => (
-          <span
-            key={s}
-            className="flex items-center gap-1 rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1 text-[10.5px] font-medium text-zinc-600"
-          >
-            <CheckCircle size={11} weight="fill" className="text-emerald-500" /> {s}
+      {/* Unified Visibility — one source of truth */}
+      <LensPanel
+        title="Lens Brief"
+        headline="Scan covered 4 MRO categories and surfaced 29 opportunities — ranked by evidence strength. Scanned MRO — $109.3M of $761.6M indirect spend."
+      >
+        <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+          {sources.map((s) => (
+            <span
+              key={s}
+              className="flex items-center gap-1 rounded-md border border-zinc-200 bg-white/80 px-2 py-1 text-[10px] font-medium text-zinc-600"
+            >
+              <CheckCircle size={10} weight="fill" className="text-emerald-500" /> {s}
+            </span>
+          ))}
+          <ArrowRight size={11} className="text-zinc-400" />
+          <span className="rounded-md bg-[#EBE8F3] px-2 py-1 text-[10px] font-medium text-[#5C3D97]">
+            One source of truth
           </span>
-        ))}
-        <ArrowRight size={12} className="text-zinc-300" />
-        <span className="rounded-md bg-[#EBE8F3] px-2 py-1 text-[10.5px] font-medium text-[#5C3D97]">
-          One view
-        </span>
-      </div>
-      <div className="mt-4 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Spend", "$15.1M"],
-          ["Sites · BUs", "9 · 3"],
-          ["Suppliers", "12"],
-          ["Systems", "4 → 1"],
-          ["Part names", "1,180 → 640"],
-          ["Leakage found", "$610K"],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[11.5px] text-zinc-400">{k}</p>
-            <p className="text-[14px] font-medium text-zinc-900">{v}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-5 text-[11.5px] text-zinc-400">Spend by site · normalized</p>
-      <div className="mt-2 flex flex-col gap-2.5">
-        {[
-          ["West DC", 75],
-          ["Midwest DC", 48],
-          ["South Central", 32],
-        ].map(([site, w]) => (
-          <div key={site as string} className="flex items-center gap-3">
-            <p className="w-24 flex-shrink-0 text-[11.5px] text-zinc-500">{site}</p>
-            <div className="h-2 flex-1 overflow-hidden rounded-full bg-zinc-100">
-              <div className="h-full rounded-full bg-[#8b6bc7]" style={{ width: `${w}%` }} />
-            </div>
-            <p className="w-8 text-right text-[11.5px] font-medium text-zinc-700">{w}%</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-5 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        Fragmented spend across systems that never talked — finally one view.
-      </p>
-    </CardShell>
-  );
-}
-
-/* 2 · Intelligent Analysis — answers "reactive, siloed decisions": habit
-   buying exposed and replaced with data-driven signals. */
-function CategoryScanCard() {
-  const signals = [
-    {
-      icon: Lightning,
-      name: "Missed volume discount",
-      detail: "Combined volume unlocks 8% tier · $214K/yr",
-      chip: <Chip tone="violet">Act</Chip>,
-    },
-    {
-      icon: WarningCircle,
-      name: "Same part, 3 prices",
-      detail: "$0.49 · $0.53 · $0.61 across sites",
-      chip: <Chip tone="amber">High</Chip>,
-    },
-    {
-      icon: ArrowsClockwise,
-      name: "Habit buy detected",
-      detail: "Site 4 pays a 12% premium to its usual vendor",
-      chip: <Chip tone="zinc">Watch</Chip>,
-    },
-  ];
-  return (
-    <CardShell
-      title="Category scan · Fasteners"
-      sub="Refreshed hourly · 34 categories"
-      badge={
-        <span className="flex items-center gap-1 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-zinc-700">
-          <Brain size={13} /> AI
-        </span>
-      }
-    >
-      <div className="mt-5 flex flex-col gap-3 border-t border-zinc-100 pt-4">
-        {signals.map((s) => (
-          <div key={s.name} className="flex items-start justify-between gap-3 rounded-xl bg-zinc-50 p-3.5">
-            <div className="flex items-start gap-3">
-              <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-                <s.icon size={15} className="text-[#5C3D97]" />
-              </span>
-              <div>
-                <p className="text-[13.5px] font-medium text-zinc-900">{s.name}</p>
-                <p className="mt-0.5 text-[12px] text-zinc-500">{s.detail}</p>
-              </div>
-            </div>
-            {s.chip}
-          </div>
-        ))}
-      </div>
-      <div className="mt-5">
-        <div className="flex items-center justify-between">
-          <p className="text-[11.5px] text-zinc-400">Savings quantified</p>
-          <p className="text-[11.5px] font-medium text-zinc-900">$2.48M – $2.75M</p>
         </div>
-        <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-zinc-100">
-          <div className="h-full rounded-full bg-[#8b6bc7]" style={{ width: "78%" }} />
+      </LensPanel>
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-5">
+        <KpiTile value="$109.3M" label="Total MRO spend" />
+        <KpiTile value="$44.7M" label="Addressable · contestable" />
+        <KpiTile value="$2.18M–$3.52M" label="Savings potential" />
+        <KpiTile value="29" label="Opportunities" />
+        <KpiTile value="4 of 15" label="Categories scanned" />
+      </div>
+
+      {/* Intelligent Analysis — the opportunity feed */}
+      <Panel title="Opportunities" right={<GhostBtn>High confidence ≥60% · 19</GhostBtn>}>
+        <div className="-mt-1 mb-3 border-b border-zinc-100">
+          <SegTabs
+            items={[
+              { label: "Feed", count: 26, active: true },
+              { label: "Act", count: 3 },
+              { label: "Parked", count: 1 },
+              { label: "Rejected", count: 1 },
+            ]}
+          />
         </div>
-      </div>
-      <p className="mt-4 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        Buying strategy from data — not habit, not whatever&apos;s on hand.
-      </p>
-    </CardShell>
+        <MiniTable
+          head={["Opportunity", "Lever", "Spend", "Vendors", "Confidence", "Savings"]}
+          rows={[
+            [
+              opp("Consumable supplies", "OPP-011 · 3 days ago"),
+              <Chip key="l" tone="zinc">Competitive RFP</Chip>,
+              "$691K",
+              "5",
+              <ConfBar key="c" pct={82} />,
+              <span key="s" className="font-medium text-zinc-900">$27k–36k</span>,
+            ],
+            [
+              opp("Cutting tools", "OPP-014 · 5 days ago"),
+              <Chip key="l" tone="zinc">Consolidation</Chip>,
+              "$1.2M",
+              "8",
+              <ConfBar key="c" pct={76} />,
+              <span key="s" className="font-medium text-zinc-900">$84k–120k</span>,
+            ],
+            [
+              opp("Abrasives", "OPP-017 · 1 week ago"),
+              <Chip key="l" tone="zinc">Tiered pricing</Chip>,
+              "$438K",
+              "4",
+              <ConfBar key="c" pct={68} />,
+              <span key="s" className="font-medium text-zinc-900">$22k–31k</span>,
+            ],
+            [
+              opp("Safety equipment", "OPP-019 · 1 week ago"),
+              <Chip key="l" tone="zinc">Contract merge</Chip>,
+              "$310K",
+              "3",
+              <ConfBar key="c" pct={64} />,
+              <span key="s" className="font-medium text-zinc-900">$14k–19k</span>,
+            ],
+          ]}
+        />
+      </Panel>
+      <Caption>
+        Every ERP, spreadsheet, and site in one source of truth — price variance, leakage, and missed discounts quantified, not guessed.
+      </Caption>
+    </DashShell>
   );
 }
 
-/* 3 · Agentic Actions — answers "decentralized buying": sites stop buying
-   alone; volume pools into consolidated buys with real leverage. */
-function RecommendationsCard() {
-  const recs = [
-    { name: "Pool fastener volume · 9 sites → 1 buy", detail: "$12.4M leverage · 4 suppliers bidding", conf: 92, chip: <Chip tone="green">Ready</Chip> },
-    { name: "Merge duplicate contracts", detail: "3 BUs · same vendor · 3 different rates", conf: 88, chip: <Chip tone="green">Ready</Chip> },
-    { name: "Move to tiered pricing", detail: "8% discount unlocked at combined volume", conf: 76, chip: <Chip tone="amber">Review</Chip> },
+/* Dashboard 2 · Sourcing & Award — volume pooled into one competitive event,
+   the award stays a human call, savings tracked live (Agentic · Planner ·
+   Learning). */
+function SourcingDashboard() {
+  const bids = [
+    { vendor: "Apex Fastening", price: "$0.49", delta: "−11% vs avg", best: true },
+    { vendor: "Acme Industrial", price: "$0.53", delta: "−4% vs avg" },
+    { vendor: "Corewell Supply", price: "$0.55", delta: "−2% vs avg" },
+    { vendor: "Delta Fastener Co.", price: "$0.61", delta: "+9% vs avg" },
   ];
-  return (
-    <CardShell
-      title="Consolidation · graded"
-      sub="One company · one buying power"
-      badge={<Chip tone="violet">Agentic</Chip>}
-    >
-      <div className="mt-5 flex flex-col gap-3 border-t border-zinc-100 pt-4">
-        {recs.map((r) => (
-          <div key={r.name} className="rounded-xl bg-zinc-50 p-3.5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-[13.5px] font-medium text-zinc-900">{r.name}</p>
-                <p className="mt-0.5 text-[12px] text-zinc-500">{r.detail}</p>
-              </div>
-              {r.chip}
-            </div>
-            <div className="mt-2.5 flex items-center gap-2">
-              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-zinc-200/70">
-                <div className="h-full rounded-full bg-[#8b6bc7]" style={{ width: `${r.conf}%` }} />
-              </div>
-              <p className="text-[11px] font-medium text-zinc-600">{r.conf}%</p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <p className="mt-5 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        Sites stop buying alone — the company buys as one.
-      </p>
-    </CardShell>
-  );
-}
-
-/* 4 · Planner in the Loop — the award stays a human call */
-function AwardApprovalCard() {
-  return (
-    <CardShell
-      title="Consolidated award · approval"
-      sub="Fasteners · 9 sites pooled · 4 bids"
-      badge={<Chip tone="amber">Review</Chip>}
-    >
-      <div className="mt-5 grid grid-cols-3 gap-y-4 border-t border-zinc-100 pt-4">
-        {[
-          ["Best bid", "$0.49"],
-          ["vs avg paid", "−11%"],
-          ["Savings / yr", "$1.1M"],
-          ["Volume", "8.4M units"],
-          ["Confidence", "84%"],
-          ["Term", "24 mo"],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <p className="text-[11.5px] text-zinc-400">{k}</p>
-            <p className="text-[14px] font-medium text-zinc-900">{v}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-5 rounded-xl bg-zinc-50 p-3.5">
-        <p className="text-[12px] leading-relaxed text-zinc-600">
-          Lens pooled nine sites&apos; volume into one negotiated buy and
-          drafted the award — the decision routes to your category manager,
-          not around them.
-        </p>
-      </div>
-      <div className="mt-5 flex gap-2.5">
-        <span className="flex-1 rounded-lg bg-zinc-900 px-4 py-2.5 text-center text-[13px] font-medium text-white">
-          Approve award
-        </span>
-        <span className="flex-1 rounded-lg border border-zinc-200 px-4 py-2.5 text-center text-[13px] font-medium text-zinc-700">
-          Adjust
-        </span>
-      </div>
-      <p className="mt-4 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        People stay in control of every decision.
-      </p>
-    </CardShell>
-  );
-}
-
-/* 5 · Continuous Learning — answers "one-off, stale analysis": a live engine
-   refreshed hourly, not manual reports that are outdated on arrival. */
-function SavingsEngineCard() {
   const quarters = [
     ["Q1", 0.3],
     ["Q2", 0.7],
@@ -1076,155 +1156,249 @@ function SavingsEngineCard() {
     ["Q4", 1.8],
   ] as const;
   return (
-    <CardShell
-      title="Savings engine · live"
-      sub="Refreshed hourly — not quarterly"
-      badge={
-        <span className="flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-[12.5px] text-zinc-700">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> Live
-        </span>
+    <DashShell
+      page="Sourcing Event · Fasteners"
+      controls={
+        <>
+          <Chip tone="green">4 of 4 bids in</Chip>
+          <AskLens />
+        </>
       }
     >
-      <p className="mt-5 border-t border-zinc-100 pt-4 text-[11.5px] text-zinc-400">
-        Realized savings · cumulative
-      </p>
-      <div className="mt-2 flex items-end justify-between gap-3">
-        {quarters.map(([q, v]) => (
-          <div key={q} className="flex flex-1 flex-col items-center gap-1.5">
-            <span className="text-[10px] font-medium text-zinc-600">${v}M</span>
-            <div className="w-full rounded-md bg-[#8b6bc7]" style={{ height: v * 58, opacity: 0.55 + v * 0.25 }} />
-            <span className="text-[9.5px] text-zinc-400">{q}</span>
+      {/* Agentic Actions — nine sites pooled into one event */}
+      <LensPanel
+        title="Lens Brief"
+        headline="Nine sites bought fasteners separately — Lens pooled $12.4M of volume into one competitive event and drafted the award."
+      />
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <Panel title="Bids · normalized">
+          <div className="flex flex-col gap-2">
+            {bids.map((b) => (
+              <div
+                key={b.vendor}
+                className={`flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 ${
+                  b.best ? "bg-emerald-50 ring-1 ring-emerald-100" : "bg-zinc-50"
+                }`}
+              >
+                <p className="text-[12px] font-medium text-zinc-900">{b.vendor}</p>
+                <div className="flex items-center gap-3">
+                  <p className="text-[10.5px] text-zinc-500">{b.delta}</p>
+                  <p className="w-11 text-right text-[12.5px] font-semibold text-zinc-900">{b.price}</p>
+                  {b.best ? <Chip tone="green">Best bid</Chip> : <span className="w-[56px]" />}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="mt-5 flex flex-col gap-3 border-t border-zinc-100 pt-4">
-        {[
-          ["Analysis age", "12 min"],
-          ["Maverick spend", "−38%"],
-          ["Realized vs target", "104%"],
-        ].map(([k, v]) => (
-          <div key={k} className="flex items-center justify-between">
-            <p className="text-[13px] text-zinc-500">{k}</p>
-            <p className="text-[13.5px] font-medium text-emerald-600">{v}</p>
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-zinc-100 pt-3">
+            {["RFP drafted & sent", "Bids normalized", "Award drafted"].map((s) => (
+              <span key={s} className="flex items-center gap-1.5 text-[10.5px] text-zinc-600">
+                <CheckCircle size={12} weight="fill" className="text-emerald-500" /> {s}
+              </span>
+            ))}
           </div>
-        ))}
+        </Panel>
+
+        {/* Planner in the Loop — the award stays a human call */}
+        <Panel title="Award approval" right={<Chip tone="amber">Awaiting review</Chip>}>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              ["Best bid", "$0.49"],
+              ["vs avg paid", "−11%"],
+              ["Savings / yr", "$1.1M"],
+              ["Term", "24 mo"],
+            ].map(([k, v]) => (
+              <div key={k} className="rounded-lg bg-zinc-50 px-2.5 py-2">
+                <p className="text-[9.5px] text-zinc-400">{k}</p>
+                <p className="mt-0.5 text-[12.5px] font-semibold text-zinc-900">{v}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-3 flex flex-col gap-1.5">
+            {["Compliance screened", "Contract terms verified", "Vendor risk scored"].map((s) => (
+              <span key={s} className="flex items-center gap-1.5 text-[10.5px] text-zinc-600">
+                <CheckCircle size={12} weight="fill" className="text-emerald-500" /> {s}
+              </span>
+            ))}
+          </div>
+          <div className="mt-3.5 flex gap-2">
+            <span className="flex-1 rounded-lg bg-zinc-900 px-3 py-2 text-center text-[11px] font-medium text-white">
+              Approve award
+            </span>
+            <span className="flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-center text-[11px] font-medium text-zinc-700">
+              Adjust
+            </span>
+          </div>
+        </Panel>
       </div>
-      <p className="mt-4 border-t border-zinc-100 pt-3 text-[12px] text-zinc-500">
-        No one-off studies — a continuous engine that never goes stale.
-      </p>
-    </CardShell>
+
+      {/* Continuous Learning — a live savings engine */}
+      <Panel
+        title="Savings engine"
+        right={
+          <span className="flex items-center gap-1.5 rounded-md border border-zinc-200 px-2 py-1 text-[10px] font-medium text-zinc-600">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> Live · refreshed hourly
+          </span>
+        }
+      >
+        <div className="flex items-center gap-6">
+          <div className="flex max-w-[440px] flex-1 items-end justify-between gap-3 px-1 pt-1">
+            {quarters.map(([q, v], i) => (
+              <div key={q} className="flex flex-1 flex-col items-center gap-1">
+                <span className="text-[10px] font-medium text-zinc-600">${v}M</span>
+                <div
+                  className={`w-full rounded-t-md ${i === quarters.length - 1 ? "bg-[#5C3D97]" : "bg-[#8b6bc7]"}`}
+                  style={{ height: v * 38, opacity: 0.55 + v * 0.25 }}
+                />
+                <span className="text-[9px] text-zinc-400">{q}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col gap-2.5 border-l border-zinc-100 pl-6">
+            {[
+              ["Analysis age", "12 min"],
+              ["Maverick spend", "−38%"],
+              ["Realized vs target", "104%"],
+            ].map(([k, v]) => (
+              <div key={k} className="flex items-center justify-between gap-6">
+                <p className="text-[10.5px] text-zinc-400">{k}</p>
+                <p className="text-[12px] font-semibold text-emerald-600">{v}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Panel>
+      <Caption>
+        Sites stop buying alone — the company buys as one, people approve every award, and savings never go stale.
+      </Caption>
+    </DashShell>
   );
 }
 
-/* Per-tab, per-feature card sequences (Structure 1) */
-const VISUALS: Record<string, React.ComponentType[]> = {
-  central: [VisibilityCard, AnalysisCard, AgenticCard, PlannerCard, LearningCard],
-  orders: [OrderViewCard, SelfServiceCard, NotificationsCard, ResolutionCard, CustomerLearningCard],
-  procurement: [SpendViewCard, CategoryScanCard, RecommendationsCard, AwardApprovalCard, SavingsEngineCard],
+/* Per-tab dashboards — one per feature group. */
+const DASHBOARDS: Record<string, React.ComponentType[]> = {
+  central: [PlanningDashboard, BuyingDashboard],
+  orders: [OrderTrackingDashboard, WorkspaceDashboard],
+  procurement: [SpendDashboard, SourcingDashboard],
 };
 
-const FEATURE_MS = 3600;
+const DASH_MS = 9000;
 
-/* Left feature card — active one shows a filling progress bar, then advances */
-function FeatureCard({
-  icon: CalloutIcon,
-  title,
-  body,
+/* Left group card — one per dashboard, on the dark section. Lists the
+   features that live on that screen; hovering a feature lights it up, the
+   active card fills a progress bar and the rotation advances. */
+function GroupCard({
+  name,
+  features,
   active,
   progressWidth,
   onSelect,
-}: Callout & { active: boolean; progressWidth?: import("framer-motion").MotionValue<string>; onSelect: () => void }) {
+}: FeatureGroup & {
+  active: boolean;
+  progressWidth?: import("framer-motion").MotionValue<string>;
+  onSelect: () => void;
+}) {
   return (
     <button
       onClick={onSelect}
       aria-pressed={active}
-      className={`block w-full rounded-2xl p-5 text-left transition-colors ${
-        active ? "bg-white shadow-sm" : "bg-zinc-100 hover:bg-zinc-100/70"
+      className={`block w-full rounded-2xl p-4 text-left ring-1 transition-colors ${
+        active
+          ? "bg-white/[0.07] ring-white/10"
+          : "bg-white/[0.02] ring-white/5 hover:bg-white/[0.05]"
       }`}
     >
-      <span
-        className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-          active ? "bg-[#EBE8F3]" : "bg-white"
+      <p
+        className={`px-2 pt-1 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors ${
+          active ? "text-[#b9a3e3]" : "text-zinc-500"
         }`}
       >
-        <CalloutIcon size={17} className={active ? "text-[#5C3D97]" : "text-zinc-400"} />
-      </span>
-      <p className={`mt-3 text-[16px] font-medium ${active ? "text-zinc-900" : "text-zinc-500"}`}>
-        {title}
+        {name}
       </p>
-      <p className={`mt-1.5 text-[13px] leading-relaxed ${active ? "text-zinc-500" : "text-zinc-400"}`}>
-        {body}
-      </p>
-      <div className="mt-4 h-px w-full overflow-hidden bg-zinc-200">
+      <div className="mt-2 flex flex-col gap-1">
+        {features.map((f) => (
+          <div
+            key={f.title}
+            className="group/feat flex items-start gap-3 rounded-xl p-2 transition-colors hover:bg-white/[0.06]"
+          >
+            <span
+              className={`mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg transition-colors group-hover/feat:bg-[#5C3D97] ${
+                active ? "bg-[#EBE8F3]" : "bg-white/10"
+              }`}
+            >
+              <f.icon
+                size={15}
+                className={`transition-colors group-hover/feat:text-white ${
+                  active ? "text-[#5C3D97]" : "text-zinc-500"
+                }`}
+              />
+            </span>
+            <div>
+              <p
+                className={`text-[14.5px] font-medium transition-colors group-hover/feat:text-white ${
+                  active ? "text-white" : "text-zinc-400"
+                }`}
+              >
+                {f.title}
+              </p>
+              <p
+                className={`mt-0.5 text-[12px] leading-snug transition-colors group-hover/feat:text-zinc-300 ${
+                  active ? "text-zinc-400" : "text-zinc-600"
+                }`}
+              >
+                {f.body}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 h-px w-full overflow-hidden bg-white/10">
         {active && progressWidth && (
-          <motion.div className="h-full bg-zinc-900" style={{ width: progressWidth }} />
+          <motion.div className="h-full bg-white" style={{ width: progressWidth }} />
         )}
       </div>
     </button>
   );
 }
 
-/* Right annotation — segmented leader line pointing left at the card + label.
-   Active one is black; inactive are light grey (matches the design). */
-function Annotation({ text, active }: { text: string; active: boolean }) {
-  const line = active ? "bg-zinc-900" : "bg-zinc-200";
-  const label = active ? "text-zinc-900" : "text-zinc-300";
-  return (
-    <div className="flex items-center gap-2 transition-colors duration-500">
-      {/* short segment nearest the card, then a gap, then the long line */}
-      <span className={`h-px w-2.5 flex-shrink-0 ${line}`} />
-      <span className={`h-px w-10 flex-shrink-0 ${line}`} />
-      <span className={`whitespace-nowrap text-[15px] ${label}`}>{text}</span>
-    </div>
-  );
-}
-
 export default function IntelligenceLayer() {
   const [active, setActive] = useState(0);
-  const [feature, setFeature] = useState(0);
+  const [dashIdx, setDashIdx] = useState(0);
   const tab = TABS[active];
-  const featureCount = tab.callouts.left.length;
+  const screens = DASHBOARDS[tab.key];
 
   const { progress, setPaused } = useAdvanceTimer(
-    FEATURE_MS,
-    () => setFeature((f) => (f + 1) % featureCount),
-    `${active}-${feature}`,
+    DASH_MS,
+    () => setDashIdx((d) => (d + 1) % screens.length),
+    `${active}-${dashIdx}`,
   );
-  const featureProgressWidth = useTransform(progress, (p) => `${p * 100}%`);
+  const progressWidth = useTransform(progress, (p) => `${p * 100}%`);
 
   return (
-    <section id="intelligence" className="bg-[#fafaf9] py-28">
+    <section id="intelligence" data-nav-theme="dark" className="bg-[#0b0a0f] py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <AnimatePresence mode="wait">
-            <motion.h2
-              key={tab.heading}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}
-              className="text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]"
-            >
-              {tab.heading}
-            </motion.h2>
-          </AnimatePresence>
-          <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
-            One layer over your existing architecture — without the $100M sunk cost.
+          <h2 className="text-[34px] font-medium tracking-tight text-white sm:text-[44px]">
+            The Navanta Lens
+          </h2>
+          <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-400">
+            Our intelligence layer unifies your existing architecture, accelerating
+            time-to-value without the $100M sunk cost.
           </p>
 
           {/* Tab pills */}
           <div className="mt-8 flex">
-            <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
+            <div className="flex flex-wrap items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1">
               {TABS.map((t, i) => (
                 <button
                   key={t.key}
                   onClick={() => {
                     setActive(i);
-                    setFeature(0); // fresh tab starts on its first feature
+                    setDashIdx(0); // fresh tab starts on its first dashboard
                   }}
                   className={`rounded-full px-5 py-2.5 text-[14px] transition-colors ${
                     i === active
-                      ? "bg-zinc-900 font-medium text-white"
-                      : "text-zinc-500 hover:text-zinc-800"
+                      ? "bg-white font-medium text-zinc-900"
+                      : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   {t.label}
@@ -1234,7 +1408,7 @@ export default function IntelligenceLayer() {
           </div>
         </FadeIn>
 
-        {/* Left features (with progress) · center product card · right annotations */}
+        {/* Left feature-group cards · right consolidated product dashboard */}
         <FadeIn delay={0.1} className="mt-16">
           <AnimatePresence mode="wait">
             <motion.div
@@ -1243,53 +1417,46 @@ export default function IntelligenceLayer() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10, transition: { duration: 0.22 } }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="grid items-center gap-8 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)_minmax(0,210px)]"
+              className="grid items-center gap-10 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]"
             >
-              {/* Left — rotating feature cards */}
+              {/* Left — one group card per dashboard (bento 2-up below lg) */}
               <div
-                className="flex flex-col gap-4"
+                className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1"
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
               >
-                {tab.callouts.left.map((c, i) => (
-                  <FeatureCard
-                    key={c.title}
-                    {...c}
-                    active={i === feature}
-                    progressWidth={i === feature ? featureProgressWidth : undefined}
-                    onSelect={() => setFeature(i)}
+                {tab.groups.map((g, i) => (
+                  <GroupCard
+                    key={g.name}
+                    {...g}
+                    active={i === dashIdx}
+                    progressWidth={i === dashIdx ? progressWidth : undefined}
+                    onSelect={() => setDashIdx(i)}
                   />
                 ))}
               </div>
 
-              {/* Center — each feature has its own product-UI card
-                  (Structure 1); it swaps as the timer advances. */}
+              {/* Right — the dashboard the active group lives on. Hover pauses. */}
               <div
-                className="flex min-h-[560px] items-center justify-center"
+                className="flex min-h-[600px] items-center justify-center"
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
               >
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={`${tab.key}-${feature}`}
-                    initial={{ opacity: 0, y: 16, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    key={`${tab.key}-${dashIdx}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     exit={{ opacity: 0, y: -12, scale: 0.99, transition: { duration: 0.2 } }}
-                    transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.3 }}
+                    className="flex w-full justify-center"
                   >
                     {(() => {
-                      const Visual = VISUALS[tab.key]?.[feature] ?? VisibilityCard;
+                      const Visual = screens[dashIdx] ?? screens[0];
                       return <Visual />;
                     })()}
                   </motion.div>
                 </AnimatePresence>
-              </div>
-
-              {/* Right — annotations that follow the active feature */}
-              <div className="hidden flex-col justify-center gap-14 lg:flex">
-                {tab.callouts.right.map((c, i) => (
-                  <Annotation key={c.title} text={c.title} active={i === feature} />
-                ))}
               </div>
             </motion.div>
           </AnimatePresence>

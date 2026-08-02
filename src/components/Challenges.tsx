@@ -146,9 +146,9 @@ export default function Challenges() {
                 initial="hidden"
                 animate="visible"
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.22 } }}
-                className="grid gap-6 md:grid-cols-3"
+                className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3"
               >
-                {tab.cards.map((c) => {
+                {tab.cards.map((c, i) => {
                   return (
                     <motion.div
                       key={c.id}
@@ -157,7 +157,9 @@ export default function Challenges() {
                         visible: { opacity: 1, y: 0 },
                       }}
                       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      className="flex h-full flex-col rounded-2xl bg-zinc-100 p-5"
+                      className={`flex h-full flex-col rounded-2xl bg-zinc-100 p-5 ${
+                        i === 2 ? "sm:col-span-2 xl:col-span-1" : ""
+                      }`}
                     >
                       <h3 className="text-[17px] font-medium text-zinc-900">{c.title}</h3>
                       {/* Media — official Navanta icon infographic (panel baked in) */}
