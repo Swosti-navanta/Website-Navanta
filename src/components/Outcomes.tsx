@@ -126,12 +126,14 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
    directly on the card so the mockup reads as part of the surface. */
 function CardMedia({ src }: { src?: string }) {
   return (
-    <div className="relative flex aspect-[1203/700] w-full items-center justify-center overflow-hidden">
+    <div className="relative flex w-full items-center justify-center">
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" aria-hidden className="h-full w-full object-contain" />
+        <img src={src} alt="" aria-hidden className="w-full" />
       ) : (
-        <span className="text-[12px] text-zinc-400">Mockup coming soon</span>
+        <div className="flex aspect-[1203/700] w-full items-center justify-center">
+          <span className="text-[12px] text-zinc-400">Mockup coming soon</span>
+        </div>
       )}
     </div>
   );
@@ -181,22 +183,19 @@ export default function Outcomes() {
             className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4"
           >
             {tab.cards.map((c) => (
-              <div key={c.metric} className="rounded-2xl bg-[#F6F6F6] p-6">
-                <div className="flex items-start gap-3.5">
+              <div key={c.metric} className="overflow-hidden rounded-2xl bg-[#F6F6F6] p-5 pb-0">
+                <div className="flex items-start gap-3.5 pb-4">
                   <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
                     <c.icon size={20} className="text-[#5C3D97]" />
                   </span>
                   <div>
-                    <p className="text-[17px] font-medium leading-snug text-zinc-900">
+                    <p className="whitespace-nowrap text-[15px] font-medium leading-snug text-zinc-900">
                       {c.metric}
                     </p>
-                    <p className="text-[14.5px] text-zinc-400">{c.sub}</p>
+                    <p className="whitespace-nowrap text-[13px] text-zinc-400">{c.sub}</p>
                   </div>
                 </div>
-                <div className="mt-5">
-                  <CardMedia src={c.media} />
-                </div>
-                <p className="mt-5 text-[14px] leading-relaxed text-zinc-600">{c.body}</p>
+                <CardMedia src={c.media} />
               </div>
             ))}
           </motion.div>

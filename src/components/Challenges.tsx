@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion, useTransform } from "framer-motion";
 import { UserCircleGear, Truck, Wrench, type Icon } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
+import { useAdvanceTimer } from "@/hooks/useAdvanceTimer";
 
 type Card = { id: string; title: string; body: string };
 type Tab = { key: string; label: string; icon: Icon; cards: Card[] };
@@ -83,11 +84,15 @@ export default function Challenges() {
   const [tabIdx, setTabIdx] = useState(0);
   const tab = TABS[tabIdx];
 
-  // Auto-advance through the tab column
-  useEffect(() => {
-    const t = setTimeout(() => setTabIdx((i) => (i + 1) % TABS.length), DURATION);
-    return () => clearTimeout(t);
-  }, [tabIdx]);
+  // Auto-advance through the tab column — pauses while a card is hovered,
+  // resuming from wherever it left off (not restarting from zero).
+  const { progress, setPaused } = useAdvanceTimer(
+    DURATION,
+    () => setTabIdx((i) => (i + 1) % TABS.length),
+    tabIdx,
+  );
+
+  const progressWidth = useTransform(progress, (p) => `${p * 100}%`);
 
   return (
     <section id="challenges" className="overflow-hidden bg-white py-28">
@@ -112,14 +117,13 @@ export default function Challenges() {
               >
                 <t.icon size={26} weight="regular" />
                 {t.label}
-                {/* Timer stroke: black line fills along the border, then advances */}
+                {/* Timer stroke: black line fills along the border, then advances.
+                    Width is driven by the shared progress value so it visibly
+                    freezes on hover and resumes from the same point. */}
                 {i === tabIdx && (
                   <motion.span
-                    key={tabIdx}
-                    initial={{ width: "0%" }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: DURATION / 1000, ease: "linear" }}
                     className="absolute -bottom-px left-0 h-px bg-zinc-900"
+                    style={{ width: progressWidth }}
                   />
                 )}
               </button>
@@ -127,7 +131,11 @@ export default function Challenges() {
           </div>
 
           {/* Cards — 3 up, zigzag offset, cross-fade on tab change */}
-          <div className="min-w-0">
+          <div
+            className="min-w-0"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
             <AnimatePresence mode="wait">
               <motion.div
                 key={tab.key}

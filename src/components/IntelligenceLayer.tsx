@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion, useTransform } from "framer-motion";
 import {
   Package,
   BellRinging,
@@ -26,6 +26,7 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
+import { useAdvanceTimer } from "@/hooks/useAdvanceTimer";
 
 type Callout = { icon: Icon; title: string; body: string };
 
@@ -1130,9 +1131,9 @@ function FeatureCard({
   title,
   body,
   active,
-  featureKey,
+  progressWidth,
   onSelect,
-}: Callout & { active: boolean; featureKey: string; onSelect: () => void }) {
+}: Callout & { active: boolean; progressWidth?: import("framer-motion").MotionValue<string>; onSelect: () => void }) {
   return (
     <button
       onClick={onSelect}
@@ -1155,14 +1156,8 @@ function FeatureCard({
         {body}
       </p>
       <div className="mt-4 h-px w-full overflow-hidden bg-zinc-200">
-        {active && (
-          <motion.div
-            key={featureKey}
-            className="h-full bg-zinc-900"
-            initial={{ width: "0%" }}
-            animate={{ width: "100%" }}
-            transition={{ duration: FEATURE_MS / 1000, ease: "linear" }}
-          />
+        {active && progressWidth && (
+          <motion.div className="h-full bg-zinc-900" style={{ width: progressWidth }} />
         )}
       </div>
     </button>
@@ -1190,11 +1185,12 @@ export default function IntelligenceLayer() {
   const tab = TABS[active];
   const featureCount = tab.callouts.left.length;
 
-  // Auto-advance the active feature (drives left progress bar + right annotation)
-  useEffect(() => {
-    const t = setTimeout(() => setFeature((f) => (f + 1) % featureCount), FEATURE_MS);
-    return () => clearTimeout(t);
-  }, [feature, active, featureCount]);
+  const { progress, setPaused } = useAdvanceTimer(
+    FEATURE_MS,
+    () => setFeature((f) => (f + 1) % featureCount),
+    `${active}-${feature}`,
+  );
+  const featureProgressWidth = useTransform(progress, (p) => `${p * 100}%`);
 
   return (
     <section id="intelligence" className="bg-[#fafaf9] py-28">
@@ -1250,13 +1246,17 @@ export default function IntelligenceLayer() {
               className="grid items-center gap-8 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)_minmax(0,210px)]"
             >
               {/* Left — rotating feature cards */}
-              <div className="flex flex-col gap-4">
+              <div
+                className="flex flex-col gap-4"
+                onMouseEnter={() => setPaused(true)}
+                onMouseLeave={() => setPaused(false)}
+              >
                 {tab.callouts.left.map((c, i) => (
                   <FeatureCard
                     key={c.title}
                     {...c}
                     active={i === feature}
-                    featureKey={`${tab.key}-${feature}`}
+                    progressWidth={i === feature ? featureProgressWidth : undefined}
                     onSelect={() => setFeature(i)}
                   />
                 ))}
@@ -1264,7 +1264,11 @@ export default function IntelligenceLayer() {
 
               {/* Center — each feature has its own product-UI card
                   (Structure 1); it swaps as the timer advances. */}
-              <div className="flex min-h-[560px] items-center justify-center">
+              <div
+                className="flex min-h-[560px] items-center justify-center"
+                onMouseEnter={() => setPaused(true)}
+                onMouseLeave={() => setPaused(false)}
+              >
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`${tab.key}-${feature}`}
