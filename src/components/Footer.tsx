@@ -14,7 +14,6 @@ const PRODUCT_LINKS = [
   { label: "Navanta Lens", href: "/#intelligence" },
   { label: "Driving Outcomes", href: "/#outcomes" },
   { label: "The Approach", href: "/#features" },
-  { label: "The Advantages", href: "/#advantages" },
 ];
 
 const COMPANY_LINKS = [

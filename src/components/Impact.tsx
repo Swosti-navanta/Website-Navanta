@@ -246,6 +246,23 @@ export default function Impact() {
                   />
                 );
               })}
+
+              {/* Invisible hit-areas — hovering a region's dots switches to it */}
+              {REGIONS.map((r) => {
+                const b = BOUNDS[r.id];
+                return (
+                  <rect
+                    key={r.id}
+                    x={b.x - 0.5}
+                    y={b.y - 0.5}
+                    width={b.w + 1}
+                    height={b.h + 1}
+                    fill="transparent"
+                    style={{ cursor: "pointer" }}
+                    onMouseEnter={() => setActive(r.id)}
+                  />
+                );
+              })}
             </svg>
 
             {/* Pulsing site markers */}

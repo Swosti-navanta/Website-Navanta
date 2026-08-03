@@ -1313,7 +1313,7 @@ function GroupItem({
       <button
         onClick={onSelect}
         aria-expanded={open}
-        className="group flex w-full items-center gap-3.5 py-5 text-left"
+        className="group flex w-full items-center gap-3.5 pb-2.5 pt-5 text-left"
       >
         <group.icon
           size={22}
@@ -1340,7 +1340,7 @@ function GroupItem({
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <p className="max-w-xs pb-5 pl-9 text-[13.5px] leading-relaxed text-zinc-400">
+            <p className="max-w-xs pb-4 pl-9 text-[13.5px] leading-relaxed text-zinc-400">
               {group.desc}
             </p>
           </motion.div>
@@ -1376,7 +1376,9 @@ function ScaledDashFill({ children }: { children: React.ReactNode }) {
     const measure = () => {
       const outer = outerRef.current;
       if (!outer) return;
-      setScale(outer.clientWidth / DASH_NATIVE_W);
+      // Never upscale past native — keeps the dashboard crisp and from growing
+      // oversized (and pushing the offset back-card off-screen) on wide viewports.
+      setScale(Math.min(1, outer.clientWidth / DASH_NATIVE_W));
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -1422,7 +1424,7 @@ function DashboardDeck({
   // crossfade, and the internal panel cascade never replays mid-rotation.
   return (
     <div
-      className="relative"
+      className="relative w-full max-w-[880px]"
       style={{ paddingRight: OFFSET, paddingBottom: OFFSET }}
     >
       {/* Stage reserves the front card's footprint via a fixed aspect ratio;
@@ -1517,7 +1519,7 @@ export default function IntelligenceLayer() {
           </p>
 
           {/* Tab pills */}
-          <div className="mt-8 flex">
+          <div className="mt-6 flex">
             <div className="flex flex-wrap items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1">
               {TABS.map((t, i) => (
                 <button
