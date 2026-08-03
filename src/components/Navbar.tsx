@@ -15,12 +15,12 @@ const NAV_LINKS = [
 ];
 
 /* Harvey-style scroll behavior (matched to the reference recording):
-   — at the top, over the dark hero: smoky translucent dark nav, white text,
+  , at the top, over the dark hero: smoky translucent dark nav, white text,
      white "Request a Demo" button;
-   — scrolling DOWN past the hero: the bar slides up out of view;
-   — any scroll UP: it slides back down as a solid light bar with dark text
+  , scrolling DOWN past the hero: the bar slides up out of view;
+  , any scroll UP: it slides back down as a solid light bar with dark text
      and a black demo button (the two themes crossfade);
-   — returning to the top restores the smoky dark nav. */
+  , returning to the top restores the smoky dark nav. */
 export default function Navbar() {
   const { open: openDemo } = useDemoModal();
   const [open, setOpen] = useState(false);
@@ -65,7 +65,7 @@ export default function Navbar() {
       transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-50"
     >
-      {/* Frosted rectangle — matched to the reference: invisible at the very
+      {/* Frosted rectangle, matched to the reference: invisible at the very
           top (links sit directly on the hero), then a smoky backdrop-blurred
           band with a crisp bottom edge once scrolling starts; dark-tinted over
           the hero, cream-tinted past it (content smears through both). The
@@ -90,12 +90,12 @@ export default function Navbar() {
       />
 
       <nav className="relative z-10 mx-auto flex h-[72px] max-w-[1560px] items-center justify-between px-6 lg:px-10">
-        {/* Navanta logo lockup — crossfading white/dark variants; returns home */}
+        {/* Navanta logo lockup, crossfading white/dark variants; returns home */}
         <a href="/" className="relative flex items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/navanta-logo.svg"
-            alt="Navanta — Enabling Intelligent Enterprises"
+            alt="Navanta, Enabling Intelligent Enterprises"
             className={`h-9 w-auto transition-opacity duration-300 ${light ? "opacity-0" : "opacity-100"}`}
           />
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -107,7 +107,7 @@ export default function Navbar() {
           />
         </a>
 
-        {/* Desktop links — underline wipes in from the left on hover */}
+        {/* Desktop links, underline wipes in from the left on hover */}
         <ul className="hidden items-center gap-8 lg:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.label}>
@@ -162,7 +162,7 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile menu — smoky dark at the top, solid light once scrolled */}
+      {/* Mobile menu, smoky dark at the top, solid light once scrolled */}
       {open && (
         <div
           className={`relative z-10 border-t lg:hidden ${light ? "border-zinc-200" : "border-white/10"}`}

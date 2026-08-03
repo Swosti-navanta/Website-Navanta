@@ -22,7 +22,7 @@ const LEADERS = [
     role: "Co-Founder",
     email: "gaurav.kohli@navanta.ai",
     img: "/team/gaurav.jpg",
-    bio: "Formerly EY Partner with 20 years architecting enterprise AI & supply chain programs for global manufacturers — ERP foundations to autonomous operations.",
+    bio: "Formerly EY Partner with 20 years architecting enterprise AI & supply chain programs for global manufacturers, ERP foundations to autonomous operations.",
   },
   {
     name: "Nitin Kumar",
@@ -39,11 +39,11 @@ export default function LeadershipCards() {
       {LEADERS.map((l, i) => (
         <FadeIn key={l.name} delay={i * 0.08}>
           <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#F6F6F6]">
-            {/* Portrait — monochrome at rest, warms to full color on hover */}
+            {/* Portrait, monochrome at rest, warms to full color on hover */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={l.img}
-              alt={`${l.name} — ${l.role}`}
+              alt={`${l.name}, ${l.role}`}
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.045]"
             />
 
@@ -51,7 +51,7 @@ export default function LeadershipCards() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
             <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-            {/* Details — name/role pinned; bio + links unfold on hover */}
+            {/* Details, name/role pinned; bio + links unfold on hover */}
             <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
               <p className="text-[19px] font-medium text-white">{l.name}</p>
               <p className="mt-0.5 text-[13.5px] text-[#c9b8ec]">{l.role}</p>

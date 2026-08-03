@@ -8,16 +8,16 @@ import LeadershipCards from "@/components/LeadershipCards";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
-  title: "About — Navanta",
+  title: "About | Navanta",
   description:
-    "Navanta is the supply chain intelligence layer for industrial enterprises — built by operators, measured in outcomes.",
+    "Navanta is the supply chain intelligence layer for industrial enterprises, built by operators, measured in outcomes.",
 };
 
 const STATS = [
-  { value: "12–16", unit: "weeks", label: "From kickoff to operational launch — fixed fee" },
-  { value: "80%", unit: "", label: "Solution-ready out of the box — only 20% tailored" },
-  { value: "30+", unit: "", label: "Enterprise systems connected — SAP, Oracle, D365, Coupa" },
-  { value: "50+", unit: "", label: "External supply-chain signals — demand, supplier, pricing" },
+  { value: "12–16", unit: "weeks", label: "From kickoff to operational launch, fixed fee" },
+  { value: "80%", unit: "", label: "Solution-ready out of the box, only 20% tailored" },
+  { value: "30+", unit: "", label: "Enterprise systems connected, SAP, Oracle, D365, Coupa" },
+  { value: "50+", unit: "", label: "External supply-chain signals, demand, supplier, pricing" },
   { value: "US + India", unit: "", label: "Senior leadership with scaled engineering teams" },
 ];
 
@@ -30,15 +30,15 @@ const PHOTOS = [
 const BELIEFS = [
   {
     title: "Outcomes, not output",
-    body: "Fixed fee, fixed timeline, and fees tied to the value clients realize — measured in their numbers, not hours billed.",
+    body: "Fixed fee, fixed timeline, and fees tied to the value clients realize, measured in their numbers, not hours billed.",
   },
   {
     title: "Industrial DNA",
-    body: "Purpose-built for industrial and automotive supply chains — real operating experience inside the world's largest manufacturers, not generic software.",
+    body: "Purpose-built for industrial and automotive supply chains, real operating experience inside the world's largest manufacturers, not generic software.",
   },
   {
     title: "AI-led, human-in-command",
-    body: "Agents do the heavy lifting across planning, procurement, and customer operations — while every decision stays confidence-graded, auditable, and yours.",
+    body: "Agents do the heavy lifting across planning, procurement, and customer operations, while every decision stays confidence-graded, auditable, and yours.",
   },
 ];
 
@@ -47,7 +47,7 @@ export default function AboutPage() {
     <>
       <Navbar />
       <main className="bg-white">
-        {/* Hero — light, typographic. The statement carries the section;
+        {/* Hero, light, typographic. The statement carries the section;
             stats follow with editorial top rules. */}
         <section className="pt-40 pb-6 sm:pt-48">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
@@ -59,7 +59,7 @@ export default function AboutPage() {
               </h1>
             </FadeIn>
 
-            {/* Stats — thin top rule above each, Harvey-style */}
+            {/* Stats, thin top rule above each, Harvey-style */}
             <div className="mt-20 grid grid-cols-2 gap-x-8 gap-y-10 sm:mt-24 lg:grid-cols-5">
               {STATS.map((s, i) => (
                 <FadeIn key={s.label} delay={i * 0.06}>
@@ -80,7 +80,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Photo strip — near full-bleed, center image leads */}
+        {/* Photo strip, near full-bleed, center image leads */}
         <section className="mt-16 px-3 sm:mt-20">
           <FadeIn>
             <div className="grid h-[240px] grid-cols-[1fr_1.6fr_1fr] gap-3 sm:h-[380px] lg:h-[480px]">
@@ -94,7 +94,7 @@ export default function AboutPage() {
           </FadeIn>
         </section>
 
-        {/* Mission — label left, word-fill statement right */}
+        {/* Mission, label left, word-fill statement right */}
         <section className="py-28 sm:py-32">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
@@ -103,8 +103,8 @@ export default function AboutPage() {
                 <div className="max-w-3xl">
                   <AboutMissionHeading />
                   <p className="mt-6 text-[15.5px] leading-relaxed text-zinc-500">
-                    Navanta connects the systems enterprises already own — ERPs,
-                    planning tools, supplier networks, external signals — into one
+                    Navanta connects the systems enterprises already own, ERPs,
+                    planning tools, supplier networks, external signals, into one
                     governed intelligence layer, then puts AI agents to work on
                     planning, procurement, and customer operations. Value lands in
                     weeks, is proven in the client&apos;s own numbers, and compounds
@@ -116,7 +116,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Beliefs — same editorial grid, flat tiles */}
+        {/* Beliefs, same editorial grid, flat tiles */}
         <section className="bg-[#fafaf9] py-28">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
@@ -140,7 +140,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Pull quote — editorial break */}
+        {/* Pull quote, editorial break */}
         <section className="py-28 sm:py-36">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
@@ -157,7 +157,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Leadership — same editorial grid */}
+        {/* Leadership, same editorial grid */}
         <section className="bg-[#fafaf9] py-28">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
@@ -172,7 +172,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* CTA band — the site's dark close */}
+        {/* CTA band, the site's dark close */}
         <section className="bg-white py-24">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
@@ -196,7 +196,7 @@ export default function AboutPage() {
                     Build the intelligence layer with us
                   </h2>
                   <p className="mx-auto mt-4 max-w-md text-[15px] text-white/60">
-                    Join the team — or see Navanta running on your own data within a week.
+                    Join the team, or see Navanta running on your own data within a week.
                   </p>
                   <div className="mt-8 flex flex-wrap justify-center gap-3">
                     <a

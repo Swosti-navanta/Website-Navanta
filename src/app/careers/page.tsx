@@ -6,7 +6,7 @@ import CareersPositions from "@/components/CareersPositions";
 import BgVideo from "@/components/BgVideo";
 
 export const metadata: Metadata = {
-  title: "Careers — Navanta",
+  title: "Careers | Navanta",
   description:
     "Join the team building the supply chain intelligence layer for industrial enterprises.",
 };
@@ -15,7 +15,7 @@ const BENEFITS = [
   "Competitive salary with meaningful upside",
   "Work directly with Fortune-100-scale industrial clients",
   "Senior US leadership working alongside scaled India engineering",
-  "Outcome-driven culture — we win when clients win",
+  "Outcome-driven culture, we win when clients win",
   "Health coverage for you and your family",
   "Real ownership, fast growth, zero bureaucracy",
 ];
@@ -25,7 +25,7 @@ export default function CareersPage() {
     <>
       <Navbar />
       <main>
-        {/* Centered hero — dark band with background video */}
+        {/* Centered hero, dark band with background video */}
         <header data-nav-theme="dark" className="relative overflow-hidden bg-[#0c0b0a] pb-24 pt-44 text-center">
           <BgVideo />
           <div
@@ -37,7 +37,7 @@ export default function CareersPage() {
               Join us
             </h1>
             <p className="mt-4 text-[17px] text-white/60">
-              Shape how the world&apos;s industrial enterprises run — with AI.
+              Shape how the world&apos;s industrial enterprises run, with AI.
             </p>
             <a
               href="#open-positions"
@@ -48,7 +48,7 @@ export default function CareersPage() {
           </div>
         </header>
 
-        {/* Photo strip — swap tiles for real team photos later */}
+        {/* Photo strip, swap tiles for real team photos later */}
         <section className="bg-white pt-16">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
@@ -97,7 +97,7 @@ export default function CareersPage() {
                   <p className="mt-5 text-[15px] leading-relaxed text-zinc-500">
                     We connect ERPs, planning tools, supplier networks, and external
                     signals into one governed model, then put AI agents to work on
-                    planning, procurement, and customer operations — with people
+                    planning, procurement, and customer operations, with people
                     always in command. Our team spans senior US leadership and scaled
                     engineering in India, and our fees are tied to the outcomes we
                     deliver.

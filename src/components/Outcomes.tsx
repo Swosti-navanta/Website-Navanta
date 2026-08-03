@@ -234,14 +234,14 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
       {
         metric: "Fewer inbound status calls",
         sub: "customers self-serve live",
-        body: "Live order visibility with exception-driven updates — no phone calls needed.",
+        body: "Live order visibility with exception-driven updates, no phone calls needed.",
         icon: PhoneSlash,
         media: "/outcomes/customer-status.png",
       },
       {
         metric: "Faster claims resolution",
         sub: "auto part + warranty match",
-        body: "Part identified, warranty verified, purchase matched — claims resolved in minutes.",
+        body: "Part identified, warranty verified, purchase matched, claims resolved in minutes.",
         icon: ShieldCheck,
         media: "/outcomes/customer-claims.png",
       },
@@ -268,7 +268,7 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
       {
         metric: "Confidence-graded POs",
         sub: "demand sensed, buying automated",
-        body: "Demand-sensed, cost-optimized POs — the planner approves, the system executes.",
+        body: "Demand-sensed, cost-optimized POs, the planner approves, the system executes.",
         icon: SealCheck,
         media: "/outcomes/procurement-pos.png",
       },
@@ -282,7 +282,7 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
       {
         metric: "Savings you can defend",
         sub: "normalized spend, every category",
-        body: "Normalized spend across every category — validated, evidence-backed savings.",
+        body: "Normalized spend across every category, validated, evidence-backed savings.",
         icon: PiggyBank,
         media: "/outcomes/procurement-savings.png",
       },
@@ -309,21 +309,21 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
       {
         metric: "Higher fill rates",
         sub: "plans self-tune to signals",
-        body: "Plans self-tune to demand shifts — right product, right place, right now.",
+        body: "Plans self-tune to demand shifts, right product, right place, right now.",
         icon: ChartLineUp,
         mock: FillRateMock,
       },
       {
         metric: "Decisions in days",
         sub: "confidence-graded actions",
-        body: "Confidence-graded stocking recommendations — the planner stays in the loop.",
+        body: "Confidence-graded stocking recommendations, the planner stays in the loop.",
         icon: Target,
         mock: ActionQueueMock,
       },
       {
         metric: "Higher turns, lower cost",
         sub: "rebalance + reorder, automated",
-        body: "Automatic rebalancing and replenishment — higher turns, less tied-up capital.",
+        body: "Automatic rebalancing and replenishment, higher turns, less tied-up capital.",
         icon: ArrowsClockwise,
         mock: RebalanceMock,
       },
@@ -368,7 +368,7 @@ export default function Outcomes() {
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
             Three pillars turning intelligence into measurable business value.
           </p>
-          {/* Tab pills — above the cards */}
+          {/* Tab pills, above the cards */}
           <div className="mt-8 flex">
             <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
               {TABS.map((t, i) => (

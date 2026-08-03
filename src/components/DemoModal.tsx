@@ -116,7 +116,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
           style={{ willChange: "clip-path" }}
           className="fixed inset-0 z-[100] grid grid-cols-1 bg-[#faf9f7] md:grid-cols-[1fr_0.92fr]"
         >
-          {/* Close — top-right, right where the demo button that opened it lives */}
+          {/* Close, top-right, right where the demo button that opened it lives */}
           <button
             onClick={onClose}
             aria-label="Close"
@@ -125,14 +125,14 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
             <X size={18} weight="bold" />
           </button>
 
-          {/* Left — flow (vertically centered on cream, white step card) */}
+          {/* Left, flow (vertically centered on cream, white step card) */}
           <div className="flex h-full flex-col justify-center overflow-y-auto px-6 py-16 sm:px-12 lg:px-20">
             <div className="mx-auto w-full max-w-[560px]">
               <h2 className="text-[30px] font-medium tracking-tight text-zinc-900 sm:text-[38px]">
                 Request a Demo
               </h2>
               <p className="mt-2 max-w-md text-[14.5px] leading-relaxed text-zinc-500">
-                See Navanta on your data within a week — planning, procurement,
+                See Navanta on your data within a week, planning, procurement,
                 and order flows on your own systems.
               </p>
 
@@ -278,7 +278,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                 </div>
               </div>
 
-              {/* Primary action — full-width below the step card */}
+              {/* Primary action, full-width below the step card */}
               {!booked && (
                 <div className="mt-4">
                   {date && time && (
@@ -305,7 +305,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
             </div>
           </div>
 
-          {/* Right — brand image with KPI chips (placeholder until final asset) */}
+          {/* Right, brand image with KPI chips (placeholder until final asset) */}
           <div className="relative hidden overflow-hidden bg-zinc-900 md:block">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

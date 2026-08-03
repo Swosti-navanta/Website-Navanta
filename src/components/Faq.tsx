@@ -8,7 +8,7 @@ import FadeIn from "./FadeIn";
 const FAQS = [
   {
     q: "Can I see a live demo on my own data?",
-    a: "Yes. Book a call and within a week we'll show Navanta running on your industry's data — planning, procurement, and order flows using your own systems, not a generic sandbox.",
+    a: "Yes. Book a call and within a week we'll show Navanta running on your industry's data, planning, procurement, and order flows using your own systems, not a generic sandbox.",
   },
   {
     q: "How long does implementation take?",
@@ -16,19 +16,19 @@ const FAQS = [
   },
   {
     q: "Which systems does Navanta connect to?",
-    a: "We connect 30+ enterprise systems — SAP, Oracle, Dynamics 365, Coupa, Anaplan, Kinaxis and more — plus 50+ external supply-chain signals. No rip-and-replace: Navanta is an intelligence layer over what you already run.",
+    a: "We connect 30+ enterprise systems, SAP, Oracle, Dynamics 365, Coupa, Anaplan, Kinaxis and more, plus 50+ external supply-chain signals. No rip-and-replace: Navanta is an intelligence layer over what you already run.",
   },
   {
     q: "Do we stay in control of decisions?",
-    a: "Always. Every agent action is graded by confidence, routed for approval where it matters, logged, and fully auditable. You set the rules, thresholds, and guardrails — people stay in command.",
+    a: "Always. Every agent action is graded by confidence, routed for approval where it matters, logged, and fully auditable. You set the rules, thresholds, and guardrails, people stay in command.",
   },
   {
     q: "How is Navanta priced?",
-    a: "Outcome-based. A meaningful share of our fees is tied to the value we deliver — measured in your numbers, not hours billed.",
+    a: "Outcome-based. A meaningful share of our fees is tied to the value we deliver, measured in your numbers, not hours billed.",
   },
   {
     q: "What makes Navanta different?",
-    a: "A proprietary AI core, productized data preparation, and outcome-anchored delivery — built by a team with deep operating experience inside the world's largest industrial and automotive manufacturers.",
+    a: "A proprietary AI core, productized data preparation, and outcome-anchored delivery, built by a team with deep operating experience inside the world's largest industrial and automotive manufacturers.",
   },
 ];
 

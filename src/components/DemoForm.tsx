@@ -20,7 +20,7 @@ export default function DemoForm() {
   if (sent) {
     return (
       <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-8 text-center">
-        <p className="text-[18px] font-medium text-zinc-900">Thanks — we&apos;ll be in touch.</p>
+        <p className="text-[18px] font-medium text-zinc-900">Thanks, we&apos;ll be in touch.</p>
         <p className="mt-2 text-[14px] text-zinc-500">
           A Navanta lead will reach out to schedule your demo within one business day.
         </p>

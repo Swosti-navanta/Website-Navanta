@@ -90,11 +90,11 @@ const CONCEPT_MS = 9000;
 /* The card layer and the orb are memoised on `on` alone. Without this, the
    concept timer's re-render every few seconds hands framer-motion fresh
    animate/transition objects, which restarts every looping animation and
-   re-applies each card's stagger delay — the cards visibly jump. */
+   re-applies each card's stagger delay, the cards visibly jump. */
 const CardLayer = memo(function CardLayer({ on }: { on: boolean }) {
   return (
     <div className={`absolute inset-0 ${on ? "z-10" : "z-30"}`}>
-      {/* raw inputs — four streams funnelling into the logo (ON) / spreading (OFF) */}
+      {/* raw inputs, four streams funnelling into the logo (ON) / spreading (OFF) */}
       {RAW_FLOW.map((c, i) => (
         <motion.div
           key={`raw-${i}`}
@@ -155,7 +155,7 @@ const CardLayer = memo(function CardLayer({ on }: { on: boolean }) {
         </motion.div>
       ))}
 
-      {/* extra scatter cards — only visible in the OFF spread */}
+      {/* extra scatter cards, only visible in the OFF spread */}
       {RAW_EXTRA.map((c, i) => (
         <motion.div
           key={`extra-${i}`}
@@ -182,7 +182,7 @@ const CardLayer = memo(function CardLayer({ on }: { on: boolean }) {
         </motion.div>
       ))}
 
-      {/* clean outputs — emerge at the orb's right edge, glide right in a row */}
+      {/* clean outputs, emerge at the orb's right edge, glide right in a row */}
       {Array.from({ length: CLEAN_COUNT }).map((_, i) => {
         const delay = (i * CLEAN_DUR) / CLEAN_COUNT;
         return (
@@ -267,7 +267,7 @@ export default function LensIntro() {
             Introducing Navanta Lens
           </h2>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
-            Fragmented signals in, coordinated decisions out — one intelligence
+            Fragmented signals in, coordinated decisions out, one intelligence
             layer standardizing process, technology, and data across your supply
             chain.
           </p>
@@ -307,7 +307,7 @@ export default function LensIntro() {
             <Orb on={on} />
           </div>
 
-          {/* Timer — one segment per model; the active one fills, then advances */}
+          {/* Timer, one segment per model; the active one fills, then advances */}
           <div className="mt-10 flex gap-5">
             {CONCEPTS.map((name, i) => (
               <button

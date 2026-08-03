@@ -7,9 +7,9 @@ import { MagnifyingGlass, ArrowRight } from "@phosphor-icons/react";
 type Role = { title: string; team: string; location: string; tags: string[] };
 
 const ROLES: Role[] = [
-  { title: "Senior AI Engineer — Supply Chain", team: "Engineering", location: "US · Remote", tags: ["us", "remote"] },
-  { title: "Data Engineer — Enterprise Integrations", team: "Engineering", location: "India · Hybrid", tags: ["india"] },
-  { title: "Full-Stack Engineer — Lens Platform", team: "Engineering", location: "India · Remote", tags: ["india", "remote"] },
+  { title: "Senior AI Engineer, Supply Chain", team: "Engineering", location: "US · Remote", tags: ["us", "remote"] },
+  { title: "Data Engineer, Enterprise Integrations", team: "Engineering", location: "India · Hybrid", tags: ["india"] },
+  { title: "Full-Stack Engineer, Lens Platform", team: "Engineering", location: "India · Remote", tags: ["india", "remote"] },
   { title: "Forward-Deployed Solutions Lead", team: "Delivery & Solutions", location: "US · Hybrid", tags: ["us"] },
   { title: "Supply Chain Domain Expert", team: "Delivery & Solutions", location: "US · Remote", tags: ["us", "remote"] },
   { title: "Product Designer", team: "Product & Design", location: "Remote", tags: ["us", "india", "remote"] },
@@ -84,7 +84,7 @@ export default function CareersPositions() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        href={`mailto:admin@navanta.ai?subject=Application — ${encodeURIComponent(r.title)}`}
+                        href={`mailto:admin@navanta.ai?subject=Application, ${encodeURIComponent(r.title)}`}
                         className="group flex items-center justify-between gap-4 py-4"
                       >
                         <span className="text-[15.5px] text-zinc-800 transition-colors group-hover:text-[#5C3D97]">

@@ -14,7 +14,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
-  title: "Contact — Navanta",
+  title: "Contact | Navanta",
   description: "Get in touch with the Navanta team, or request a demo on your own data.",
 };
 
@@ -38,7 +38,7 @@ export default function ContactPage() {
         <PageHeader
           eyebrow="Contact"
           title="Let's talk"
-          sub="Share your challenges — within a week we'll show a live demo built on your industry data."
+          sub="Share your challenges, within a week we'll show a live demo built on your industry data."
           video
         />
 
@@ -94,7 +94,7 @@ export default function ContactPage() {
               <FadeIn delay={0.08}>
                 <div className="h-[360px] overflow-hidden rounded-2xl border border-zinc-200 shadow-sm lg:h-full lg:min-h-[420px]">
                   <iframe
-                    title="Navanta — Dover, DE"
+                    title="Navanta, Dover, DE"
                     src={MAP_EMBED}
                     className="h-full w-full"
                     loading="lazy"
@@ -106,7 +106,7 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Request a Demo — form left · brand image right */}
+        {/* Request a Demo, form left · brand image right */}
         <section id="demo" className="bg-white py-20">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
@@ -115,7 +115,7 @@ export default function ContactPage() {
                   Request a Demo
                 </h2>
                 <p className="mt-3 max-w-md text-[15.5px] leading-relaxed text-zinc-500">
-                  See Navanta on your data within a week — planning, procurement, and
+                  See Navanta on your data within a week, planning, procurement, and
                   order flows running on your own systems.
                 </p>
                 <div className="mt-8 max-w-lg">
@@ -140,7 +140,7 @@ export default function ContactPage() {
                   />
                   <div className="absolute bottom-6 left-6 right-6">
                     <p className="text-[20px] font-medium leading-snug text-white sm:text-[24px]">
-                      12–16 weeks from kickoff to operational launch — fixed fee,
+                      12–16 weeks from kickoff to operational launch, fixed fee,
                       measured in your numbers.
                     </p>
                     <p className="mt-2 text-[13px] text-white/60">

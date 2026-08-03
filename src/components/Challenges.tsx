@@ -18,12 +18,12 @@ const TABS: Tab[] = [
       {
         id: "cx-1",
         title: "Disconnected experiences",
-        body: "Status lives across phone, email, and portals — every channel tells a different story.",
+        body: "Status lives across phone, email, and portals, every channel tells a different story.",
       },
       {
         id: "cx-2",
         title: "No real-time order visibility",
-        body: "No live view of orders — you hear about delays when the customer does.",
+        body: "No live view of orders, you hear about delays when the customer does.",
       },
       {
         id: "cx-3",
@@ -40,7 +40,7 @@ const TABS: Tab[] = [
       {
         id: "sf-1",
         title: "Fragmented data hides risk",
-        body: "Spend and supplier data sit in disconnected systems — risk hides until it hits.",
+        body: "Spend and supplier data sit in disconnected systems, risk hides until it hits.",
       },
       {
         id: "sf-2",
@@ -50,7 +50,7 @@ const TABS: Tab[] = [
       {
         id: "sf-3",
         title: "Reacting vs anticipating",
-        body: "Reacting to shocks instead of sensing them — expedite premiums and value leakage.",
+        body: "Reacting to shocks instead of sensing them, expedite premiums and value leakage.",
       },
     ],
   },
@@ -62,7 +62,7 @@ const TABS: Tab[] = [
       {
         id: "inv-1",
         title: "Manual adjustment to every SKU",
-        body: "Planning by hand, SKU by SKU — stock piles up here while it runs dry there.",
+        body: "Planning by hand, SKU by SKU, stock piles up here while it runs dry there.",
       },
       {
         id: "inv-2",
@@ -105,7 +105,7 @@ export default function Challenges() {
         </FadeIn>
 
         <div className="mt-10 grid gap-14 lg:grid-cols-[minmax(0,400px)_1fr]">
-          {/* Tab rail — auto-advancing, click to jump (static strokes) */}
+          {/* Tab rail, auto-advancing, click to jump (static strokes) */}
           <div className="flex h-fit flex-col">
             {TABS.map((t, i) => (
               <button
@@ -130,7 +130,7 @@ export default function Challenges() {
             ))}
           </div>
 
-          {/* Cards — 3 up, zigzag offset, cross-fade on tab change */}
+          {/* Cards, 3 up, zigzag offset, cross-fade on tab change */}
           <div
             className="min-w-0"
             onMouseEnter={() => setPaused(true)}
@@ -162,7 +162,7 @@ export default function Challenges() {
                       }`}
                     >
                       <h3 className="text-[17px] font-medium text-zinc-900">{c.title}</h3>
-                      {/* Media — official Navanta icon infographic (panel baked in) */}
+                      {/* Media, official Navanta icon infographic (panel baked in) */}
                       <div className="mt-4 h-[170px] overflow-hidden rounded-xl">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img

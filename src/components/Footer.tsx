@@ -56,7 +56,7 @@ export default function Footer() {
           <div className="grid gap-16 md:grid-cols-2">
             <p className="max-w-xs self-end text-[13.5px] leading-relaxed text-white/55">
               Navanta is the supply chain intelligence layer for industrial
-              enterprises — unifying orders, inventory, and procurement into
+              enterprises, unifying orders, inventory, and procurement into
               decisions that protect margin, growth, and customer trust.
             </p>
             <div>
@@ -111,7 +111,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Brand image band — rail-yard photo, curved top, sits below the legal bar */}
+      {/* Brand image band, rail-yard photo, curved top, sits below the legal bar */}
       <div
         ref={bandRef}
         className="relative flex h-[440px] items-center justify-center overflow-hidden rounded-t-[40px] sm:h-[600px]"

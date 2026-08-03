@@ -8,7 +8,7 @@ const STEPS = [
   {
     title: "AI Readiness",
     img: "ai-readiness",
-    caption: "Your data cleansed, modeled, and AI-ready — the bedrock of every outcome.",
+    caption: "Your data cleansed, modeled, and AI-ready, the bedrock of every outcome.",
   },
   {
     title: "Value Definition",
@@ -23,12 +23,12 @@ const STEPS = [
   {
     title: "Tailored Launch",
     img: "targeted-alignment",
-    caption: "The Lens tailored to your data and industry — live in months, not years.",
+    caption: "The Lens tailored to your data and industry, live in months, not years.",
   },
   {
     title: "Refine & Measure",
     img: "refine-measure",
-    caption: "Outcomes that compound — your AI gets smarter every quarter.",
+    caption: "Outcomes that compound, your AI gets smarter every quarter.",
   },
 ];
 
@@ -81,7 +81,7 @@ export default function Approach() {
         </FadeIn>
       </div>
 
-      {/* Full-bleed scroll-driven row — starts offset right, glides edge-to-edge,
+      {/* Full-bleed scroll-driven row, starts offset right, glides edge-to-edge,
           stops with the last card (Refine & Measure) at the right */}
       <div ref={rowRef} className="mt-12 w-full overflow-hidden">
         <motion.div
@@ -90,7 +90,7 @@ export default function Approach() {
         >
           {STEPS.map((s) => (
               <div key={s.title} className="w-[300px] flex-shrink-0">
-                {/* Official Figma card asset — title and mockup are baked into
+                {/* Official Figma card asset, title and mockup are baked into
                     the image itself (5:4 aspect matches the 300×240 tile). */}
                 <div className="relative h-[240px] overflow-hidden rounded-xl bg-[#f5f5f7]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -17,9 +17,9 @@ const mdPrimer = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Navanta — The Supply Chain Intelligence Layer for Industrial Enterprises",
+  title: "Navanta | The Supply Chain Intelligence Layer for Industrial Enterprises",
   description:
-    "Navanta unifies orders, inventory, and procurement into one intelligence layer — turning fragmented signals into decisions from day one.",
+    "Navanta unifies orders, inventory, and procurement into one intelligence layer, turning fragmented signals into decisions from day one.",
 };
 
 export default function RootLayout({

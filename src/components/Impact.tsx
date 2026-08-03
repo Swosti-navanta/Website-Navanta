@@ -9,7 +9,7 @@ import { DOTS, MAP_W, MAP_H } from "./impactDots";
 
 /* Veolia-style region explorer in the Navanta dot-matrix language: pick a
    region from the list (or let it auto-tour) and its dots become a window
-   onto a photo of the work there — plus a slow-spinning badge and pulsing
+   onto a photo of the work there, plus a slow-spinning badge and pulsing
    site markers. */
 
 const REGIONS = [
@@ -30,7 +30,7 @@ const REGIONS = [
     name: "Europe",
     coords: "51°55′ N · 4°28′ E",
     img: "/figma/footer-railyard.jpg",
-    body: "Procurement control across chemicals categories — RFPs, consolidated buys, tracked savings.",
+    body: "Procurement control across chemicals categories, RFPs, consolidated buys, tracked savings.",
     badge: { cx: 50, cy: 6.5 },
     sites: [{ x: 46.5, y: 4.5 }],
   },
@@ -143,19 +143,19 @@ export default function Impact() {
               Real impact for real clients
             </h2>
             <p className="max-w-md text-[15px] leading-relaxed text-white/55 lg:justify-self-end">
-              Navanta runs where industry runs — delivered by teams across the US and India.
+              Navanta runs where industry runs, delivered by teams across the US and India.
             </p>
           </div>
         </FadeIn>
 
-        {/* Dotted world map — the active region's dots open onto a photo */}
+        {/* Dotted world map, the active region's dots open onto a photo */}
         <FadeIn delay={0.1} className="mt-20">
           <div
             className="relative mx-auto max-w-[1180px]"
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
           >
-            {/* Coordinates readout — quiet instrument detail */}
+            {/* Coordinates readout, quiet instrument detail */}
             <div className="pointer-events-none absolute -top-10 right-0 z-10 font-mono text-[10px] tracking-wider text-white/25">
               <AnimatePresence mode="wait">
                 <motion.p
@@ -210,7 +210,7 @@ export default function Impact() {
                 ))}
               </g>
 
-              {/* client clusters — softly lit until their photo takes over */}
+              {/* client clusters, softly lit until their photo takes over */}
               {REGIONS.map((r) => (
                 <g
                   key={r.id}
@@ -310,7 +310,7 @@ export default function Impact() {
               </AnimatePresence>
             </div>
 
-            {/* Region picker — overlays open ocean on desktop */}
+            {/* Region picker, overlays open ocean on desktop */}
             <RegionList
               active={active}
               onPick={setActive}
@@ -320,7 +320,7 @@ export default function Impact() {
             />
           </div>
 
-          {/* Region picker — inline on smaller screens */}
+          {/* Region picker, inline on smaller screens */}
           <RegionList
             active={active}
             onPick={setActive}
@@ -330,7 +330,7 @@ export default function Impact() {
           />
         </FadeIn>
 
-        {/* Active region — plain inline text, no card */}
+        {/* Active region, plain inline text, no card */}
         <div className="mt-14 border-t border-white/10 pt-8">
           <AnimatePresence mode="wait">
             <motion.div

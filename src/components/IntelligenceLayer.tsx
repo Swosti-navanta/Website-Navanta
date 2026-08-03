@@ -49,7 +49,7 @@ const TABS: TabDef[] = [
       {
         name: "Parts Planning",
         icon: SquaresFour,
-        desc: "Every SKU classified and scored overnight — planners review only the exceptions that matter.",
+        desc: "Every SKU classified and scored overnight, planners review only the exceptions that matter.",
         features: [
           {
             icon: SquaresFour,
@@ -71,7 +71,7 @@ const TABS: TabDef[] = [
       {
         name: "Autonomous Buying",
         icon: Lightning,
-        desc: "Lens executes routine buys by confidence level — and learns from every decision the planner makes.",
+        desc: "Lens executes routine buys by confidence level, and learns from every decision the planner makes.",
         features: [
           {
             icon: Lightning,
@@ -95,12 +95,12 @@ const TABS: TabDef[] = [
       {
         name: "Order Tracking",
         icon: Package,
-        desc: "Every order, shipment, and issue in one live view — customers hear about delays before they ask.",
+        desc: "Every order, shipment, and issue in one live view, customers hear about delays before they ask.",
         features: [
           {
             icon: SquaresFour,
             title: "Unified Visibility",
-            body: "Every order, shipment, and location's inventory in one view — SKU cross-reference built in.",
+            body: "Every order, shipment, and location's inventory in one view, SKU cross-reference built in.",
           },
           {
             icon: BellRinging,
@@ -110,19 +110,19 @@ const TABS: TabDef[] = [
           {
             icon: ChatCircleText,
             title: "Guided Resolution",
-            body: "Issues raised in context — Lens suggests alternatives and keeps everyone on one thread.",
+            body: "Issues raised in context, Lens suggests alternatives and keeps everyone on one thread.",
           },
         ],
       },
       {
         name: "Customer Workspace",
         icon: MagnifyingGlass,
-        desc: "Self-serve search, live availability, and alternatives — personalized to every customer visit.",
+        desc: "Self-serve search, live availability, and alternatives, personalized to every customer visit.",
         features: [
           {
             icon: MagnifyingGlass,
             title: "Intelligent Self-Service",
-            body: "Search by name, SKU, or image — live availability, alternatives, full detail.",
+            body: "Search by name, SKU, or image, live availability, alternatives, full detail.",
           },
           {
             icon: GraduationCap,
@@ -141,24 +141,24 @@ const TABS: TabDef[] = [
       {
         name: "Spend Intelligence",
         icon: Brain,
-        desc: "Spend, contracts, and vendors unified — price variance, leakage, and missed discounts surfaced.",
+        desc: "Spend, contracts, and vendors unified, price variance, leakage, and missed discounts surfaced.",
         features: [
           {
             icon: SquaresFour,
             title: "Unified Visibility",
-            body: "Spend, contract, and vendor data from every ERP, spreadsheet, and site — one source of truth.",
+            body: "Spend, contract, and vendor data from every ERP, spreadsheet, and site, one source of truth.",
           },
           {
             icon: Brain,
             title: "Intelligent Analysis",
-            body: "Data-driven signals replace habit buying — price variance, leakage, and missed discounts surfaced.",
+            body: "Data-driven signals replace habit buying, price variance, leakage, and missed discounts surfaced.",
           },
         ],
       },
       {
         name: "Sourcing & Award",
         icon: CheckCircle,
-        desc: "Volume pooled into consolidated, competitive buys — every award validated and savings tracked live.",
+        desc: "Volume pooled into consolidated, competitive buys, every award validated and savings tracked live.",
         features: [
           {
             icon: Lightning,
@@ -173,7 +173,7 @@ const TABS: TabDef[] = [
           {
             icon: GraduationCap,
             title: "Continuous Learning",
-            body: "A continuous engine, not one-off reports — savings tracked live, never stale.",
+            body: "A continuous engine, not one-off reports, savings tracked live, never stale.",
           },
         ],
       },
@@ -182,9 +182,9 @@ const TABS: TabDef[] = [
 ];
 
 /* ── SaaS dashboard primitives ──────────────────────────────────────────────
-   Each tab shows a small number of complete product dashboards — a slim icon
+   Each tab shows a small number of complete product dashboards, a slim icon
    sidebar, a top bar with page title + filters + "Ask Lens", and a soft work
-   canvas of white panels — in the site's design language (white surfaces,
+   canvas of white panels, in the site's design language (white surfaces,
    #EBE8F3 tiles, #5C3D97 accents). Several features live on one dashboard. */
 
 /* Presentation cascade — when a dashboard loads, its top bar settles in and
@@ -241,7 +241,7 @@ function DashShell({
             <p className="truncate text-[13px] font-semibold text-zinc-900">{page}</p>
             <div className="flex flex-shrink-0 items-center gap-1.5">{controls}</div>
           </motion.div>
-          {/* Work canvas — panels cascade in one after another */}
+          {/* Work canvas, panels cascade in one after another */}
           <motion.div
             variants={canvasStagger}
             initial="hidden"
@@ -481,7 +481,7 @@ function DarkBtn({ children }: { children: React.ReactNode }) {
 }
 
 /* ── Centralized Intelligence ───────────────────────────────────────────────
-   Dashboard 1 · Parts Planning — see the whole network, signals scored
+   Dashboard 1 · Parts Planning, see the whole network, signals scored
    overnight, exceptions routed to the planner (Visibility · Analysis ·
    Planner in the Loop). */
 function PlanningDashboard() {
@@ -554,7 +554,7 @@ function PlanningDashboard() {
       }
     >
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
-        {/* Unified Visibility — the network classified in one live view */}
+        {/* Unified Visibility, the network classified in one live view */}
         <Panel
           title="ABC × XYZ classification"
           right={<p className="text-[10px] text-zinc-400">518 products · revenue × demand pattern</p>}
@@ -588,19 +588,19 @@ function PlanningDashboard() {
           </div>
         </Panel>
 
-        {/* Intelligent Analysis — the overnight Lens review */}
-        <LensPanel title="Lens Summary" headline="Reviewed 734 SKUs overnight — every signal scored and ranked by impact.">
+        {/* Intelligent Analysis, the overnight Lens review */}
+        <LensPanel title="Lens Summary" headline="Reviewed 734 SKUs overnight, every signal scored and ranked by impact.">
           <div className="mt-3 flex flex-col gap-2">
             <div className="rounded-lg bg-white/70 px-3 py-2.5 ring-1 ring-[#e8e2f4]">
               <p className="text-[17px] font-semibold leading-none text-zinc-900">57</p>
               <p className="mt-1.5 text-[10px] leading-snug text-zinc-500">
-                Exceptions need you — 10 critical · 37 high · 10 medium
+                Exceptions need you, 10 critical · 37 high · 10 medium
               </p>
             </div>
             <div className="rounded-lg bg-white/70 px-3 py-2.5 ring-1 ring-[#e8e2f4]">
               <p className="text-[17px] font-semibold leading-none text-zinc-900">12</p>
               <p className="mt-1.5 text-[10px] leading-snug text-zinc-500">
-                Ready for PO review — 4 branch transfers · 8 alternate vendors
+                Ready for PO review, 4 branch transfers · 8 alternate vendors
               </p>
             </div>
             <div className="rounded-lg bg-white/70 px-3 py-2.5 ring-1 ring-[#e8e2f4]">
@@ -608,14 +608,14 @@ function PlanningDashboard() {
                 <TrendUp size={13} className="text-emerald-600" /> +18%
               </p>
               <p className="mt-1.5 text-[10px] leading-snug text-zinc-500">
-                Demand shift on SKU-4482 — WoW across 4 stores
+                Demand shift on SKU-4482, WoW across 4 stores
               </p>
             </div>
           </div>
         </LensPanel>
       </div>
 
-      {/* Planner in the Loop — only the exceptions reach you, drafted */}
+      {/* Planner in the Loop, only the exceptions reach you, drafted */}
       <Panel
         right={
           <div className="flex items-center gap-1.5">
@@ -670,7 +670,7 @@ function PlanningDashboard() {
         />
       </Panel>
       <Caption>
-        One classified view of the network, signals scored overnight — and only the exceptions routed to your planner.
+        One classified view of the network, signals scored overnight, and only the exceptions routed to your planner.
       </Caption>
     </DashShell>
   );
@@ -690,7 +690,7 @@ function BuyingDashboard() {
         </>
       }
     >
-      {/* Agentic Actions — most POs never need a touch */}
+      {/* Agentic Actions, most POs never need a touch */}
       <div className="grid gap-3 sm:grid-cols-3">
         <KpiPanel label="Pending your review" value="4" sub="$21K total · 3 branches" />
         <KpiPanel label="Approved today" value="5" sub="$4K total · 1 vendor" />
@@ -760,7 +760,7 @@ function BuyingDashboard() {
         />
       </Panel>
 
-      {/* Continuous Learning — calibration compounds quarter over quarter */}
+      {/* Continuous Learning, calibration compounds quarter over quarter */}
       <Panel
         title="Model calibration · trailing 12 months"
         right={
@@ -784,14 +784,14 @@ function BuyingDashboard() {
         </div>
       </Panel>
       <Caption>
-        Above the confidence bar, Lens buys on its own — every planner decision sharpens the next call.
+        Above the confidence bar, Lens buys on its own, every planner decision sharpens the next call.
       </Caption>
     </DashShell>
   );
 }
 
 /* ── Customer Inventory & Order Intelligence ────────────────────────────────
-   Dashboard 1 · Order Tracking — one live view of the order, alerts pushed
+   Dashboard 1 · Order Tracking, one live view of the order, alerts pushed
    before the customer asks, issues fixed in context (Visibility ·
    Notifications · Resolution). */
 function OrderTrackingDashboard() {
@@ -828,7 +828,7 @@ function OrderTrackingDashboard() {
     >
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div className="flex min-w-0 flex-col gap-3">
-          {/* Unified Visibility — the order, every line and ETA */}
+          {/* Unified Visibility, the order, every line and ETA */}
           <Panel title="Order status" right={<p className="text-[10px] text-zinc-400">4 items · placed Jan 12</p>}>
             <div className="flex items-start">
               {steps.map((s, i) => (
@@ -854,7 +854,7 @@ function OrderTrackingDashboard() {
               ))}
             </div>
             <div className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-[11px] font-medium text-emerald-700">
-              In process — order ETA: Feb 1, 2026
+              In process, order ETA: Feb 1, 2026
             </div>
           </Panel>
           <Panel title="Products · 4">
@@ -881,7 +881,7 @@ function OrderTrackingDashboard() {
             </div>
           </Panel>
 
-          {/* Proactive Notifications — pushed before the customer asks */}
+          {/* Proactive Notifications, pushed before the customer asks */}
           <Panel title="Notifications" right={<Chip tone="violet">Proactive</Chip>}>
             <div className="flex flex-col gap-2">
               <div className="flex items-start gap-2.5 rounded-lg bg-zinc-50 p-2.5">
@@ -891,7 +891,7 @@ function OrderTrackingDashboard() {
                 <div className="min-w-0">
                   <p className="text-[11px] font-medium text-zinc-900">Delay flagged</p>
                   <p className="mt-0.5 text-[10px] leading-snug text-zinc-500">
-                    ETA slipped 2 days — customer notified 09:12
+                    ETA slipped 2 days, customer notified 09:12
                   </p>
                 </div>
               </div>
@@ -907,10 +907,10 @@ function OrderTrackingDashboard() {
             </div>
           </Panel>
 
-          {/* Guided Resolution — raised in context, fixed on one thread */}
+          {/* Guided Resolution, raised in context, fixed on one thread */}
           <Panel title="Issue #1842" right={<Chip tone="green">Resolved</Chip>}>
             <p className="text-[10.5px] leading-relaxed text-zinc-600">
-              Short shipment on SKU-8841 — Lens matched invoice, ASN, and receipt,
+              Short shipment on SKU-8841, Lens matched invoice, ASN, and receipt,
               queued 2 replacement units, and credit was issued. Fixed in 26 min,
               one thread, zero handoffs.
             </p>
@@ -918,7 +918,7 @@ function OrderTrackingDashboard() {
         </div>
       </div>
       <Caption>
-        Every line, shipment, and ETA in one view — alerts pushed before the customer asks, issues fixed in context.
+        Every line, shipment, and ETA in one view, alerts pushed before the customer asks, issues fixed in context.
       </Caption>
     </DashShell>
   );
@@ -953,7 +953,7 @@ function WorkspaceDashboard() {
         </>
       }
     >
-      {/* Intelligent Self-Service — search by name, SKU, or image */}
+      {/* Intelligent Self-Service, search by name, SKU, or image */}
       <div className="flex items-center gap-2.5 rounded-xl bg-white px-3.5 py-2.5 ring-1 ring-zinc-100">
         <MagnifyingGlass size={14} className="text-zinc-400" />
         <p className="text-[12px] text-zinc-900">
@@ -984,7 +984,7 @@ function WorkspaceDashboard() {
           </div>
         </Panel>
 
-        {/* Continuous Learning — the workspace remembers */}
+        {/* Continuous Learning, the workspace remembers */}
         <Panel title="Saved this month">
           <div className="flex flex-col gap-2">
             {saved.map((s) => (
@@ -1039,14 +1039,14 @@ function WorkspaceDashboard() {
         </div>
       </Panel>
       <Caption>
-        Live availability, alternatives, and full detail 24/7 — a workspace that sharpens with every visit.
+        Live availability, alternatives, and full detail 24/7, a workspace that sharpens with every visit.
       </Caption>
     </DashShell>
   );
 }
 
 /* ── Procurement Control Tower ──────────────────────────────────────────────
-   Dashboard 1 · Spend Intelligence — every system unified, opportunities
+   Dashboard 1 · Spend Intelligence, every system unified, opportunities
    quantified and scored (Visibility · Analysis). */
 function SpendDashboard() {
   const sources = ["SAP", "Oracle", "D365", "Sheets"];
@@ -1066,10 +1066,10 @@ function SpendDashboard() {
         </>
       }
     >
-      {/* Unified Visibility — one source of truth */}
+      {/* Unified Visibility, one source of truth */}
       <LensPanel
         title="Lens Brief"
-        headline="Scan covered 4 MRO categories and surfaced 29 opportunities — ranked by evidence strength. Scanned MRO — $109.3M of $761.6M indirect spend."
+        headline="Scan covered 4 MRO categories and surfaced 29 opportunities, ranked by evidence strength. Scanned MRO, $109.3M of $761.6M indirect spend."
       >
         <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
           {sources.map((s) => (
@@ -1094,7 +1094,7 @@ function SpendDashboard() {
         <KpiTile value="4 of 15" label="Categories scanned" />
       </div>
 
-      {/* Intelligent Analysis — the opportunity feed */}
+      {/* Intelligent Analysis, the opportunity feed */}
       <Panel title="Opportunities" right={<GhostBtn>High confidence ≥60% · 19</GhostBtn>}>
         <div className="-mt-1 mb-3 border-b border-zinc-100">
           <SegTabs
@@ -1145,7 +1145,7 @@ function SpendDashboard() {
         />
       </Panel>
       <Caption>
-        Every ERP, spreadsheet, and site in one source of truth — price variance, leakage, and missed discounts quantified, not guessed.
+        Every ERP, spreadsheet, and site in one source of truth, price variance, leakage, and missed discounts quantified, not guessed.
       </Caption>
     </DashShell>
   );
@@ -1177,10 +1177,10 @@ function SourcingDashboard() {
         </>
       }
     >
-      {/* Agentic Actions — nine sites pooled into one event */}
+      {/* Agentic Actions, nine sites pooled into one event */}
       <LensPanel
         title="Lens Brief"
-        headline="Nine sites bought fasteners separately — Lens pooled $12.4M of volume into one competitive event and drafted the award."
+        headline="Nine sites bought fasteners separately, Lens pooled $12.4M of volume into one competitive event and drafted the award."
       />
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_320px]">
         <Panel title="Bids · normalized">
@@ -1210,7 +1210,7 @@ function SourcingDashboard() {
           </div>
         </Panel>
 
-        {/* Planner in the Loop — the award stays a human call */}
+        {/* Planner in the Loop, the award stays a human call */}
         <Panel title="Award approval" right={<Chip tone="amber">Awaiting review</Chip>}>
           <div className="grid grid-cols-2 gap-2">
             {[
@@ -1243,7 +1243,7 @@ function SourcingDashboard() {
         </Panel>
       </div>
 
-      {/* Continuous Learning — a live savings engine */}
+      {/* Continuous Learning, a live savings engine */}
       <Panel
         title="Savings engine"
         right={
@@ -1280,7 +1280,7 @@ function SourcingDashboard() {
         </div>
       </Panel>
       <Caption>
-        Sites stop buying alone — the company buys as one, people approve every award, and savings never go stale.
+        Sites stop buying alone, the company buys as one, people approve every award, and savings never go stale.
       </Caption>
     </DashShell>
   );
@@ -1347,7 +1347,7 @@ function GroupItem({
         )}
       </AnimatePresence>
 
-      {/* Divider — fills as the advance timer on the active item */}
+      {/* Divider, fills as the advance timer on the active item */}
       <div className="relative h-px w-full bg-white/10">
         {open && progressWidth && (
           <motion.div
@@ -1364,7 +1364,7 @@ const DASH_NATIVE_W = 1060;
 const DASH_NATIVE_H = 720; // every DashShell is locked to this height
 
 /* Renders a dashboard at its authored size (1060×720) and scales it to fill a
-   parent that already has a fixed size — the deck stage. Scales by the parent's
+   parent that already has a fixed size, the deck stage. Scales by the parent's
    width; the stage's aspect ratio matches the native ratio, so the scaled
    dashboard fills it exactly. Like a placed image in Figma: it shrinks
    uniformly and never reflows or changes aspect ratio. */
@@ -1452,7 +1452,7 @@ function DashboardDeck({
                 <ScaledDashFill>
                   <Screen />
                 </ScaledDashFill>
-                {/* Dim veil — fades away as this card takes the front slot */}
+                {/* Dim veil, fades away as this card takes the front slot */}
                 <motion.div
                   aria-hidden
                   className="absolute inset-0 rounded-2xl bg-black/60"
@@ -1475,9 +1475,19 @@ export default function IntelligenceLayer() {
   const tab = TABS[active];
   const screens = DASHBOARDS[tab.key];
 
+  // Auto-advance: step through this tab's dashboards, then roll on to the
+  // next tab (section) once the last one's timer completes — so the whole
+  // section cycles central → orders → procurement → central.
   const { progress, setPaused } = useAdvanceTimer(
     DASH_MS,
-    () => setDashIdx((d) => (d + 1) % screens.length),
+    () => {
+      if (dashIdx + 1 < screens.length) {
+        setDashIdx(dashIdx + 1);
+      } else {
+        setActive((a) => (a + 1) % TABS.length);
+        setDashIdx(0);
+      }
+    },
     `${active}-${dashIdx}`,
   );
   const progressWidth = useTransform(progress, (p) => `${p * 100}%`);
@@ -1488,7 +1498,7 @@ export default function IntelligenceLayer() {
       data-nav-theme="dark"
       className="relative overflow-hidden bg-[#050505] py-28"
     >
-      {/* Aurora wash — official background asset from the Figma redesign */}
+      {/* Aurora wash, official background asset from the Figma redesign */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/figma/lens-aurora.jpg"
@@ -1540,7 +1550,7 @@ export default function IntelligenceLayer() {
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,330px)_minmax(0,1fr)] lg:items-start"
             >
-              {/* Rail — one item per dashboard */}
+              {/* Rail, one item per dashboard */}
               <div className="flex flex-col lg:pt-2">
                 {tab.groups.map((g, i) => (
                   <GroupItem
@@ -1553,9 +1563,9 @@ export default function IntelligenceLayer() {
                 ))}
               </div>
 
-              {/* Deck — active dashboard up front, the next waiting behind.
+              {/* Deck, active dashboard up front, the next waiting behind.
                   Hover-pause lives here, so only the dashboards freeze the
-                  timer — not the rail or the surrounding space. */}
+                  timer, not the rail or the surrounding space. */}
               <div
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}

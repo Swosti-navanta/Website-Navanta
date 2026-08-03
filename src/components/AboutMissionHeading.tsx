@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, useMotionValue, useTransform, type MotionValue } from "framer-motion";
 
 const TEXT =
-  "Industrial supply chains run the physical world — yet they still run on fragmented systems, manual planning, and decisions made a step too late. We exist to change that.";
+  "Industrial supply chains run the physical world, yet they still run on fragmented systems, manual planning, and decisions made a step too late. We exist to change that.";
 const WORDS = TEXT.split(" ");
 
 function Word({

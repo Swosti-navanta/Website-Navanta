@@ -25,12 +25,12 @@ const NOTES: Note[] = [
   {
     icon: ClockCountdown,
     title: "Demand shift detected",
-    body: "Midwest DC trending +18% on SKU 4482 — reorder point review suggested",
+    body: "Midwest DC trending +18% on SKU 4482, reorder point review suggested",
   },
   {
     icon: Flag,
     title: "Delay risk flagged",
-    body: "PO #4821 — Rotterdam ETA slipped 6 days on ocean leg",
+    body: "PO #4821, Rotterdam ETA slipped 6 days on ocean leg",
     nested: [
       "Expedite via alternate carrier adds $2.1K.",
       "Competitive quote requested.",
@@ -39,12 +39,12 @@ const NOTES: Note[] = [
   {
     icon: CheckCircle,
     title: "Reorder executed",
-    body: "Auto-PO issued for 240 units — planner approved at 92% confidence",
+    body: "Auto-PO issued for 240 units, planner approved at 92% confidence",
   },
   {
     icon: Warning,
     title: "Supplier risk elevated",
-    body: "Kirby Risk on-time delivery fell to 91% — alternate supplier suggested",
+    body: "Kirby Risk on-time delivery fell to 91%, alternate supplier suggested",
   },
   {
     icon: Package,
@@ -85,7 +85,7 @@ export default function HeroNotifications() {
       transition={{ delay: 0.7, duration: 0.8 }}
       className="pointer-events-none absolute bottom-16 right-10 z-10 hidden lg:block"
     >
-      {/* Bottom-anchored window. No mask/overflow tricks — they break the
+      {/* Bottom-anchored window. No mask/overflow tricks, they break the
           cards' backdrop blur and paint a dark box behind the stack. */}
       <div className="flex h-[440px] w-[460px] flex-col justify-end gap-3">
         <AnimatePresence mode="popLayout" initial={false}>
@@ -105,7 +105,7 @@ export default function HeroNotifications() {
               // Pronounced chat-style zigzag: right → left → right, like the Figma
               className={id % 2 === 0 ? "w-[76%] self-end" : "w-[76%] self-start"}
             >
-              {/* Smoky warm glass — narrower card, full-size text */}
+              {/* Smoky warm glass, narrower card, full-size text */}
               <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#2a1f15]/40 backdrop-blur-2xl backdrop-saturate-150">
                 <div className="flex items-center gap-2.5 border-b border-white/10 px-4 py-2.5">
                   <note.icon size={16} className="text-white/75" />

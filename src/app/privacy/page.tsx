@@ -5,14 +5,14 @@ import PageHeader from "@/components/PageHeader";
 import FadeIn from "@/components/FadeIn";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Navanta",
+  title: "Privacy Policy | Navanta",
   description: "How Navanta collects, uses, and protects your data.",
 };
 
 const SECTIONS = [
   {
     heading: "Data we collect",
-    body: "We collect information you provide directly — such as your name, work email, company, and any details you share when requesting a demo or contacting us. We also collect limited technical data (device, browser, and usage analytics) to operate and improve this website.",
+    body: "We collect information you provide directly, such as your name, work email, company, and any details you share when requesting a demo or contacting us. We also collect limited technical data (device, browser, and usage analytics) to operate and improve this website.",
   },
   {
     heading: "How we use data",
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
     <>
       <Navbar />
       <main>
-        <PageHeader eyebrow="Legal" title="Privacy Policy" sub="Last updated — July 2026" />
+        <PageHeader eyebrow="Legal" title="Privacy Policy" sub="Last updated, July 2026" />
 
         <section className="bg-white py-24">
           <div className="mx-auto max-w-[820px] px-6 lg:px-10">

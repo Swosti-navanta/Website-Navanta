@@ -27,7 +27,7 @@ const STEPS: Step[] = [
   {
     key: "senses",
     word: "Senses",
-    line: "Watches every order, shipment, and signal — live.",
+    line: "Watches every order, shipment, and signal, live.",
     icon: Broadcast,
     rail: "Signals",
   },
@@ -48,7 +48,7 @@ const STEPS: Step[] = [
   {
     key: "approve",
     word: "You approve",
-    line: "One click — and every step stays auditable.",
+    line: "One click, and every step stays auditable.",
     icon: UserCheck,
     rail: "Audit",
   },
@@ -97,7 +97,7 @@ function StepScreen({ step }: { step: number }) {
           <motion.div key={k} {...rowIn(i)} className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-2.5">
             <CheckCircle size={15} weight="fill" className="flex-shrink-0 text-emerald-500" />
             <p className="text-[12.5px] text-zinc-700">
-              <span className="font-medium text-zinc-900">{k}</span> — {v}
+              <span className="font-medium text-zinc-900">{k}</span>, {v}
             </p>
           </motion.div>
         ))}
@@ -166,13 +166,13 @@ export default function Lens() {
     <section id="lens" className="bg-[#0c0b0a] py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
-          {/* Left — the four words */}
+          {/* Left, the four words */}
           <FadeIn>
             <h2 className="text-[34px] font-medium tracking-tight text-white sm:text-[44px] mt-0">
               Meet the Navanta Lens
             </h2>
             <p className="mt-4 max-w-md text-[16px] leading-relaxed text-white/55">
-              The AI layer over your supply chain — it spots problems and fixes
+              The AI layer over your supply chain, it spots problems and fixes
               them, before they cost you.
             </p>
 
@@ -218,7 +218,7 @@ export default function Lens() {
             </div>
           </FadeIn>
 
-          {/* Right — product window playing the scenario */}
+          {/* Right, product window playing the scenario */}
           <FadeIn delay={0.1}>
             <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#fafaf9] shadow-[0_40px_120px_rgba(92,61,151,0.18)]">
               {/* window chrome */}

@@ -121,7 +121,7 @@ export default function HeroV2() {
         }}
       />
 
-      {/* Legibility overlays — warehouse stays visible, with a slightly deeper
+      {/* Legibility overlays, warehouse stays visible, with a slightly deeper
           left-weighted scrim for the text. */}
       <div
         aria-hidden
@@ -154,7 +154,7 @@ export default function HeroV2() {
             className="mt-7 max-w-xl text-[17px] leading-relaxed text-white/75 sm:text-[19px]"
           >
             Navanta unifies your orders, inventory, and procurement into one
-            intelligence layer — turning fragmented signals into decisions
+            intelligence layer, turning fragmented signals into decisions
             from day one.
           </motion.p>
 
