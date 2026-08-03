@@ -11,7 +11,6 @@ import {
   Database,
   TreeStructure,
   MagicWand,
-  ArrowUp,
   ArrowRight,
 } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
@@ -65,12 +64,41 @@ const SIGNALS = ["Demand Signals", "Market Intelligence", "Supplier Networks", "
    above/below (both live inside the same max-w container), so the left arrow
    sits under column 1 and the right arrow under column 3 in every band,
    genuinely connecting them instead of an arbitrary even spacing. */
+/* Upward connector — a line that fades in from below into a solid arrowhead
+   at the top, matching the gradient arrows in the redesign. */
+function GradientArrow() {
+  return (
+    <svg
+      width="16"
+      height="34"
+      viewBox="0 0 16 34"
+      fill="none"
+      className="mx-auto"
+      aria-hidden
+    >
+      <defs>
+        <linearGradient id="lens-uparrow" x1="8" y1="0" x2="8" y2="34" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#5C3D97" />
+          <stop offset="1" stopColor="#5C3D97" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M8 2V33M8 2L3 8M8 2L13 8"
+        stroke="url(#lens-uparrow)"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function UpArrows() {
   return (
-    <div className="grid grid-cols-3 py-1.5">
-      <ArrowUp size={16} className="mx-auto text-[#5C3D97]" />
+    <div className="grid grid-cols-3 py-1">
+      <GradientArrow />
       <span />
-      <ArrowUp size={16} className="mx-auto text-[#5C3D97]" />
+      <GradientArrow />
     </div>
   );
 }
@@ -123,7 +151,10 @@ export default function HowWeEnable() {
               <UpArrows />
 
               {/* ── The Navanta Lens ──────────────────────────────────────── */}
-              <div className="rounded-2xl bg-[#4b3382] p-3 sm:p-4">
+              <div
+                className="rounded-2xl bg-[#4b3382] bg-cover bg-center p-3 sm:p-4"
+                style={{ backgroundImage: "url(/figma/lens-card-bg.jpg)" }}
+              >
                 <p className="text-center text-[14px] font-medium text-white">
                   ✦ The Navanta Lens
                 </p>

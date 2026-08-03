@@ -14,21 +14,21 @@ const LEADERS = [
     name: "Tanuj Gupta",
     role: "Co-Founder",
     email: "tanuj.gupta@navanta.ai",
-    img: "/team/portrait-1.jpg",
+    img: "/team/tanuj.jpg",
     bio: "Formerly EY Executive Director with 10 years leading AI & digital supply chain transformation for industrial enterprises across North America.",
   },
   {
     name: "Gaurav Kohli",
     role: "Co-Founder",
     email: "gaurav.kohli@navanta.ai",
-    img: "/team/portrait-2.jpg",
+    img: "/team/gaurav.jpg",
     bio: "Formerly EY Partner with 20 years architecting enterprise AI & supply chain programs for global manufacturers — ERP foundations to autonomous operations.",
   },
   {
     name: "Nitin Kumar",
     role: "Head of India Operations",
     email: "nitin.kumar@navanta.ai",
-    img: "/team/portrait-3.jpg",
+    img: "/team/nitin.jpg",
     bio: "Leads Navanta's scaled engineering and delivery teams, turning the intelligence layer into production outcomes for every engagement.",
   },
 ];
@@ -44,7 +44,7 @@ export default function LeadershipCards() {
             <img
               src={l.img}
               alt={`${l.name} — ${l.role}`}
-              className="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.045] group-hover:grayscale-0"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.045]"
             />
 
             {/* Resting scrim for name legibility; deepens across the card on hover */}

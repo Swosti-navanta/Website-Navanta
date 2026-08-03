@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, useState } from "react";
+import { Children, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useTransform } from "framer-motion";
 import {
   Package,
@@ -29,8 +29,9 @@ import { useAdvanceTimer } from "@/hooks/useAdvanceTimer";
 
 type Callout = { icon: Icon; title: string; body: string };
 
-/* One group card per dashboard — the features that live on that screen. */
-type FeatureGroup = { name: string; features: Callout[] };
+/* One group per dashboard — icon + one-line summary shown in the left rail,
+   features listed for reference on the screen itself. */
+type FeatureGroup = { name: string; icon: Icon; desc: string; features: Callout[] };
 
 type TabDef = {
   key: string;
@@ -47,6 +48,8 @@ const TABS: TabDef[] = [
     groups: [
       {
         name: "Parts Planning",
+        icon: SquaresFour,
+        desc: "Every SKU classified and scored overnight — planners review only the exceptions that matter.",
         features: [
           {
             icon: SquaresFour,
@@ -67,6 +70,8 @@ const TABS: TabDef[] = [
       },
       {
         name: "Autonomous Buying",
+        icon: Lightning,
+        desc: "Lens executes routine buys by confidence level — and learns from every decision the planner makes.",
         features: [
           {
             icon: Lightning,
@@ -89,6 +94,8 @@ const TABS: TabDef[] = [
     groups: [
       {
         name: "Order Tracking",
+        icon: Package,
+        desc: "Every order, shipment, and issue in one live view — customers hear about delays before they ask.",
         features: [
           {
             icon: SquaresFour,
@@ -109,6 +116,8 @@ const TABS: TabDef[] = [
       },
       {
         name: "Customer Workspace",
+        icon: MagnifyingGlass,
+        desc: "Self-serve search, live availability, and alternatives — personalized to every customer visit.",
         features: [
           {
             icon: MagnifyingGlass,
@@ -131,6 +140,8 @@ const TABS: TabDef[] = [
     groups: [
       {
         name: "Spend Intelligence",
+        icon: Brain,
+        desc: "Spend, contracts, and vendors unified — price variance, leakage, and missed discounts surfaced.",
         features: [
           {
             icon: SquaresFour,
@@ -146,6 +157,8 @@ const TABS: TabDef[] = [
       },
       {
         name: "Sourcing & Award",
+        icon: CheckCircle,
+        desc: "Volume pooled into consolidated, competitive buys — every award validated and savings tracked live.",
         features: [
           {
             icon: Lightning,
@@ -179,15 +192,14 @@ const TABS: TabDef[] = [
    demoed live. */
 const canvasStagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.16, delayChildren: 0.15 } },
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.06 } },
 };
 const canvasBlock = {
-  hidden: { opacity: 0, y: 22, scale: 0.985 },
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -201,8 +213,8 @@ function DashShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-full max-w-[1060px] overflow-hidden rounded-2xl bg-white shadow-[0_32px_90px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
-      <div className="flex">
+    <div className="flex h-[720px] w-full max-w-[1060px] overflow-hidden rounded-2xl bg-white shadow-[0_32px_90px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
+      <div className="flex w-full">
         {/* App sidebar */}
         <div className="flex w-11 flex-shrink-0 flex-col items-center gap-2.5 border-r border-zinc-100 py-3.5">
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-900 text-[10px] font-semibold text-white">
@@ -218,13 +230,13 @@ function DashShell({
             <Gauge size={14} className="text-zinc-300" />
           </span>
         </div>
-        <div className="min-w-0 flex-1">
+        <div className="flex min-w-0 flex-1 flex-col">
           {/* Top bar */}
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center justify-between gap-3 border-b border-zinc-100 px-4 py-2.5"
+            className="flex flex-shrink-0 items-center justify-between gap-3 border-b border-zinc-100 px-4 py-2.5"
           >
             <p className="truncate text-[13px] font-semibold text-zinc-900">{page}</p>
             <div className="flex flex-shrink-0 items-center gap-1.5">{controls}</div>
@@ -234,7 +246,7 @@ function DashShell({
             variants={canvasStagger}
             initial="hidden"
             animate="visible"
-            className="flex flex-col gap-3 bg-zinc-50/70 p-4"
+            className="flex flex-1 flex-col gap-3 overflow-hidden bg-zinc-50/70 p-4"
           >
             {Children.map(children, (child) => (
               <motion.div variants={canvasBlock}>{child}</motion.div>
@@ -1283,51 +1295,34 @@ const DASHBOARDS: Record<string, React.ComponentType[]> = {
 
 const DASH_MS = 9000;
 
-/* Use-case accordion row — one per dashboard. Full-width rows separated by
-   hairline dividers; the open row expands to its feature list (left) and the
-   live dashboard (right) while a progress line fills along its bottom divider
-   and the rotation advances. Collapsed rows keep a faint ghost of their
-   dashboard bleeding through, like a screen waiting off-stage. */
-function GroupRow({
+/* Left-rail group item — icon + title; the active one reveals its one-line
+   summary and its bottom divider doubles as the advance timer. */
+function GroupItem({
   group,
-  index,
   open,
   progressWidth,
   onSelect,
-  Dash,
 }: {
   group: FeatureGroup;
-  index: number;
   open: boolean;
   progressWidth?: import("framer-motion").MotionValue<string>;
   onSelect: () => void;
-  Dash: React.ComponentType;
 }) {
   return (
-    <div className="relative">
-      {/* Ghost of this row's dashboard behind the collapsed title */}
-      {!open && (
-        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-6 right-0 w-[58%] opacity-[0.06] saturate-0 [mask-image:linear-gradient(to_left,black_55%,transparent)]">
-            <Dash />
-          </div>
-        </div>
-      )}
-
+    <div>
       <button
         onClick={onSelect}
         aria-expanded={open}
-        className="group relative z-10 flex w-full items-baseline gap-5 py-7 text-left"
+        className="group flex w-full items-center gap-3.5 py-5 text-left"
       >
-        <span
-          className={`font-mono text-[12px] tabular-nums transition-colors duration-300 ${
-            open ? "text-[#b9a3e3]" : "text-zinc-600"
+        <group.icon
+          size={22}
+          className={`flex-shrink-0 transition-colors duration-300 ${
+            open ? "text-white" : "text-zinc-600 group-hover:text-zinc-400"
           }`}
-        >
-          0{index + 1}
-        </span>
+        />
         <span
-          className={`text-[21px] font-medium tracking-tight transition-colors duration-300 sm:text-[25px] ${
+          className={`text-[19px] font-medium tracking-tight transition-colors duration-300 sm:text-[22px] ${
             open ? "text-white" : "text-zinc-500 group-hover:text-zinc-300"
           }`}
         >
@@ -1338,47 +1333,21 @@ function GroupRow({
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
-            key="content"
+            key="desc"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="grid gap-10 pb-12 pt-2 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:items-center">
-              {/* Features that live on this screen */}
-              <div className="flex flex-col gap-2">
-                {group.features.map((f) => (
-                  <div
-                    key={f.title}
-                    className="group/feat -mx-2.5 flex items-start gap-3.5 rounded-xl p-2.5 transition-colors hover:bg-white/[0.05]"
-                  >
-                    <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3] transition-colors group-hover/feat:bg-[#5C3D97]">
-                      <f.icon
-                        size={16}
-                        className="text-[#5C3D97] transition-colors group-hover/feat:text-white"
-                      />
-                    </span>
-                    <div>
-                      <p className="text-[15px] font-medium text-white">{f.title}</p>
-                      <p className="mt-0.5 text-[12.5px] leading-snug text-zinc-400">
-                        {f.body}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* The dashboard these features live on */}
-              <div className="flex justify-center">
-                <Dash />
-              </div>
-            </div>
+            <p className="max-w-xs pb-5 pl-9 text-[13.5px] leading-relaxed text-zinc-400">
+              {group.desc}
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Divider — doubles as the advance timer on the open row */}
+      {/* Divider — fills as the advance timer on the active item */}
       <div className="relative h-px w-full bg-white/10">
         {open && progressWidth && (
           <motion.div
@@ -1386,6 +1355,115 @@ function GroupRow({
             style={{ width: progressWidth }}
           />
         )}
+      </div>
+    </div>
+  );
+}
+
+const DASH_NATIVE_W = 1060;
+const DASH_NATIVE_H = 720; // every DashShell is locked to this height
+
+/* Renders a dashboard at its authored size (1060×720) and scales it to fill a
+   parent that already has a fixed size — the deck stage. Scales by the parent's
+   width; the stage's aspect ratio matches the native ratio, so the scaled
+   dashboard fills it exactly. Like a placed image in Figma: it shrinks
+   uniformly and never reflows or changes aspect ratio. */
+function ScaledDashFill({ children }: { children: React.ReactNode }) {
+  const outerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const outer = outerRef.current;
+      if (!outer) return;
+      setScale(outer.clientWidth / DASH_NATIVE_W);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (outerRef.current) ro.observe(outerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <div ref={outerRef} className="h-full w-full">
+      <div
+        className="origin-top-left"
+        style={{
+          width: DASH_NATIVE_W,
+          height: DASH_NATIVE_H,
+          transform: `scale(${scale})`,
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* Stacked dashboard deck — the active screen up front, the next one waiting
+   behind it, dimmed and offset to the bottom-right. When the timer runs out
+   the back card glides forward to take the stage. */
+function DashboardDeck({
+  screens,
+  active,
+  tabKey,
+}: {
+  screens: React.ComponentType[];
+  active: number;
+  tabKey: string;
+}) {
+  const n = screens.length;
+  const OFFSET = 30; // px the back card peeks down-right
+
+  // Stable stack: every screen stays mounted and simply animates between the
+  // "front" and "back" slots as `active` changes. The card in the back slot
+  // glides up-left into the front (un-dimming) while the next screen fades in
+  // behind it — a continuous, one-after-another advance rather than a
+  // crossfade, and the internal panel cascade never replays mid-rotation.
+  return (
+    <div
+      className="relative"
+      style={{ paddingRight: OFFSET, paddingBottom: OFFSET }}
+    >
+      {/* Stage reserves the front card's footprint via a fixed aspect ratio;
+          the cards are absolutely stacked inside it. */}
+      <div
+        className="relative w-full"
+        style={{ aspectRatio: `${DASH_NATIVE_W} / ${DASH_NATIVE_H}` }}
+      >
+        {screens.map((Screen, i) => {
+          const isFront = i === active;
+          const isBack = i === (active + 1) % n;
+          const shown = isFront || isBack;
+          return (
+            <motion.div
+              key={`${tabKey}-${i}`}
+              className="absolute inset-0"
+              initial={false}
+              animate={{
+                x: isFront ? 0 : OFFSET,
+                y: isFront ? 0 : OFFSET,
+                opacity: shown ? 1 : 0,
+              }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              style={{ zIndex: isFront ? 10 : 1, pointerEvents: isFront ? "auto" : "none" }}
+            >
+              <div className="relative h-full w-full overflow-hidden rounded-2xl">
+                <ScaledDashFill>
+                  <Screen />
+                </ScaledDashFill>
+                {/* Dim veil — fades away as this card takes the front slot */}
+                <motion.div
+                  aria-hidden
+                  className="absolute inset-0 rounded-2xl bg-black/60"
+                  initial={false}
+                  animate={{ opacity: isFront ? 0 : 1 }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                />
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
@@ -1405,13 +1483,25 @@ export default function IntelligenceLayer() {
   const progressWidth = useTransform(progress, (p) => `${p * 100}%`);
 
   return (
-    <section id="intelligence" data-nav-theme="dark" className="bg-[#0b0a0f] py-28">
-      <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
+    <section
+      id="intelligence"
+      data-nav-theme="dark"
+      className="relative overflow-hidden bg-[#050505] py-28"
+    >
+      {/* Aurora wash — official background asset from the Figma redesign */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/figma/lens-aurora.jpg"
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+      />
+      <div className="relative mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
           <h2 className="text-[34px] font-medium tracking-tight text-white sm:text-[44px]">
             The Navanta Lens
           </h2>
-          <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-400">
+          <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-zinc-400">
             Our intelligence layer unifies your existing architecture, accelerating
             time-to-value without the $100M sunk cost.
           </p>
@@ -1439,8 +1529,8 @@ export default function IntelligenceLayer() {
           </div>
         </FadeIn>
 
-        {/* Use-case accordion — one row per dashboard, auto-advancing */}
-        <FadeIn delay={0.1} className="mt-14">
+        {/* Left rail of groups · right stacked dashboard deck */}
+        <FadeIn delay={0.1} className="mt-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={tab.key}
@@ -1448,21 +1538,30 @@ export default function IntelligenceLayer() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10, transition: { duration: 0.22 } }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              onMouseEnter={() => setPaused(true)}
-              onMouseLeave={() => setPaused(false)}
+              className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,330px)_minmax(0,1fr)] lg:items-start"
             >
-              <div className="h-px w-full bg-white/10" />
-              {tab.groups.map((g, i) => (
-                <GroupRow
-                  key={g.name}
-                  group={g}
-                  index={i}
-                  open={i === dashIdx}
-                  progressWidth={i === dashIdx ? progressWidth : undefined}
-                  onSelect={() => setDashIdx(i)}
-                  Dash={screens[i] ?? screens[0]}
-                />
-              ))}
+              {/* Rail — one item per dashboard */}
+              <div className="flex flex-col lg:pt-2">
+                {tab.groups.map((g, i) => (
+                  <GroupItem
+                    key={g.name}
+                    group={g}
+                    open={i === dashIdx}
+                    progressWidth={i === dashIdx ? progressWidth : undefined}
+                    onSelect={() => setDashIdx(i)}
+                  />
+                ))}
+              </div>
+
+              {/* Deck — active dashboard up front, the next waiting behind.
+                  Hover-pause lives here, so only the dashboards freeze the
+                  timer — not the rail or the surrounding space. */}
+              <div
+                onMouseEnter={() => setPaused(true)}
+                onMouseLeave={() => setPaused(false)}
+              >
+                <DashboardDeck screens={screens} active={dashIdx} tabKey={tab.key} />
+              </div>
             </motion.div>
           </AnimatePresence>
         </FadeIn>

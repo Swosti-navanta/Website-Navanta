@@ -118,7 +118,7 @@ export default function Footer() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <motion.img
-          src="/figma/footer-railyard.jpg"
+          src="/figma/footer-warehouse.jpg"
           alt=""
           aria-hidden
           style={{ scale }}
