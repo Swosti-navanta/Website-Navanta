@@ -1376,9 +1376,7 @@ function ScaledDashFill({ children }: { children: React.ReactNode }) {
     const measure = () => {
       const outer = outerRef.current;
       if (!outer) return;
-      // Never upscale past native — keeps the dashboard crisp and from growing
-      // oversized (and pushing the offset back-card off-screen) on wide viewports.
-      setScale(Math.min(1, outer.clientWidth / DASH_NATIVE_W));
+      setScale(outer.clientWidth / DASH_NATIVE_W);
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -1424,7 +1422,7 @@ function DashboardDeck({
   // crossfade, and the internal panel cascade never replays mid-rotation.
   return (
     <div
-      className="relative w-full max-w-[880px]"
+      className="relative"
       style={{ paddingRight: OFFSET, paddingBottom: OFFSET }}
     >
       {/* Stage reserves the front card's footprint via a fixed aspect ratio;

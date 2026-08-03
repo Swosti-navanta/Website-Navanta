@@ -4,7 +4,6 @@ import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
 import DemoForm from "@/components/DemoForm";
 import FadeIn from "@/components/FadeIn";
-import LeadershipCards from "@/components/LeadershipCards";
 import {
   MapPin,
   EnvelopeSimple,
@@ -153,17 +152,6 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Leadership */}
-        <section className="bg-white py-24">
-          <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
-            <FadeIn>
-              <h2 className="text-[28px] font-medium tracking-tight text-zinc-900 sm:text-[36px]">
-                Leadership
-              </h2>
-            </FadeIn>
-            <LeadershipCards />
-          </div>
-        </section>
       </main>
       <Footer />
     </>
