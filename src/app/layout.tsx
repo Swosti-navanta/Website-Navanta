@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import SmoothScroll from "@/components/SmoothScroll";
 import { DemoModalProvider } from "@/components/DemoModal";
+import { FeedbackWidget } from "@/components/FeedbackWidget";
 import "./globals.css";
 
 /** MD Primer (test cut) — site-wide type for now */
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <SmoothScroll />
         <DemoModalProvider>{children}</DemoModalProvider>
+        <FeedbackWidget />
       </body>
     </html>
   );
