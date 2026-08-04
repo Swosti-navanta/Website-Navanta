@@ -64,9 +64,10 @@ export default function Footer() {
                   <li key={l.label}>
                     <a
                       href={l.href}
-                      className="text-[30px] font-medium text-white transition-colors hover:text-white/70 sm:text-[34px]"
+                      className="group relative inline-block text-[30px] font-medium text-white transition-colors hover:text-white/70 sm:text-[34px]"
                     >
                       {l.label}
+                      <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
                     </a>
                   </li>
                 ))}

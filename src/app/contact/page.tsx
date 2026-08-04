@@ -110,7 +110,7 @@ export default function ContactPage() {
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
               <FadeIn className="flex flex-col justify-center py-4">
-                <h2 className="text-[32px] font-medium tracking-tight text-zinc-900 sm:text-[40px]">
+                <h2 className="font-medium tracking-tight text-zinc-900">
                   Request a Demo
                 </h2>
                 <p className="mt-3 max-w-md text-[15.5px] leading-relaxed text-zinc-500">

@@ -108,7 +108,7 @@ export default function HowWeEnable() {
     <section id="value" className="bg-white py-16 sm:py-20">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <h2 className="text-[28px] font-medium tracking-tight text-zinc-900 sm:text-[36px]">
+          <h2 className="font-medium tracking-tight text-zinc-900">
             How We Enable Value for Our Clients
           </h2>
           <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-zinc-500">

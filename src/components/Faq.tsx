@@ -41,7 +41,7 @@ export default function Faq() {
     <section id="faq" className="bg-[#fafaf9] py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <h2 className="text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]">
+          <h2 className="font-medium tracking-tight text-zinc-900">
             FAQs
           </h2>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">

@@ -128,7 +128,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
           {/* Left, flow (vertically centered on cream, white step card) */}
           <div className="flex h-full flex-col justify-center overflow-y-auto px-6 py-16 sm:px-12 lg:px-20">
             <div className="mx-auto w-full max-w-[560px]">
-              <h2 className="text-[30px] font-medium tracking-tight text-zinc-900 sm:text-[38px]">
+              <h2 className="font-medium tracking-tight text-zinc-900">
                 Request a Demo
               </h2>
               <p className="mt-2 max-w-md text-[14.5px] leading-relaxed text-zinc-500">

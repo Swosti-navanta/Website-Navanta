@@ -50,7 +50,7 @@ export default function Advantages() {
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
           <p className="text-[17px] font-medium text-[#5C3D97]">The Value We Deliver</p>
-          <h2 className="mt-3 text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]">
+          <h2 className="mt-3 font-medium tracking-tight text-zinc-900">
             The Advantages
           </h2>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">

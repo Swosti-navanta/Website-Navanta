@@ -89,7 +89,7 @@ export default function Navbar() {
         }}
       />
 
-      <nav className="relative z-10 mx-auto flex h-[72px] max-w-[1560px] items-center justify-between px-6 lg:px-10">
+      <nav className="relative z-[50] mx-auto flex h-[72px] max-w-[1560px] items-center justify-between px-6 lg:px-10">
         {/* Navanta logo lockup, crossfading white/dark variants; returns home */}
         <a href="/" className="relative flex items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -162,33 +162,37 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile menu, smoky dark at the top, solid light once scrolled */}
+      {/* Mobile menu — full-screen smoky overlay, buttons pinned to bottom */}
       {open && (
         <div
-          className={`relative z-10 border-t lg:hidden ${light ? "border-zinc-200" : "border-white/10"}`}
+          className="fixed inset-0 z-[45] flex flex-col lg:hidden"
+          style={{
+            backdropFilter: "blur(24px) saturate(1.4)",
+            WebkitBackdropFilter: "blur(24px) saturate(1.4)",
+            backgroundColor: light
+              ? "rgba(250,249,247,0.88)"
+              : "rgba(20,18,16,0.75)",
+          }}
         >
-          <div
-            aria-hidden
-            className={`pointer-events-none absolute inset-0 backdrop-blur-[20px] ${
-              light ? "bg-[#faf9f7]/90" : "bg-[#141210]/70"
-            }`}
-          />
-          <ul className="relative flex flex-col gap-1 px-6 py-4">
+          <ul className="flex flex-col gap-1 px-6 pt-[88px]">
             {NAV_LINKS.map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className={`block py-2.5 text-[15px] ${light ? "text-zinc-800" : "text-white/85"}`}
+                  className={`block py-3 text-[18px] font-medium ${light ? "text-zinc-800" : "text-white/90"}`}
                 >
                   {link.label}
                 </a>
               </li>
             ))}
-            <li className="mt-3 flex gap-3">
+          </ul>
+          <div className="mt-auto px-6 pb-14">
+            <div className="flex gap-3">
               <a
                 href="/contact"
-                className={`flex-1 rounded-lg border px-4 py-2.5 text-center text-[14px] font-medium ${
+                onClick={() => setOpen(false)}
+                className={`flex-1 rounded-xl border px-4 py-3.5 text-center text-[15px] font-medium ${
                   light ? "border-zinc-300 text-zinc-800" : "border-white/30 text-white"
                 }`}
               >
@@ -199,14 +203,14 @@ export default function Navbar() {
                   setOpen(false);
                   openDemo();
                 }}
-                className={`flex-1 rounded-lg px-4 py-2.5 text-center text-[14px] font-medium ${
+                className={`flex-1 rounded-xl px-4 py-3.5 text-center text-[15px] font-medium ${
                   light ? "bg-zinc-950 text-white" : "bg-white text-black"
                 }`}
               >
                 Request a Demo
               </button>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       )}
     </motion.header>

@@ -140,7 +140,7 @@ export default function HeroV2() {
             initial={{ y: 32, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: EASE, delay: 0.15 }}
-            className="text-[40px] font-medium leading-[1.08] tracking-[-0.01em] text-white sm:text-[56px] lg:text-[68px]"
+            className="text-[36px] font-medium leading-[1.08] tracking-[-0.01em] text-white sm:text-[56px] lg:text-[68px]"
           >
             The Supply Chain Intelligence
             <br />

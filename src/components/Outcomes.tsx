@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -19,6 +18,7 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
+import MobileTabDropdown from "./MobileTabDropdown";
 
 type Card = {
   metric: string;
@@ -28,6 +28,71 @@ type Card = {
   media?: string;
   mock?: React.ComponentType;
 };
+
+/* ── Customer Engagement mockup ─────────────────────────────────── */
+
+function OrderStatusMock() {
+  const steps = [
+    { label: "Open", date: "Jan 14", done: true },
+    { label: "In Process", date: "Jan 16", done: true },
+    { label: "Shipped", date: "", done: false },
+    { label: "Delivered", date: "", done: false },
+  ];
+  return (
+    <MockPanel title="Order Status" badge={<span className="text-[9.5px] font-medium text-zinc-500">4 Items</span>}>
+      <div className="mt-4 flex items-start justify-between px-1">
+        {steps.map((s, i) => (
+          <div key={s.label} className="relative flex flex-col items-center" style={{ flex: 1 }}>
+            {i > 0 && (
+              <div
+                className="absolute top-[9px] right-1/2 h-[2px] w-full"
+                style={{
+                  background: steps[i - 1].done && s.done
+                    ? "#16a34a"
+                    : steps[i - 1].done && !s.done
+                    ? "linear-gradient(to right, #16a34a 50%, #d4d4d8 50%)"
+                    : "#d4d4d8",
+                  backgroundSize: !s.done && !steps[i - 1].done ? "8px 2px" : undefined,
+                  backgroundRepeat: "repeat-x",
+                }}
+              />
+            )}
+            <div
+              className={`relative z-10 flex h-[20px] w-[20px] items-center justify-center rounded-full ${
+                s.done ? "bg-[#16a34a]" : "border-2 border-zinc-300 bg-white"
+              }`}
+            >
+              {s.done && (
+                <CheckCircle size={20} weight="fill" className="text-white" />
+              )}
+            </div>
+            <p className={`mt-1.5 text-[9px] font-medium ${s.done ? "text-zinc-800" : "text-zinc-400"}`}>{s.label}</p>
+            {s.date && <p className="text-[8px] text-zinc-400">{s.date}</p>}
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 space-y-2">
+        {[
+          { sku: "BRG-4420", qty: 1, status: "In Process" },
+          { sku: "SFT-1180", qty: 2, status: "In Process" },
+          { sku: "HSG-0093", qty: 1, status: "Open" },
+        ].map((item) => (
+          <div key={item.sku} className="flex items-center justify-between rounded-md bg-zinc-50 px-2.5 py-1.5">
+            <span className="text-[9px] font-semibold text-zinc-700">{item.sku}</span>
+            <span className="text-[8px] text-zinc-400">Qty {item.qty}</span>
+            <span className={`rounded-full px-1.5 py-0.5 text-[7.5px] font-medium ${
+              item.status === "In Process" ? "bg-blue-50 text-blue-600" : "bg-zinc-100 text-zinc-500"
+            }`}>{item.status}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-auto rounded-lg bg-emerald-50 px-3 py-2 text-[9.5px]">
+        <span className="font-medium text-emerald-700">Order ETA:</span>{" "}
+        <span className="font-semibold text-zinc-800">Feb 1, 2026</span>
+      </div>
+    </MockPanel>
+  );
+}
 
 /* ── Inventory Optimization mockups — JSX product-UI cards in the same
    design language as the Intelligence Layer dashboards (white panel,
@@ -236,7 +301,7 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
         sub: "customers self-serve live",
         body: "Live order visibility with exception-driven updates, no phone calls needed.",
         icon: PhoneSlash,
-        media: "/outcomes/customer-status.png",
+        mock: OrderStatusMock,
       },
       {
         metric: "Faster claims resolution",
@@ -337,10 +402,10 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
    composition rather than an empty placeholder. */
 function CardMedia({ src, Mock }: { src?: string; Mock?: React.ComponentType }) {
   return (
-    <div className="relative flex w-full items-center justify-center">
+    <div className="relative flex w-full items-center justify-center overflow-hidden rounded-xl">
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" aria-hidden className="w-full" />
+        <img src={src} alt="" aria-hidden className="w-full object-cover" style={{ aspectRatio: "1203/700" }} />
       ) : Mock ? (
         <div className="aspect-[1203/700] w-full" aria-hidden>
           <Mock />
@@ -362,15 +427,18 @@ export default function Outcomes() {
     <section id="outcomes" className="bg-white py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <h2 className="mt-3 text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]">
+          <h2 className="mt-3 font-medium tracking-tight text-zinc-900">
             Driving Outcomes
           </h2>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
             Three pillars turning intelligence into measurable business value.
           </p>
-          {/* Tab pills, above the cards */}
-          <div className="mt-8 flex">
-            <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
+          {/* Tabs — custom dropdown on mobile, pills on md+ */}
+          <div className="mt-8">
+            <MobileTabDropdown items={TABS} active={active} onChange={setActive} />
+          </div>
+          <div className="mt-8 hidden md:flex">
+            <div className="flex items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
               {TABS.map((t, i) => (
                 <button
                   key={t.key}
@@ -398,16 +466,16 @@ export default function Outcomes() {
             className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4"
           >
             {tab.cards.map((c) => (
-              <div key={c.metric} className="flex flex-col overflow-hidden rounded-2xl bg-[#F6F6F6] p-5">
+              <div key={c.metric} className="flex flex-col overflow-hidden rounded-2xl bg-[#F6F6F6] p-6">
                 <div className="flex items-start gap-3.5 pb-4">
                   <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
                     <c.icon size={20} className="text-[#5C3D97]" />
                   </span>
                   <div>
-                    <p className="whitespace-nowrap text-[15px] font-medium leading-snug text-zinc-900">
+                    <p className="text-[15px] font-medium leading-snug text-zinc-900">
                       {c.metric}
                     </p>
-                    <p className="whitespace-nowrap text-[13px] text-zinc-400">{c.sub}</p>
+                    <p className="text-[13px] text-zinc-400">{c.sub}</p>
                   </div>
                 </div>
                 <div className="flex flex-1 items-center">

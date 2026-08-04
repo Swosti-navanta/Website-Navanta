@@ -25,6 +25,7 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
+import MobileTabDropdown from "./MobileTabDropdown";
 import { useAdvanceTimer } from "@/hooks/useAdvanceTimer";
 
 type Callout = { icon: Icon; title: string; body: string };
@@ -1508,7 +1509,7 @@ export default function IntelligenceLayer() {
       />
       <div className="relative mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <h2 className="text-[34px] font-medium tracking-tight text-white sm:text-[44px]">
+          <h2 className="font-medium tracking-tight text-white">
             The Navanta Lens
           </h2>
           <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-zinc-400">
@@ -1516,15 +1517,23 @@ export default function IntelligenceLayer() {
             time-to-value without the $100M sunk cost.
           </p>
 
-          {/* Tab pills */}
-          <div className="mt-6 flex">
+          {/* Tabs — custom dropdown on mobile, pills on md+ */}
+          <div className="mt-6">
+            <MobileTabDropdown
+              items={TABS}
+              active={active}
+              onChange={(i) => { setActive(i); setDashIdx(0); }}
+              variant="dark"
+            />
+          </div>
+          <div className="mt-6 hidden md:flex">
             <div className="flex flex-wrap items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1">
               {TABS.map((t, i) => (
                 <button
                   key={t.key}
                   onClick={() => {
                     setActive(i);
-                    setDashIdx(0); // fresh tab starts on its first dashboard
+                    setDashIdx(0);
                   }}
                   className={`rounded-full px-5 py-2.5 text-[14px] transition-colors ${
                     i === active

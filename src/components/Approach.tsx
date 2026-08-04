@@ -72,7 +72,7 @@ export default function Approach() {
     <section id="features" ref={sectionRef} className="overflow-hidden bg-white py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <h2 className="mt-3 text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]">
+          <h2 className="mt-3 font-medium tracking-tight text-zinc-900">
             From vision to value
           </h2>
           <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">

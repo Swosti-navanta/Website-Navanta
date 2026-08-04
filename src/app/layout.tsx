@@ -1,19 +1,13 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 import { DemoModalProvider } from "@/components/DemoModal";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
 import "./globals.css";
 
-/** MD Primer (test cut) — site-wide type for now */
-const mdPrimer = localFont({
-  src: [
-    { path: "../fonts/MDPrimerTest-Regular.otf", weight: "400", style: "normal" },
-    { path: "../fonts/MDPrimerTest-Medium.otf", weight: "500", style: "normal" },
-    { path: "../fonts/MDPrimerTest-Semibold.otf", weight: "600", style: "normal" },
-    { path: "../fonts/MDPrimerTest-Bold.otf", weight: "700", style: "normal" },
-  ],
-  variable: "--font-primer",
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -29,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${mdPrimer.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <SmoothScroll />
         <DemoModalProvider>{children}</DemoModalProvider>

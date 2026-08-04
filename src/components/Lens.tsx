@@ -168,7 +168,7 @@ export default function Lens() {
         <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
           {/* Left, the four words */}
           <FadeIn>
-            <h2 className="text-[34px] font-medium tracking-tight text-white sm:text-[44px] mt-0">
+            <h2 className="font-medium tracking-tight text-white mt-0">
               Meet the Navanta Lens
             </h2>
             <p className="mt-4 max-w-md text-[16px] leading-relaxed text-white/55">

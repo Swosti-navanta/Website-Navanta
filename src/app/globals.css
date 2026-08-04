@@ -17,11 +17,31 @@
   --color-brand-accent: var(--brand-accent);
   --color-surface: var(--surface);
   --color-ink: var(--ink);
-  --font-sans: var(--font-primer);
+  --font-sans: var(--font-inter);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-primer), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+@media (min-width: 640px) {
+  h2 {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+}
+
+@media (min-width: 768px) {
+  h2 {
+    font-size: 48px;
+  }
 }

@@ -83,13 +83,19 @@ export default function AboutPage() {
         {/* Photo strip, near full-bleed, center image leads */}
         <section className="mt-16 px-3 sm:mt-20">
           <FadeIn>
-            <div className="grid h-[240px] grid-cols-[1fr_1.6fr_1fr] gap-3 sm:h-[380px] lg:h-[480px]">
-              {PHOTOS.map((p) => (
-                <div key={p.src} className="overflow-hidden rounded-2xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={p.src} alt={p.alt} className="h-full w-full object-cover" />
-                </div>
-              ))}
+            <div className="grid gap-3">
+              <div className="grid h-[160px] grid-cols-2 gap-3 sm:h-[260px] lg:h-[340px]">
+                {PHOTOS.slice(0, 2).map((p) => (
+                  <div key={p.src} className="overflow-hidden rounded-2xl">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.src} alt={p.alt} className="h-full w-full object-cover" />
+                  </div>
+                ))}
+              </div>
+              <div className="h-[140px] overflow-hidden rounded-2xl sm:h-[220px] lg:h-[280px]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={PHOTOS[2].src} alt={PHOTOS[2].alt} className="h-full w-full object-cover" />
+              </div>
             </div>
           </FadeIn>
         </section>
@@ -122,7 +128,7 @@ export default function AboutPage() {
             <FadeIn>
               <div className="grid gap-10 lg:grid-cols-[280px_1fr]">
                 <p className="text-[14px] font-medium text-[#5C3D97]">What we believe</p>
-                <h2 className="max-w-2xl text-[28px] font-medium leading-snug tracking-tight text-zinc-900 sm:text-[36px]">
+                <h2 className="max-w-2xl font-medium tracking-tight text-zinc-900">
                   Built by operators, measured in outcomes
                 </h2>
               </div>
@@ -158,58 +164,53 @@ export default function AboutPage() {
         </section>
 
         {/* Leadership, same editorial grid */}
-        <section className="bg-[#fafaf9] py-28">
+        <section data-nav-theme="dark" className="bg-[#0c0b0a] py-28">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
-              <div className="grid gap-10 lg:grid-cols-[280px_1fr]">
-                <p className="text-[14px] font-medium text-[#5C3D97]">The team</p>
-                <h2 className="text-[28px] font-medium leading-snug tracking-tight text-zinc-900 sm:text-[36px]">
-                  Leadership
+              <div>
+                <h2 className="font-medium tracking-tight text-white">
+                  The people who set the tempo.
                 </h2>
+                <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-white/55">
+                  A lifetime on the problem, and the passion hasn&apos;t faded. The leadership team at Navanta goes back more than a decade together, across multiple ventures and some of the hardest problems in supply chain. With over 20 years working alongside the world&apos;s largest global supply chains, the proof is in the work. And they&apos;re not done yet.
+                </p>
               </div>
             </FadeIn>
             <LeadershipCards />
           </div>
         </section>
 
-        {/* CTA band, the site's dark close */}
-        <section className="bg-white py-24">
-          <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
+        {/* CTA band, full-bleed background image */}
+        <section data-nav-theme="dark" className="relative overflow-hidden py-28 sm:py-36">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/figma/footer-railyard.jpg"
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-black/70"
+          />
+          <div className="relative mx-auto max-w-[1560px] px-6 text-center lg:px-10">
             <FadeIn>
-              <div
-                data-nav-theme="dark"
-                className="relative overflow-hidden rounded-2xl bg-[#0c0b0a] px-8 py-16 text-center sm:px-16"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/figma/footer-railyard.jpg"
-                  alt=""
-                  aria-hidden
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_0%,rgba(12,11,10,0.65)_0%,rgba(12,11,10,0.92)_70%)]"
-                />
-                <div className="relative">
-                  <h2 className="text-[30px] font-medium tracking-tight text-white sm:text-[40px]">
-                    Build the intelligence layer with us
-                  </h2>
-                  <p className="mx-auto mt-4 max-w-md text-[15px] text-white/60">
-                    Join the team, or see Navanta running on your own data within a week.
-                  </p>
-                  <div className="mt-8 flex flex-wrap justify-center gap-3">
-                    <a
-                      href="/careers"
-                      className="flex items-center gap-1.5 rounded-lg bg-white px-5 py-3 text-[14px] font-medium text-black transition-colors hover:bg-white/90"
-                    >
-                      Open positions <ArrowRight size={14} weight="bold" />
-                    </a>
-                    <OpenDemoButton className="rounded-lg border border-white/30 px-5 py-3 text-[14px] font-medium text-white transition-colors hover:border-white/60 hover:bg-white/5">
-                      Request a Demo
-                    </OpenDemoButton>
-                  </div>
-                </div>
+              <h2 className="font-medium tracking-tight text-white">
+                Build the intelligence layer with us
+              </h2>
+              <p className="mx-auto mt-4 max-w-md text-[15px] text-white/60">
+                Join the team, or see Navanta running on your own data within a week.
+              </p>
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
+                <a
+                  href="/careers"
+                  className="flex items-center gap-1.5 rounded-lg bg-white px-5 py-3 text-[14px] font-medium text-black transition-colors hover:bg-white/90"
+                >
+                  Open positions <ArrowRight size={14} weight="bold" />
+                </a>
+                <OpenDemoButton className="rounded-lg border border-white/30 px-5 py-3 text-[14px] font-medium text-white transition-colors hover:border-white/60 hover:bg-white/5">
+                  Request a Demo
+                </OpenDemoButton>
               </div>
             </FadeIn>
           </div>

@@ -52,24 +52,26 @@ export default function CareersPage() {
         <section className="bg-white pt-16">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="h-[260px] overflow-hidden rounded-2xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/figma/challenges-photo.jpg"
-                    alt="Navanta team at work"
-                    className="h-full w-full object-cover"
-                  />
+              <div className="grid gap-3">
+                <div className="grid h-[160px] grid-cols-2 gap-3 sm:h-[260px] lg:h-[340px]">
+                  <div className="overflow-hidden rounded-2xl">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/figma/challenges-photo.jpg"
+                      alt="Navanta team at work"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="overflow-hidden rounded-2xl">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/hero/poster.jpg"
+                      alt="Inside a Navanta client warehouse"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
                 </div>
-                <div className="h-[260px] overflow-hidden rounded-2xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/hero/poster.jpg"
-                    alt="Inside a Navanta client warehouse"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="h-[260px] overflow-hidden rounded-2xl">
+                <div className="h-[140px] overflow-hidden rounded-2xl sm:h-[220px] lg:h-[280px]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/figma/footer-railyard.jpg"
@@ -89,7 +91,7 @@ export default function CareersPage() {
               <div className="grid gap-10 lg:grid-cols-[280px_1fr]">
                 <p className="text-[14px] font-medium text-[#5C3D97]">About Navanta</p>
                 <div className="max-w-2xl">
-                  <h2 className="text-[26px] font-medium leading-snug tracking-tight text-zinc-900 sm:text-[32px]">
+                  <h2 className="font-medium tracking-tight text-zinc-900">
                     For industrial enterprises facing relentless supply-chain
                     complexity, Navanta is the intelligence layer that turns
                     fragmented signals into decisions.
@@ -142,7 +144,7 @@ export default function CareersPage() {
         <section id="open-positions" className="bg-white py-24">
           <div className="mx-auto max-w-[1100px] px-6 lg:px-10">
             <FadeIn>
-              <h2 className="text-center text-[34px] font-medium tracking-tight text-zinc-900 sm:text-[44px]">
+              <h2 className="text-center font-medium tracking-tight text-zinc-900">
                 Open positions
               </h2>
             </FadeIn>

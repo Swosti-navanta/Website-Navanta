@@ -84,25 +84,14 @@ function RegionList({
 }) {
   return (
     <div className={className}>
-      <p
-        className={`text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35 ${
-          align === "right" ? "text-right" : ""
-        }`}
-      >
-        Choose region
-      </p>
-      <div
-        className={`mt-4 flex flex-col gap-4 ${
-          align === "right" ? "items-end" : "items-start"
-        }`}
-      >
+      <div className="flex w-full gap-4">
         {REGIONS.map((r) => (
           <button
             key={r.id}
             onClick={() => onPick(r.id)}
             onMouseEnter={() => onPick(r.id)}
             aria-pressed={r.id === active}
-            className={`text-[17px] font-medium tracking-tight transition-colors duration-300 ${
+            className={`flex-1 text-left text-[17px] font-medium tracking-tight transition-colors duration-300 ${
               r.id === active ? "text-white" : "text-white/35 hover:text-white/70"
             }`}
           >
@@ -139,7 +128,7 @@ export default function Impact() {
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
           <div className="grid gap-8 lg:grid-cols-2 lg:items-end">
-            <h2 className="text-[30px] font-medium tracking-tight text-white sm:text-[38px]">
+            <h2 className="font-medium tracking-tight text-white">
               Real impact for real clients
             </h2>
             <p className="max-w-md text-[15px] leading-relaxed text-white/55 lg:justify-self-end">
@@ -327,28 +316,20 @@ export default function Impact() {
               </AnimatePresence>
             </div>
 
-            {/* Region picker, overlays open ocean on desktop */}
-            <RegionList
-              active={active}
-              onPick={setActive}
-              progressWidth={progressWidth}
-              className="absolute right-0 top-[34%] z-10 hidden lg:block"
-              align="right"
-            />
           </div>
 
-          {/* Region picker, inline on smaller screens */}
+          {/* Region picker, below the map */}
           <RegionList
             active={active}
             onPick={setActive}
             progressWidth={progressWidth}
-            className="mt-10 lg:hidden"
+            className="mt-10"
             align="left"
           />
         </FadeIn>
 
         {/* Active region, plain inline text, no card */}
-        <div className="mt-14 border-t border-white/10 pt-8">
+        <div className="mt-14 pt-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={region.id}
