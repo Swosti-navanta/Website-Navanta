@@ -71,24 +71,105 @@ function OrderStatusMock() {
           </div>
         ))}
       </div>
-      <div className="mt-4 space-y-2">
-        {[
-          { sku: "BRG-4420", qty: 1, status: "In Process" },
-          { sku: "SFT-1180", qty: 2, status: "In Process" },
-          { sku: "HSG-0093", qty: 1, status: "Open" },
-        ].map((item) => (
-          <div key={item.sku} className="flex items-center justify-between rounded-md bg-zinc-50 px-2.5 py-1.5">
-            <span className="text-[9px] font-semibold text-zinc-700">{item.sku}</span>
-            <span className="text-[8px] text-zinc-400">Qty {item.qty}</span>
-            <span className={`rounded-full px-1.5 py-0.5 text-[7.5px] font-medium ${
-              item.status === "In Process" ? "bg-blue-50 text-blue-600" : "bg-zinc-100 text-zinc-500"
-            }`}>{item.status}</span>
-          </div>
-        ))}
-      </div>
       <div className="mt-auto rounded-lg bg-emerald-50 px-3 py-2 text-[9.5px]">
         <span className="font-medium text-emerald-700">Order ETA:</span>{" "}
         <span className="font-semibold text-zinc-800">Feb 1, 2026</span>
+      </div>
+    </MockPanel>
+  );
+}
+
+function ClaimMock() {
+  const rows = [
+    { label: "Part Number", value: "TRN-87432" },
+    { label: "Part Match", value: "Matched", green: true },
+    { label: "Warranty Check", value: "Eligible", green: true },
+    { label: "Coverage Available", value: "100%" },
+  ];
+  return (
+    <MockPanel title="Claim #CLM-9213">
+      <div className="mt-3 flex gap-3">
+        <div className="flex h-[80px] w-[80px] flex-shrink-0 items-center justify-center overflow-hidden rounded-lg bg-zinc-100">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/outcomes/claim-part.png" alt="" aria-hidden className="h-full w-full object-cover" />
+        </div>
+        <div className="flex flex-1 flex-col gap-1.5">
+          {rows.map((r) => (
+            <div key={r.label} className="flex items-center justify-between rounded-lg bg-zinc-100/80 px-2.5 py-1.5">
+              <span className="text-[8.5px] text-zinc-500">{r.label}</span>
+              <span className={`text-[9px] font-semibold ${r.green ? "text-emerald-600" : "text-zinc-800"}`}>
+                {r.green && <span className="mr-0.5">&#x2705;</span>}
+                {r.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </MockPanel>
+  );
+}
+
+function PurchaseRateMock() {
+  const points = [10, 12, 14, 13, 18, 22, 28, 35, 40, 48, 55, 60, 62, 65, 68, 70, 72, 74, 76, 78];
+  const max = 80;
+  const h = 60;
+  const w = 180;
+  const step = w / (points.length - 1);
+  const pathD = points
+    .map((p, i) => `${i === 0 ? "M" : "L"}${i * step},${h - (p / max) * h}`)
+    .join(" ");
+  const areaD = `${pathD} L${(points.length - 1) * step},${h} L0,${h} Z`;
+  return (
+    <MockPanel title="Purchase Rate" badge={<span className="text-[11px] font-semibold text-zinc-800">42%</span>}>
+      <div className="mt-2 flex-1">
+        <svg viewBox={`0 0 ${w} ${h}`} className="h-full w-full" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="prGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3b5bdb" stopOpacity="0.18" />
+              <stop offset="100%" stopColor="#3b5bdb" stopOpacity="0.02" />
+            </linearGradient>
+          </defs>
+          <path d={areaD} fill="url(#prGrad)" />
+          <path d={pathD} fill="none" stroke="#1e3a8a" strokeWidth="1.5" />
+        </svg>
+      </div>
+      <div className="mt-2 grid grid-cols-3 gap-1.5">
+        <div className="rounded-lg bg-zinc-100/80 px-2 py-1.5">
+          <p className="text-[7.5px] text-zinc-400">Overall Orders</p>
+          <p className="text-[10px] font-semibold text-zinc-800">34</p>
+        </div>
+        <div className="rounded-lg bg-zinc-100/80 px-2 py-1.5">
+          <p className="text-[7.5px] text-zinc-400">Revenue</p>
+          <p className="text-[10px] font-semibold text-zinc-800">$68.2K</p>
+        </div>
+        <div className="rounded-lg bg-zinc-100/80 px-2 py-1.5">
+          <p className="text-[7.5px] text-zinc-400">Purchase Increase</p>
+          <p className="text-[10px] font-semibold text-emerald-600">&#x2B06; 8% vs last week</p>
+        </div>
+      </div>
+    </MockPanel>
+  );
+}
+
+function AutomationMock() {
+  const items = [
+    { icon: "&#x1F4CB;", label: "Order Status Updates" },
+    { icon: "&#x1F514;", label: "Order Notifications" },
+    { icon: "&#x26A0;", label: "Escalations" },
+    { icon: "&#x1F4C4;", label: "Create Case" },
+  ];
+  return (
+    <MockPanel title="Automation Overview">
+      <div className="mt-3 flex flex-col gap-1.5">
+        {items.map((item) => (
+          <div key={item.label} className="flex items-center justify-between rounded-xl bg-zinc-100/80 px-3 py-2">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px]" dangerouslySetInnerHTML={{ __html: item.icon }} />
+              <span className="text-[9.5px] font-medium text-zinc-700">{item.label}</span>
+            </div>
+            <span className="text-[9px] font-semibold text-emerald-600">Automated</span>
+          </div>
+        ))}
       </div>
     </MockPanel>
   );
@@ -308,21 +389,21 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
         sub: "auto part + warranty match",
         body: "Part identified, warranty verified, purchase matched, claims resolved in minutes.",
         icon: ShieldCheck,
-        media: "/outcomes/customer-claims.png",
+        mock: ClaimMock,
       },
       {
         metric: "Higher repeat revenue",
         sub: "engagement into lifetime",
         body: "Engagement signals become repeat purchases and higher lifetime value.",
         icon: TrendUp,
-        media: "/outcomes/customer-revenue.png",
+        mock: PurchaseRateMock,
       },
       {
         metric: "Routine work, automated",
         sub: "one surface, every service desk",
         body: "One command surface automating routine service work across every desk.",
         icon: Robot,
-        media: "/outcomes/customer-automation.png",
+        mock: AutomationMock,
       },
     ],
   },

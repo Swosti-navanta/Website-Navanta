@@ -83,8 +83,9 @@ export default function AboutPage() {
         {/* Photo strip, near full-bleed, center image leads */}
         <section className="mt-16 px-3 sm:mt-20">
           <FadeIn>
-            <div className="grid gap-3">
-              <div className="grid h-[160px] grid-cols-2 gap-3 sm:h-[260px] lg:h-[340px]">
+            {/* Mobile: bento (2 top + 1 full-width bottom) */}
+            <div className="grid gap-3 sm:hidden">
+              <div className="grid h-[160px] grid-cols-2 gap-3">
                 {PHOTOS.slice(0, 2).map((p) => (
                   <div key={p.src} className="overflow-hidden rounded-2xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -92,10 +93,19 @@ export default function AboutPage() {
                   </div>
                 ))}
               </div>
-              <div className="h-[140px] overflow-hidden rounded-2xl sm:h-[220px] lg:h-[280px]">
+              <div className="h-[140px] overflow-hidden rounded-2xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={PHOTOS[2].src} alt={PHOTOS[2].alt} className="h-full w-full object-cover" />
               </div>
+            </div>
+            {/* Desktop: original 3-column */}
+            <div className="hidden h-[380px] grid-cols-[1fr_1.6fr_1fr] gap-3 sm:grid lg:h-[480px]">
+              {PHOTOS.map((p) => (
+                <div key={p.src} className="overflow-hidden rounded-2xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={p.src} alt={p.alt} className="h-full w-full object-cover" />
+                </div>
+              ))}
             </div>
           </FadeIn>
         </section>

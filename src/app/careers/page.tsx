@@ -52,32 +52,36 @@ export default function CareersPage() {
         <section className="bg-white pt-16">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
-              <div className="grid gap-3">
-                <div className="grid h-[160px] grid-cols-2 gap-3 sm:h-[260px] lg:h-[340px]">
+              {/* Mobile: bento (2 top + 1 full-width bottom) */}
+              <div className="grid gap-3 sm:hidden">
+                <div className="grid h-[160px] grid-cols-2 gap-3">
                   <div className="overflow-hidden rounded-2xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/figma/challenges-photo.jpg"
-                      alt="Navanta team at work"
-                      className="h-full w-full object-cover"
-                    />
+                    <img src="/figma/challenges-photo.jpg" alt="Navanta team at work" className="h-full w-full object-cover" />
                   </div>
                   <div className="overflow-hidden rounded-2xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/hero/poster.jpg"
-                      alt="Inside a Navanta client warehouse"
-                      className="h-full w-full object-cover"
-                    />
+                    <img src="/hero/poster.jpg" alt="Inside a Navanta client warehouse" className="h-full w-full object-cover" />
                   </div>
                 </div>
-                <div className="h-[140px] overflow-hidden rounded-2xl sm:h-[220px] lg:h-[280px]">
+                <div className="h-[140px] overflow-hidden rounded-2xl">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/figma/footer-railyard.jpg"
-                    alt="Industrial operations"
-                    className="h-full w-full object-cover"
-                  />
+                  <img src="/figma/footer-railyard.jpg" alt="Industrial operations" className="h-full w-full object-cover" />
+                </div>
+              </div>
+              {/* Desktop: original 3-column */}
+              <div className="hidden h-[260px] gap-4 sm:grid sm:grid-cols-3 lg:h-[380px]">
+                <div className="overflow-hidden rounded-2xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/figma/challenges-photo.jpg" alt="Navanta team at work" className="h-full w-full object-cover" />
+                </div>
+                <div className="overflow-hidden rounded-2xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/hero/poster.jpg" alt="Inside a Navanta client warehouse" className="h-full w-full object-cover" />
+                </div>
+                <div className="overflow-hidden rounded-2xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/figma/footer-railyard.jpg" alt="Industrial operations" className="h-full w-full object-cover" />
                 </div>
               </div>
             </FadeIn>
