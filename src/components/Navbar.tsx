@@ -94,7 +94,7 @@ export default function Navbar() {
         <a href="/" className="relative flex items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/navanta-logo.svg"
+            src="/navanta-logo-hero.png"
             alt="Navanta, Enabling Intelligent Enterprises"
             className={`h-9 w-auto transition-opacity duration-300 ${light ? "opacity-0" : "opacity-100"}`}
           />
