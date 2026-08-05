@@ -22,6 +22,11 @@ import {
   Sparkle,
   CaretDown,
   Gauge,
+  Receipt,
+  Factory,
+  ChartLineUp,
+  Sliders,
+  Gear,
   type Icon,
 } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
@@ -216,20 +221,53 @@ function DashShell({
   return (
     <div className="flex h-[720px] w-full max-w-[1060px] overflow-hidden rounded-2xl bg-white shadow-[0_32px_90px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
       <div className="flex w-full">
-        {/* App sidebar */}
-        <div className="flex w-11 flex-shrink-0 flex-col items-center gap-2.5 border-r border-zinc-100 py-3.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-900 text-[10px] font-semibold text-white">
-            N
-          </span>
-          <span className="mt-2 flex h-7 w-7 items-center justify-center rounded-md bg-[#EBE8F3]">
-            <SquaresFour size={14} className="text-[#5C3D97]" />
-          </span>
-          <span className="flex h-7 w-7 items-center justify-center rounded-md">
-            <ChatCircleText size={14} className="text-zinc-300" />
-          </span>
-          <span className="flex h-7 w-7 items-center justify-center rounded-md">
-            <Gauge size={14} className="text-zinc-300" />
-          </span>
+        {/* App sidebar — grouped nav with brand mark on top, gear + avatar pinned bottom */}
+        <div className="flex w-11 flex-shrink-0 flex-col items-center border-r border-zinc-100 py-3">
+          {/* Brand mark */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/navanta-logo-hero.png" alt="" aria-hidden className="h-6 w-auto" />
+
+          {/* Primary nav */}
+          <div className="mt-4 flex flex-col items-center gap-1.5">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-100 ring-1 ring-zinc-200">
+              <SquaresFour size={13} weight="fill" className="text-zinc-700" />
+            </span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-md">
+              <Receipt size={13} className="text-zinc-400" />
+            </span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-md">
+              <Gauge size={13} className="text-zinc-400" />
+            </span>
+          </div>
+
+          <div className="my-3 h-px w-6 bg-zinc-100" />
+
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md">
+              <Factory size={13} className="text-zinc-400" />
+            </span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-md">
+              <ChartLineUp size={13} className="text-zinc-400" />
+            </span>
+          </div>
+
+          <div className="my-3 h-px w-6 bg-zinc-100" />
+
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md">
+              <Sliders size={13} className="text-zinc-400" />
+            </span>
+          </div>
+
+          {/* Bottom cluster */}
+          <div className="mt-auto flex flex-col items-center gap-2 pt-4">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md">
+              <Gear size={13} className="text-zinc-400" />
+            </span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3b5bdb] text-[9.5px] font-semibold text-white">
+              FL
+            </span>
+          </div>
         </div>
         <div className="flex min-w-0 flex-1 flex-col">
           {/* Top bar */}
