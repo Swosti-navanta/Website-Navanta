@@ -21,6 +21,7 @@ const TEAM: Slot[] = [
   null,
   { name: "Ashish Sharma", role: "Design Lead", img: "/team/ashish.jpg" },
   { name: "Ashutosh Thakur", role: "Full Stack Developer", img: "/team/ashutosh.jpg" },
+  { name: "Mahi Gangal", role: "Product Engineer Intern", img: "/team/mahi.jpg" },
   { name: "Pinki Raut", role: "Administrative Officer", img: "/team/pinki.jpg" },
   { name: "Rishab Kumar", role: "Data Engineer", img: "/team/rishab.jpg" },
   { name: "Sharan Sasi", role: "Lead Data Scientist", img: "/team/sharan.jpg" },
