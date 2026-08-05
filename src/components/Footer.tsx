@@ -14,12 +14,7 @@ const PRODUCT_LINKS = [
   { label: "Navanta Lens", href: "/#intelligence" },
   { label: "Driving Outcomes", href: "/#outcomes" },
   { label: "The Approach", href: "/#features" },
-];
-
-const COMPANY_LINKS = [
-  { label: "About", href: "/about" },
-  { label: "Team", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "The Advantages", href: "/#advantages" },
 ];
 
 export default function Footer() {
@@ -73,18 +68,9 @@ export default function Footer() {
                 ))}
               </ul>
 
-              <div className="mt-14 grid grid-cols-2 gap-8">
+              <div className="mt-14">
                 <ul className="space-y-3">
                   {PRODUCT_LINKS.map((l) => (
-                    <li key={l.label}>
-                      <a href={l.href} className="text-[15px] text-white/80 hover:text-white">
-                        {l.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <ul className="space-y-3">
-                  {COMPANY_LINKS.map((l) => (
                     <li key={l.label}>
                       <a href={l.href} className="text-[15px] text-white/80 hover:text-white">
                         {l.label}
