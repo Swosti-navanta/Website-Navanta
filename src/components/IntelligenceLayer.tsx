@@ -1499,13 +1499,13 @@ export default function IntelligenceLayer() {
       data-nav-theme="dark"
       className="relative overflow-hidden bg-[#050505] py-28"
     >
-      {/* Aurora wash, official background asset from the Figma redesign */}
+      {/* Aurora wash — purple aurora background */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/figma/lens-aurora.jpg"
         alt=""
         aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40"
       />
       <div className="relative mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>

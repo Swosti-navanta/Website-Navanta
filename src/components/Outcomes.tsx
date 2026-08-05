@@ -382,28 +382,28 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
         sub: "customers self-serve live",
         body: "Live order visibility with exception-driven updates, no phone calls needed.",
         icon: PhoneSlash,
-        mock: OrderStatusMock,
+        media: "/outcomes/customer-status.png",
       },
       {
         metric: "Faster claims resolution",
         sub: "auto part + warranty match",
         body: "Part identified, warranty verified, purchase matched, claims resolved in minutes.",
         icon: ShieldCheck,
-        mock: ClaimMock,
+        media: "/outcomes/customer-claims.png",
       },
       {
         metric: "Higher repeat revenue",
         sub: "engagement into lifetime",
         body: "Engagement signals become repeat purchases and higher lifetime value.",
         icon: TrendUp,
-        mock: PurchaseRateMock,
+        media: "/outcomes/customer-revenue.png",
       },
       {
         metric: "Routine work, automated",
         sub: "one surface, every service desk",
         body: "One command surface automating routine service work across every desk.",
         icon: Robot,
-        mock: AutomationMock,
+        media: "/outcomes/customer-automation.png",
       },
     ],
   },
@@ -483,10 +483,10 @@ const TABS: { key: string; label: string; cards: Card[] }[] = [
    composition rather than an empty placeholder. */
 function CardMedia({ src, Mock }: { src?: string; Mock?: React.ComponentType }) {
   return (
-    <div className="relative flex w-full items-center justify-center overflow-hidden rounded-xl">
+    <div className="relative flex w-full items-center justify-center overflow-hidden rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" aria-hidden className="w-full object-cover" style={{ aspectRatio: "1203/700" }} />
+        <img src={src} alt="" aria-hidden className="w-full" />
       ) : Mock ? (
         <div className="aspect-[1203/700] w-full" aria-hidden>
           <Mock />
