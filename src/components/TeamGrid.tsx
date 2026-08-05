@@ -12,9 +12,9 @@ type Member = {
 /* Broader team grid — 4 across, 2 rows. Fill in each member's name, role, and
    photo as they come in. Cards with no `img` show an initials placeholder. */
 const TEAM: Member[] = [
-  { name: "Tanuj Gupta", role: "Co-Founder", img: "/team/tanuj.jpg", imgPos: "60% 15%" },
-  { name: "Gaurav Kohli", role: "Co-Founder", img: "/team/gaurav.jpg", imgPos: "center 20%" },
-  { name: "Nitin Kumar", role: "Head of India Operations", img: "/team/nitin.jpg", imgPos: "center 14%" },
+  { name: "Tanuj Gupta", role: "Co-Founder", img: "/team/tanuj.jpg" },
+  { name: "Gaurav Kohli", role: "Co-Founder", img: "/team/gaurav.jpg" },
+  { name: "Nitin Kumar", role: "Head of India Operations", img: "/team/nitin.jpg" },
   { name: "Team Member", role: "Role" },
   { name: "Team Member", role: "Role" },
   { name: "Team Member", role: "Role" },
@@ -43,7 +43,7 @@ export default function TeamGrid() {
                 <img
                   src={m.img}
                   alt={`${m.name}, ${m.role}`}
-                  style={{ objectPosition: m.imgPos ?? "center 20%" }}
+                  style={{ objectPosition: m.imgPos ?? "center" }}
                   className="absolute inset-0 h-full w-full object-cover grayscale transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.045]"
                 />
               ) : (

@@ -9,7 +9,7 @@ const LEADERS = [
     role: "Co-Founder",
     email: "tanuj.gupta@navanta.ai",
     img: "/team/tanuj.jpg",
-    imgPos: "60% 15%",
+    imgPos: "center",
     bio: "Formerly EY Executive Director with 10 years leading AI & digital supply chain transformation for industrial enterprises across North America.",
   },
   {
@@ -17,7 +17,7 @@ const LEADERS = [
     role: "Co-Founder",
     email: "gaurav.kohli@navanta.ai",
     img: "/team/gaurav.jpg",
-    imgPos: "center 20%",
+    imgPos: "center",
     bio: "Formerly EY Partner with 20 years architecting enterprise AI & supply chain programs for global manufacturers, ERP foundations to autonomous operations.",
   },
   {
@@ -25,7 +25,7 @@ const LEADERS = [
     role: "Head of India Operations",
     email: "nitin.kumar@navanta.ai",
     img: "/team/nitin.jpg",
-    imgPos: "center 14%",
+    imgPos: "center",
     bio: "Leads Navanta's scaled engineering and delivery teams, turning the intelligence layer into production outcomes for every engagement.",
   },
 ];
