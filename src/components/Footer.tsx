@@ -47,7 +47,7 @@ export default function Footer() {
       <div className="mx-auto max-w-[1560px] px-6 pb-8 pt-24 lg:px-10">
         {/* Big primary links */}
         <FadeIn>
-          <div className="grid gap-12 md:grid-cols-3 md:gap-16">
+          <div className="grid gap-12 md:grid-cols-3 md:gap-8 [&>*:nth-child(2)]:md:justify-self-center [&>*:nth-child(3)]:md:justify-self-end">
             <p className="max-w-xs text-[13.5px] leading-relaxed text-white/55">
               Navanta is the supply chain intelligence layer for industrial
               enterprises — unifying orders, inventory, and procurement into
