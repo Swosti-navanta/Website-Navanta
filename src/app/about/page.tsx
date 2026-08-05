@@ -134,6 +134,32 @@ export default function AboutPage() {
         </section>
 
         {/* Beliefs, same editorial grid, flat tiles */}
+        {/* Leadership, same editorial grid */}
+        <section data-nav-theme="dark" className="bg-[#0c0b0a] py-28">
+          <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
+            <FadeIn>
+              <div>
+                <h2 className="font-medium tracking-tight text-white">
+                  The people who set the tempo.
+                </h2>
+                <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-white/55">
+                  A lifetime on the problem, and the passion hasn&apos;t faded. The leadership team at Navanta goes back more than a decade together, across multiple ventures and some of the hardest problems in supply chain. With over 20 years working alongside the world&apos;s largest global supply chains, the proof is in the work. And they&apos;re not done yet.
+                </p>
+              </div>
+            </FadeIn>
+            <LeadershipCards />
+
+            <div className="mt-24">
+              <FadeIn>
+                <h3 className="text-[24px] font-medium tracking-tight text-white sm:text-[28px]">
+                  The team behind the work
+                </h3>
+              </FadeIn>
+              <TeamGrid />
+            </div>
+          </div>
+        </section>
+
         <section className="bg-[#fafaf9] py-28">
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <FadeIn>
@@ -171,32 +197,6 @@ export default function AboutPage() {
                 </p>
               </div>
             </FadeIn>
-          </div>
-        </section>
-
-        {/* Leadership, same editorial grid */}
-        <section data-nav-theme="dark" className="bg-[#0c0b0a] py-28">
-          <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
-            <FadeIn>
-              <div>
-                <h2 className="font-medium tracking-tight text-white">
-                  The people who set the tempo.
-                </h2>
-                <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-white/55">
-                  A lifetime on the problem, and the passion hasn&apos;t faded. The leadership team at Navanta goes back more than a decade together, across multiple ventures and some of the hardest problems in supply chain. With over 20 years working alongside the world&apos;s largest global supply chains, the proof is in the work. And they&apos;re not done yet.
-                </p>
-              </div>
-            </FadeIn>
-            <LeadershipCards />
-
-            <div className="mt-24">
-              <FadeIn>
-                <h3 className="text-[24px] font-medium tracking-tight text-white sm:text-[28px]">
-                  The team behind the work
-                </h3>
-              </FadeIn>
-              <TeamGrid />
-            </div>
           </div>
         </section>
 
