@@ -118,7 +118,7 @@ export default function HowWeEnable() {
 
         <FadeIn delay={0.1} className="mt-6">
           {/* Diagram canvas */}
-          <div className="rounded-2xl border border-zinc-100 bg-[radial-gradient(#e5e5e8_1px,transparent_1px)] [background-size:22px_22px] p-3 sm:p-6">
+          <div className="rounded-2xl border border-zinc-100 bg-[radial-gradient(#c8c8cf_1.2px,transparent_1.2px)] [background-size:22px_22px] p-3 sm:p-6">
             <div className="mx-auto max-w-[1180px]">
               {/* ── Intelligent Operational Model ─────────────────────────── */}
               <div className="relative">
