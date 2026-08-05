@@ -4,9 +4,9 @@ import { useEffect, useRef } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import FadeIn from "./FadeIn";
 
-const MAIN_LINKS = [
+const COMPANY_LINKS = [
   { label: "About", href: "/about" },
-  { label: "Careers", href: "/careers" },
+  { label: "Team", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -47,39 +47,30 @@ export default function Footer() {
       <div className="mx-auto max-w-[1560px] px-6 pb-8 pt-24 lg:px-10">
         {/* Big primary links */}
         <FadeIn>
-          <div className="grid gap-16 md:grid-cols-2">
-            <p className="max-w-xs self-end text-[13.5px] leading-relaxed text-white/55">
+          <div className="grid gap-12 md:grid-cols-3 md:gap-16">
+            <p className="max-w-xs text-[13.5px] leading-relaxed text-white/55">
               Navanta is the supply chain intelligence layer for industrial
-              enterprises, unifying orders, inventory, and procurement into
+              enterprises — unifying orders, inventory, and procurement into
               decisions that protect margin, growth, and customer trust.
             </p>
-            <div>
-              <ul className="flex flex-wrap gap-x-8 gap-y-2">
-                {MAIN_LINKS.map((l) => (
-                  <li key={l.label}>
-                    <a
-                      href={l.href}
-                      className="group relative inline-block text-[30px] font-medium text-white transition-colors hover:text-white/70 sm:text-[34px]"
-                    >
-                      {l.label}
-                      <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-10">
-                <ul className="flex flex-wrap gap-x-6 gap-y-2">
-                  {PRODUCT_LINKS.map((l) => (
-                    <li key={l.label}>
-                      <a href={l.href} className="text-[15px] text-white/80 hover:text-white">
-                        {l.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <ul className="space-y-3">
+              {COMPANY_LINKS.map((l) => (
+                <li key={l.label}>
+                  <a href={l.href} className="text-[15px] text-white/80 transition-colors hover:text-white">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <ul className="space-y-3">
+              {PRODUCT_LINKS.map((l) => (
+                <li key={l.label}>
+                  <a href={l.href} className="text-[15px] text-white/80 transition-colors hover:text-white">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </FadeIn>
 
