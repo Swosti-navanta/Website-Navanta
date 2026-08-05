@@ -271,8 +271,8 @@ function Select({ children }: { children: React.ReactNode }) {
 /* Branded AI entry point — mirrors the "Ask …" button in the product */
 function AskLens() {
   return (
-    <span className="flex items-center gap-1 whitespace-nowrap rounded-lg bg-[#4b3382] px-2.5 py-1.5 text-[11px] font-medium text-white">
-      <Sparkle size={11} weight="fill" /> Ask Lens
+    <span className="flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-gradient-to-b from-[#3a3480] to-[#1e1f5e] px-3 py-1.5 text-[11.5px] font-medium text-white shadow-[0_2px_6px_rgba(30,31,94,0.35),inset_0_1px_0_rgba(255,255,255,0.15)] ring-1 ring-white/10">
+      <Sparkle size={12} weight="fill" className="text-[#b8a3ff]" /> Ask Lens
     </span>
   );
 }
