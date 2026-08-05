@@ -44,7 +44,7 @@ export default function Footer() {
 
   return (
     <footer id="contact" className="bg-[#0c0b0a] text-white">
-      <div className="mx-auto flex min-h-[calc(100vh-56px)] max-w-[1560px] flex-col justify-end px-6 pb-8 pt-24 lg:px-10">
+      <div className="mx-auto max-w-[1560px] px-6 pb-8 pt-24 lg:px-10">
         {/* Big primary links */}
         <FadeIn>
           <div className="grid gap-12 md:grid-cols-[1fr_auto_auto] md:gap-x-24">
