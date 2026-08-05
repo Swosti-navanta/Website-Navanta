@@ -25,6 +25,7 @@ const TEAM: Slot[] = [
   { name: "Pinki Raut", role: "Administrative Officer", img: "/team/pinki.jpg" },
   { name: "Ashutosh Thakur", role: "Full Stack Developer", img: "/team/ashutosh.jpg" },
   { name: "Vilakshna Bansal", role: "Product Manager", img: "/team/vilakshna.jpg" },
+  { name: "Rishab Kumar", role: "Data Engineer", img: "/team/rishab.jpg" },
 ];
 
 function initials(name: string) {
