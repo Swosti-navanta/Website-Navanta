@@ -233,21 +233,10 @@ function DashShell({
               <SquaresFour size={13} weight="fill" className="text-zinc-700" />
             </span>
             <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Receipt size={13} className="text-zinc-400" />
+              <Receipt size={14} weight="bold" className="text-[#71717A]" />
             </span>
             <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Gauge size={13} className="text-zinc-400" />
-            </span>
-          </div>
-
-          <div className="my-3 h-px w-6 bg-zinc-100" />
-
-          <div className="flex flex-col items-center gap-1.5">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Factory size={13} className="text-zinc-400" />
-            </span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <ChartLineUp size={13} className="text-zinc-400" />
+              <Gauge size={14} weight="bold" className="text-[#71717A]" />
             </span>
           </div>
 
@@ -255,14 +244,25 @@ function DashShell({
 
           <div className="flex flex-col items-center gap-1.5">
             <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Sliders size={13} className="text-zinc-400" />
+              <Factory size={14} weight="bold" className="text-[#71717A]" />
+            </span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-md">
+              <ChartLineUp size={14} weight="bold" className="text-[#71717A]" />
+            </span>
+          </div>
+
+          <div className="my-3 h-px w-6 bg-zinc-100" />
+
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md">
+              <Sliders size={14} weight="bold" className="text-[#71717A]" />
             </span>
           </div>
 
           {/* Bottom cluster */}
           <div className="mt-auto flex flex-col items-center gap-2 pt-4">
             <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Gear size={13} className="text-zinc-400" />
+              <Gear size={14} weight="bold" className="text-[#71717A]" />
             </span>
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3b5bdb] text-[9.5px] font-semibold text-white">
               FL
@@ -301,7 +301,7 @@ function DashShell({
 function Select({ children }: { children: React.ReactNode }) {
   return (
     <span className="flex items-center gap-1 whitespace-nowrap rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-[11px] font-medium text-zinc-600">
-      {children} <CaretDown size={9} className="text-zinc-400" />
+      {children} <CaretDown size={9} className="text-[#71717A]" />
     </span>
   );
 }
@@ -309,8 +309,8 @@ function Select({ children }: { children: React.ReactNode }) {
 /* Branded AI entry point — mirrors the "Ask …" button in the product */
 function AskLens() {
   return (
-    <span className="flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-gradient-to-b from-[#3a3480] to-[#1e1f5e] px-3 py-1.5 text-[11.5px] font-medium text-white shadow-[0_2px_6px_rgba(30,31,94,0.35),inset_0_1px_0_rgba(255,255,255,0.15)] ring-1 ring-white/10">
-      <Sparkle size={12} weight="fill" className="text-[#b8a3ff]" /> Ask Lens
+    <span className="flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-gradient-to-b from-[#2a2e7a] to-[#151647] px-3.5 py-2 text-[12px] font-semibold text-white shadow-[0_4px_10px_rgba(21,22,71,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] ring-1 ring-white/10">
+      <Sparkle size={14} weight="fill" className="text-[#c8b6ff]" /> Ask Lens
     </span>
   );
 }
@@ -994,7 +994,7 @@ function WorkspaceDashboard() {
     >
       {/* Intelligent Self-Service, search by name, SKU, or image */}
       <div className="flex items-center gap-2.5 rounded-xl bg-white px-3.5 py-2.5 ring-1 ring-zinc-100">
-        <MagnifyingGlass size={14} className="text-zinc-400" />
+        <MagnifyingGlass size={14} className="text-[#71717A]" />
         <p className="text-[12px] text-zinc-900">
           oak plank 8mm<span className="animate-pulse text-zinc-400">|</span>
         </p>
@@ -1119,7 +1119,7 @@ function SpendDashboard() {
               <CheckCircle size={10} weight="fill" className="text-emerald-500" /> {s}
             </span>
           ))}
-          <ArrowRight size={11} className="text-zinc-400" />
+          <ArrowRight size={11} className="text-[#71717A]" />
           <span className="rounded-md bg-[#EBE8F3] px-2 py-1 text-[10px] font-medium text-[#5C3D97]">
             One source of truth
           </span>

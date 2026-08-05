@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
-import { OpenDemoButton } from "@/components/DemoModal";
 import AboutMissionHeading from "@/components/AboutMissionHeading";
 import LeadershipCards from "@/components/LeadershipCards";
 import TeamGrid from "@/components/TeamGrid";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
   title: "About | Navanta",
@@ -200,41 +198,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* CTA band, full-bleed background image */}
-        <section data-nav-theme="dark" className="relative overflow-hidden py-28 sm:py-36">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/figma/footer-railyard.jpg"
-            alt=""
-            aria-hidden
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-black/70"
-          />
-          <div className="relative mx-auto max-w-[1560px] px-6 text-center lg:px-10">
-            <FadeIn>
-              <h2 className="font-medium tracking-tight text-white">
-                Build the intelligence layer with us
-              </h2>
-              <p className="mx-auto mt-4 max-w-md text-[15px] text-white/60">
-                Join the team, or see Navanta running on your own data within a week.
-              </p>
-              <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <a
-                  href="/careers"
-                  className="flex items-center gap-1.5 rounded-lg bg-white px-5 py-3 text-[14px] font-medium text-black transition-colors hover:bg-white/90"
-                >
-                  Open positions <ArrowRight size={14} weight="bold" />
-                </a>
-                <OpenDemoButton className="rounded-lg border border-white/30 px-5 py-3 text-[14px] font-medium text-white transition-colors hover:border-white/60 hover:bg-white/5">
-                  Request a Demo
-                </OpenDemoButton>
-              </div>
-            </FadeIn>
-          </div>
-        </section>
       </main>
       <Footer />
     </>
