@@ -19,7 +19,7 @@ const TEAM: Slot[] = [
   { name: "Gaurav Kohli", role: "Co-Founder", img: "/team/gaurav.jpg" },
   { name: "Nitin Kumar", role: "Head of India Operations", img: "/team/nitin.jpg" },
   null,
-  { name: "Team Member", role: "Role" },
+  { name: "Pinki Raut", role: "Administrative Officer", img: "/team/pinki.jpg" },
   { name: "Team Member", role: "Role" },
   { name: "Team Member", role: "Role" },
   { name: "Team Member", role: "Role" },
