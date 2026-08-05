@@ -9,13 +9,16 @@ type Member = {
   imgPos?: string;
 };
 
+type Slot = Member | null;
+
 /* Broader team grid — 4 across, 2 rows. Fill in each member's name, role, and
-   photo as they come in. Cards with no `img` show an initials placeholder. */
-const TEAM: Member[] = [
+   photo as they come in. Cards with no `img` show an initials placeholder;
+   `null` leaves the slot empty (renders a spacer, keeps the grid columns). */
+const TEAM: Slot[] = [
   { name: "Tanuj Gupta", role: "Co-Founder", img: "/team/tanuj.jpg" },
   { name: "Gaurav Kohli", role: "Co-Founder", img: "/team/gaurav.jpg" },
   { name: "Nitin Kumar", role: "Head of India Operations", img: "/team/nitin.jpg" },
-  { name: "Team Member", role: "Role" },
+  null,
   { name: "Team Member", role: "Role" },
   { name: "Team Member", role: "Role" },
   { name: "Team Member", role: "Role" },
@@ -34,7 +37,9 @@ function initials(name: string) {
 export default function TeamGrid() {
   return (
     <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-      {TEAM.map((m, i) => (
+      {TEAM.map((m, i) => {
+        if (!m) return <div key={i} aria-hidden />;
+        return (
         <FadeIn key={i} delay={(i % 4) * 0.06}>
           <div className="group">
             <div className="relative aspect-square overflow-hidden rounded-xl bg-[#181818]">
@@ -60,7 +65,8 @@ export default function TeamGrid() {
             </div>
           </div>
         </FadeIn>
-      ))}
+        );
+      })}
     </div>
   );
 }
