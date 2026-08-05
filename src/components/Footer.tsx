@@ -44,7 +44,7 @@ export default function Footer() {
 
   return (
     <footer id="contact" className="bg-[#0c0b0a] text-white">
-      <div className="mx-auto flex max-w-[1560px] flex-col px-6 pb-8 pt-24 md:min-h-[calc(100svh-72px)] md:snap-start md:justify-end lg:px-10">
+      <div className="mx-auto max-w-[1560px] px-6 pb-8 pt-24 lg:px-10">
         {/* Big primary links */}
         <FadeIn>
           <div className="grid gap-12 md:grid-cols-[1fr_auto_auto] md:gap-x-24">
@@ -91,7 +91,7 @@ export default function Footer() {
       {/* Brand image band, rail-yard photo, curved top, sits below the legal bar */}
       <div
         ref={bandRef}
-        className="relative flex h-[440px] items-center justify-center overflow-hidden rounded-t-[40px] sm:h-[600px] md:snap-start"
+        className="relative flex h-[440px] items-center justify-center overflow-hidden rounded-t-[40px] sm:h-[600px]"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <motion.img

@@ -26,16 +26,6 @@ body {
   font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Two-stage footer reveal: scroll-snap only engages near elements that opt in
-   with `snap-start` (the footer content block and the warehouse band). Using
-   `proximity` keeps the rest of the page scrolling normally. Desktop only —
-   on touch devices a tall snapping footer feels sluggish. */
-@media (min-width: 768px) and (pointer: fine) {
-  html {
-    scroll-snap-type: y proximity;
-  }
-}
-
 h2 {
   font-size: 32px;
   font-weight: 500;
