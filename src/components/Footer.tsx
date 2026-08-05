@@ -54,7 +54,7 @@ export default function Footer() {
               decisions that protect margin, growth, and customer trust.
             </p>
             <div>
-              <ul className="space-y-1.5">
+              <ul className="flex flex-wrap gap-x-8 gap-y-2">
                 {MAIN_LINKS.map((l) => (
                   <li key={l.label}>
                     <a
@@ -68,8 +68,8 @@ export default function Footer() {
                 ))}
               </ul>
 
-              <div className="mt-14">
-                <ul className="space-y-3">
+              <div className="mt-10">
+                <ul className="flex flex-wrap gap-x-6 gap-y-2">
                   {PRODUCT_LINKS.map((l) => (
                     <li key={l.label}>
                       <a href={l.href} className="text-[15px] text-white/80 hover:text-white">
