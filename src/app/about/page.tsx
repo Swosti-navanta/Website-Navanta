@@ -5,6 +5,7 @@ import FadeIn from "@/components/FadeIn";
 import { OpenDemoButton } from "@/components/DemoModal";
 import AboutMissionHeading from "@/components/AboutMissionHeading";
 import LeadershipCards from "@/components/LeadershipCards";
+import TeamGrid from "@/components/TeamGrid";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
@@ -187,6 +188,15 @@ export default function AboutPage() {
               </div>
             </FadeIn>
             <LeadershipCards />
+
+            <div className="mt-24">
+              <FadeIn>
+                <h3 className="text-[24px] font-medium tracking-tight text-white sm:text-[28px]">
+                  The team behind the work
+                </h3>
+              </FadeIn>
+              <TeamGrid />
+            </div>
           </div>
         </section>
 

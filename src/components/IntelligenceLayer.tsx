@@ -225,7 +225,7 @@ function DashShell({
         <div className="flex w-11 flex-shrink-0 flex-col items-center border-r border-zinc-100 py-3">
           {/* Brand mark */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/navanta-logo-hero.png" alt="" aria-hidden className="h-6 w-auto" />
+          <img src="/navanta-mark.png" alt="" aria-hidden className="h-6 w-auto" />
 
           {/* Primary nav */}
           <div className="mt-4 flex flex-col items-center gap-1.5">

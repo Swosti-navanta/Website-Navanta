@@ -25,7 +25,7 @@ const LEADERS = [
     role: "Head of India Operations",
     email: "nitin.kumar@navanta.ai",
     img: "/team/nitin.jpg",
-    imgPos: "center 22%",
+    imgPos: "center 20%",
     bio: "Leads Navanta's scaled engineering and delivery teams, turning the intelligence layer into production outcomes for every engagement.",
   },
 ];
