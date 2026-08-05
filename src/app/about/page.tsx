@@ -3,7 +3,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
 import AboutMissionHeading from "@/components/AboutMissionHeading";
-import LeadershipCards from "@/components/LeadershipCards";
 import TeamGrid from "@/components/TeamGrid";
 
 export const metadata: Metadata = {
@@ -145,16 +144,7 @@ export default function AboutPage() {
                 </p>
               </div>
             </FadeIn>
-            <LeadershipCards />
-
-            <div className="mt-24">
-              <FadeIn>
-                <h3 className="text-[24px] font-medium tracking-tight text-white sm:text-[28px]">
-                  The team behind the work
-                </h3>
-              </FadeIn>
-              <TeamGrid />
-            </div>
+            <TeamGrid />
           </div>
         </section>
 
