@@ -9,15 +9,26 @@ import {
   useState,
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, CheckCircle } from "@phosphor-icons/react";
+import {
+  X,
+  CaretLeft,
+  CheckCircle,
+  ArrowRight,
+} from "@phosphor-icons/react";
 
 /* ── Content (Navanta-specific; swap freely) ─────────────────────────────── */
+
+// Placeholder available slots (UI-only).
+const DATES = ["Mon 3", "Tue 4", "Wed 5", "Thu 6", "Fri 7", "Mon 10"];
+const TIMES = ["9:00 AM", "10:30 AM", "1:00 PM", "2:30 PM", "4:00 PM"];
 
 const KPIS = [
   { value: "12–16 wks", label: "kickoff to launch" },
   { value: "30+", label: "enterprise systems" },
   { value: "50+", label: "supply-chain signals" },
 ];
+
+const STEPS = ["Date & Time", "Your Details"] as const;
 
 /* ── Context so any CTA can open the modal ───────────────────────────────── */
 
@@ -63,7 +74,10 @@ export function DemoModalProvider({ children }: { children: React.ReactNode }) {
 /* ── Modal ───────────────────────────────────────────────────────────────── */
 
 function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [submitted, setSubmitted] = useState(false);
+  const [step, setStep] = useState(0);
+  const [date, setDate] = useState<string | null>(null);
+  const [time, setTime] = useState<string | null>(null);
+  const [booked, setBooked] = useState(false);
 
   // Reset when it closes, and lock body scroll while open. Esc closes.
   useEffect(() => {
@@ -76,10 +90,20 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
         window.removeEventListener("keydown", onKey);
       };
     }
-    // small delay avoids a flash of the initial state while the close animation plays
-    const t = setTimeout(() => setSubmitted(false), 250);
+    // small delay avoids a flash of step 0 while the close animation plays
+    const t = setTimeout(() => {
+      setStep(0);
+      setDate(null);
+      setTime(null);
+      setBooked(false);
+    }, 250);
     return () => clearTimeout(t);
   }, [isOpen, onClose]);
+
+  const canAdvance =
+    (step === 0 && date !== null && time !== null) || step === 1;
+
+  const back = () => setStep((s) => Math.max(0, s - 1));
 
   return (
     <AnimatePresence>
@@ -101,33 +125,67 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
             <X size={18} weight="bold" />
           </button>
 
-          {/* Left, form (matches the contact page's Request a Demo form) */}
+          {/* Left, flow (vertically centered on cream, white step card) */}
           <div className="flex h-full flex-col justify-center overflow-y-auto px-6 py-16 sm:px-12 lg:px-20">
             <div className="mx-auto w-full max-w-[560px]">
               <h2 className="font-medium tracking-tight text-zinc-900">
                 Request a Demo
               </h2>
-              <p className="mt-3 max-w-md text-[15.5px] leading-relaxed text-zinc-500">
+              <p className="mt-2 max-w-md text-[14.5px] leading-relaxed text-zinc-500">
                 See Navanta on your data within a week, planning, procurement,
-                and order flows running on your own systems.
+                and order flows on your own systems.
               </p>
 
-              <div className="mt-8">
-                <AnimatePresence mode="wait">
-                  {submitted ? (
+              {/* Step card */}
+              <div className="mt-8 rounded-2xl border border-zinc-100 bg-white p-7 shadow-sm sm:p-9">
+                {step > 0 && !booked && (
+                  <button
+                    onClick={back}
+                    className="mb-3 flex items-center gap-1 text-[13px] font-medium text-zinc-400 transition-colors hover:text-zinc-700"
+                  >
+                    <CaretLeft size={13} weight="bold" /> Back
+                  </button>
+                )}
+
+                {/* Step indicator */}
+                {!booked && (
+                  <div className="flex gap-2">
+                    {STEPS.map((label, i) => (
+                      <div key={label} className="flex-1">
+                        <div
+                          className={`h-1 rounded-full transition-colors duration-300 ${
+                            i <= step ? "bg-[#5C3D97]" : "bg-zinc-200"
+                          }`}
+                        />
+                        <span
+                          className={`mt-1.5 block text-[11px] font-medium transition-colors ${
+                            i === step ? "text-zinc-900" : "text-zinc-400"
+                          }`}
+                        >
+                          {label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Body */}
+                <div className="mt-8">
+                  <AnimatePresence mode="wait">
+                  {booked ? (
                     <motion.div
                       key="done"
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex flex-col items-center py-8 text-center"
+                      className="flex h-full flex-col items-center justify-center py-10 text-center"
                     >
                       <CheckCircle size={54} weight="fill" className="text-[#5C3D97]" />
                       <h3 className="mt-4 text-[20px] font-medium text-zinc-900">
-                        Thanks — we&apos;ll be in touch
+                        You&apos;re booked in
                       </h3>
                       <p className="mt-2 max-w-xs text-[14px] leading-relaxed text-zinc-500">
-                        A confirmation is on its way to your inbox. We&apos;ll come
-                        prepared with your use case in mind.
+                        A calendar invite and confirmation are on their way to your
+                        inbox. We&apos;ll come prepared with your use case in mind.
                       </p>
                       <button
                         onClick={onClose}
@@ -136,46 +194,114 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                         Done
                       </button>
                     </motion.div>
+                  ) : step === 0 ? (
+                    <motion.div
+                      key="s1"
+                      initial={{ opacity: 0, x: 14 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -14 }}
+                      transition={{ duration: 0.22 }}
+                    >
+                      <p className="mb-2 text-[13px] font-medium text-zinc-700">Select a date</p>
+                      <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+                        {DATES.map((d) => (
+                          <button
+                            key={d}
+                            onClick={() => setDate(d)}
+                            className={`rounded-lg border py-3 text-[13px] font-medium transition-all ${
+                              date === d
+                                ? "border-[#5C3D97] bg-[#5C3D97] text-white"
+                                : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
+                            }`}
+                          >
+                            {d}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="mb-2 mt-8 text-[13px] font-medium text-zinc-700">
+                        Available times
+                      </p>
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                        {TIMES.map((t) => (
+                          <button
+                            key={t}
+                            onClick={() => setTime(t)}
+                            disabled={!date}
+                            className={`rounded-lg border py-2.5 text-[13px] font-medium transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
+                              time === t
+                                ? "border-[#5C3D97] bg-[#f7f4fc] text-[#5C3D97] ring-1 ring-[#5C3D97]"
+                                : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
+                            }`}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
                   ) : (
                     <motion.form
-                      key="form"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.2 }}
+                      key="s2"
+                      id="demo-modal-form"
+                      initial={{ opacity: 0, x: 14 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -14 }}
+                      transition={{ duration: 0.22 }}
                       onSubmit={(e) => {
                         e.preventDefault();
-                        setSubmitted(true);
+                        setBooked(true);
                       }}
                       className="space-y-4"
                     >
-                      <Field label="Name" name="name" type="text" required />
-                      <Field label="Work Email" name="email" type="email" required />
-                      <Field label="Company" name="company" type="text" required />
-                      <div>
-                        <label
-                          htmlFor="message"
-                          className="mb-1.5 block text-[13px] font-medium text-zinc-700"
-                        >
-                          Message
-                        </label>
-                        <textarea
-                          id="message"
-                          name="message"
-                          rows={4}
-                          className="w-full resize-none rounded-lg border border-zinc-200 bg-white px-4 py-3 text-[14px] text-zinc-900 outline-none transition-colors focus:border-[#5C3D97]"
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        className="rounded-lg bg-zinc-900 px-6 py-3 text-[14px] font-medium text-white transition-colors hover:bg-zinc-800"
-                      >
-                        Request a Demo
-                      </button>
+                      <Input label="Full Name" type="text" required />
+                      <Input label="Work Email" type="email" required />
+                      <Input label="Company" type="text" required />
+                      <Input label="Phone (optional)" type="tel" />
+                      <textarea
+                        placeholder="What would you like to focus on? (optional)"
+                        rows={3}
+                        className="w-full resize-none rounded-lg border border-zinc-200 bg-white px-4 py-3 text-[14px] text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-[#5C3D97]"
+                      />
+                      <label className="flex items-start gap-2 pt-1 text-[13px] text-zinc-600">
+                        <input type="checkbox" required className="mt-0.5 accent-[#5C3D97]" />
+                        <span>
+                          I agree to be contacted about my demo and accept the{" "}
+                          <a href="/privacy" className="underline hover:text-[#5C3D97]">
+                            privacy policy
+                          </a>
+                          .
+                        </span>
+                      </label>
+                      <button type="submit" className="hidden" />
                     </motion.form>
-                  )}
-                </AnimatePresence>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
+
+              {/* Primary action, full-width below the step card */}
+              {!booked && (
+                <div className="mt-4">
+                  {date && time && (
+                    <p className="mb-2.5 text-center text-[12.5px] text-zinc-400">
+                      {date}, {time}
+                    </p>
+                  )}
+                  <button
+                    onClick={() =>
+                      step === 1
+                        ? document
+                            .querySelector<HTMLFormElement>("#demo-modal-form")
+                            ?.requestSubmit()
+                        : setStep((s) => s + 1)
+                    }
+                    disabled={!canAdvance}
+                    className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-zinc-900 px-5 py-4 text-[14.5px] font-medium text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-300"
+                  >
+                    {step === 1 ? "Confirm Booking" : "Continue"}
+                    <ArrowRight size={15} weight="bold" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -224,29 +350,21 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
   );
 }
 
-function Field({
+function Input({
   label,
-  name,
   type,
   required,
 }: {
   label: string;
-  name: string;
   type: string;
   required?: boolean;
 }) {
   return (
-    <div>
-      <label htmlFor={name} className="mb-1.5 block text-[13px] font-medium text-zinc-700">
-        {label}
-      </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        required={required}
-        className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-[14px] text-zinc-900 outline-none transition-colors focus:border-[#5C3D97]"
-      />
-    </div>
+    <input
+      type={type}
+      required={required}
+      placeholder={label}
+      className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-[14px] text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-[#5C3D97]"
+    />
   );
 }
