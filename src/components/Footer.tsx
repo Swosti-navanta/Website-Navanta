@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import FadeIn from "./FadeIn";
+import { lenisRef } from "./SmoothScroll";
 
 /* Kept in step with the contact page, which is the source of truth for these.
    Split across two lines here purely for the footer's narrow column. */
@@ -46,6 +47,177 @@ export default function Footer() {
     };
   }, [scale]);
 
+  /* Two-stage reveal. Stage one: the page settles with the footer content on
+     screen and PEEK px of the image band showing below it. Stage two: the next
+     deliberate downward scroll eases the page to the very bottom.
+
+     The last version of this gate required 400ms of total input silence before
+     the second scroll counted — a trackpad's momentum tail kept resetting that
+     window, so the page felt stuck. This one never asks the user to stop:
+     while pinned it classifies wheel events by their delta profile. A momentum
+     tail decays monotonically and is discounted; a genuine new push (rising
+     deltas, a fresh event after a gap, or a discrete wheel notch) fills a
+     small budget and opens the gate — so "scroll again" always works, and a
+     single flick still can't blow through. */
+  useEffect(() => {
+    const band = bandRef.current;
+    if (!band) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const PEEK = 110; // px of the band visible at the stage-one rest
+    const DWELL_MS = 220; // ignore everything this soon after the pin — still the same flick
+    const GAP_MS = 140; // quiet gap that marks a new gesture
+    const BUDGET = 90; // px of intentional scroll that opens the gate
+    const REVEAL_S = 1.0;
+
+    let stage: "open" | "gated" | "revealing" | "done" = "open";
+    let engagedAt = 0; // when the pin landed
+    let lastDelta = 0; // previous wheel delta, for the rising-profile test
+    let lastEventAt = 0;
+    let counting = false; // a new gesture was detected — its deltas now count
+    let budget = 0;
+    let failsafe: ReturnType<typeof setTimeout> | undefined;
+
+    const gateY = () =>
+      Math.max(0, band.offsetTop - window.innerHeight + PEEK);
+    const bottomY = () =>
+      document.documentElement.scrollHeight - window.innerHeight;
+
+    const pin = () => {
+      stage = "gated";
+      engagedAt = performance.now();
+      lastDelta = 0;
+      lastEventAt = 0;
+      counting = false;
+      budget = 0;
+      lenisRef.current?.stop();
+      lenisRef.current?.scrollTo(gateY(), { immediate: true, force: true });
+    };
+
+    const release = () => {
+      stage = "open";
+      if (failsafe) clearTimeout(failsafe);
+      lenisRef.current?.start();
+    };
+
+    const startReveal = () => {
+      stage = "revealing";
+      // Lenis stays stopped so the gesture's tail can't fight the ease;
+      // `force` runs the scroll anyway and onComplete hands control back.
+      lenisRef.current?.scrollTo(bottomY(), {
+        duration: REVEAL_S,
+        immediate: reduced,
+        force: true,
+        onComplete: () => {
+          stage = "done";
+          if (failsafe) clearTimeout(failsafe);
+          lenisRef.current?.start();
+        },
+      });
+      // Never leave the page pinned if onComplete doesn't land.
+      failsafe = setTimeout(() => {
+        stage = "done";
+        lenisRef.current?.start();
+      }, REVEAL_S * 1000 + 600);
+    };
+
+    const onScroll = () => {
+      const gy = gateY();
+      // Short pages (band already visible at rest) get no gate at all.
+      if (gy <= 0 || bottomY() - gy < 60) return;
+      const y = window.scrollY;
+      if (stage === "open" && y >= gy - 1) {
+        pin();
+        return;
+      }
+      if (stage === "gated") {
+        // Keyboard / scrollbar moves bypass the wheel listener entirely:
+        // read intent straight from the scroll position instead.
+        if (y > gy + 40) startReveal();
+        else if (y < gy - 10) release();
+        return;
+      }
+      if (stage === "done" && y < gy - 80) stage = "open"; // re-arm above the gate
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (stage === "revealing") {
+        e.preventDefault(); // swallow the tail so it can't fight the ease
+        return;
+      }
+      if (stage !== "gated") return;
+      e.preventDefault(); // hold the stage-one rest
+      if (e.deltaY < 0) {
+        release();
+        return;
+      }
+      const now = performance.now();
+      if (now - engagedAt > DWELL_MS) {
+        // Momentum only ever decays — a delta that genuinely accelerates past
+        // the previous one is a new push, and an event after a quiet gap is a
+        // new gesture (discrete mouse-wheel notches always arrive after one).
+        // Either marks the start of real intent; from there the whole gesture
+        // counts, so the budget fills mid-ramp and the gate never demands a
+        // dead stop. A decaying tail alone never trips the detector.
+        const rising = e.deltaY > lastDelta * 1.2 + 2;
+        const fresh = now - lastEventAt > GAP_MS;
+        if (rising || fresh) counting = true;
+        if (counting) budget += e.deltaY;
+        if (budget >= BUDGET) startReveal();
+      }
+      lastDelta = e.deltaY;
+      lastEventAt = now;
+    };
+
+    // Touch drags are direct manipulation — no momentum tail to filter, so a
+    // short dwell alone separates the pinning swipe from the follow-up one.
+    let touchY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      touchY = e.touches[0].clientY;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (stage === "revealing") {
+        e.preventDefault();
+        return;
+      }
+      if (stage !== "gated") return;
+      const y = e.touches[0].clientY;
+      const delta = touchY - y; // >0 = dragging content up (scrolling down)
+      touchY = y;
+      e.preventDefault();
+      if (delta < 0) {
+        release();
+        return;
+      }
+      if (performance.now() - engagedAt > DWELL_MS) {
+        budget += delta;
+        if (budget >= 60) startReveal();
+      }
+    };
+
+    const onResize = () => {
+      if (stage === "gated")
+        lenisRef.current?.scrollTo(gateY(), { immediate: true, force: true });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("resize", onResize);
+    onScroll();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("resize", onResize);
+      if (failsafe) clearTimeout(failsafe);
+      lenisRef.current?.start(); // never leave scrolling locked
+    };
+  }, []);
 
   return (
     <footer id="contact" className="rounded-t-[40px] bg-[#0c0b0a] text-white">
