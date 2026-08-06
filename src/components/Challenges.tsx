@@ -110,7 +110,7 @@ export default function Challenges() {
             The Challenges
           </h2>
           <p className="mt-3 text-[16px] text-zinc-500">
-            From day one, our methodology and solutions work together across three pillars
+            The problems industrial supply chains live with every day
           </p>
         </FadeIn>
 

@@ -25,8 +25,8 @@ const MAP_DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${enc
 
 const DETAILS = [
   { icon: MapPin, label: "Address", value: ADDRESS },
-  { icon: EnvelopeSimple, label: "Email", value: "admin@navanta.ai", href: "mailto:admin@navanta.ai" },
-  { icon: Phone, label: "Phone", value: "+1 (___) ___-____" },
+  { icon: EnvelopeSimple, label: "Email", value: "info@navanta.ai", href: "mailto:info@navanta.ai" },
+  { icon: Phone, label: "Phone", value: "+1 (540) 579-2338", href: "tel:+15405792338" },
 ];
 
 

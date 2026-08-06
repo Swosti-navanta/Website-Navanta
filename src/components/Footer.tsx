@@ -7,7 +7,7 @@ import FadeIn from "./FadeIn";
 /* Kept in step with the contact page, which is the source of truth for these.
    Split across two lines here purely for the footer's narrow column. */
 const ADDRESS_LINES = ["8 The Green #8618", "Dover, DE 19901"];
-const EMAIL = "admin@navanta.ai";
+const EMAIL = "info@navanta.ai";
 
 const COMPANY_LINKS = [
   { label: "About", href: "/about" },
