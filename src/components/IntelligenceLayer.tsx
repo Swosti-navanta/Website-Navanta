@@ -613,15 +613,15 @@ function ConfBar({ pct }: { pct: number }) {
 }
 
 /* Dense product table */
-function MiniTable({ head, rows }: { head: string[]; rows: React.ReactNode[][] }) {
+function MiniTable({ head, rows }: { head: React.ReactNode[]; rows: React.ReactNode[][] }) {
   return (
     <div className="overflow-x-auto overflow-y-hidden rounded-lg ring-1 ring-zinc-100">
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-zinc-50/80">
-            {head.map((h) => (
+            {head.map((h, i) => (
               <th
-                key={h}
+                key={i}
                 className="whitespace-nowrap px-3 py-2 text-left text-[10px] font-medium text-zinc-400"
               >
                 {h}
@@ -835,7 +835,17 @@ function PlanningDashboard() {
           />
         </div>
         <MiniTable
-          head={["Product", "Branch", "Exception", "Req. qty", "Value", "Lens insight", ""]}
+          head={[
+            "Product",
+            "Branch",
+            "Exception",
+            "Req. qty",
+            "Value",
+            <span key="lens" className="flex items-center gap-1">
+              <LensStar size={11} /> Lens Insight
+            </span>,
+            "",
+          ]}
           rows={[
             [
               sku("SKU-4482", "Evaporator coil"),
@@ -914,7 +924,17 @@ function BuyingDashboard() {
         }
       >
         <MiniTable
-          head={["Req. number", "Source", "Branch", "Avg lead time", "Total", "Type", "Action"]}
+          head={[
+            "Req. number",
+            "Source",
+            "Branch",
+            "Avg lead time",
+            "Total",
+            <span key="lens" className="flex items-center gap-1">
+              <LensStar size={11} /> Lens Insight
+            </span>,
+            "Action",
+          ]}
           rows={[
             [
               <span key="r" className="font-medium text-zinc-900">REQ-2026-1300</span>,
@@ -2085,7 +2105,7 @@ export default function IntelligenceLayer() {
       <div className="relative mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
           <h2 className="font-medium tracking-tight text-white">
-            The Navanta Lens
+            Introducing Navanta Lens
           </h2>
           <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-zinc-400">
             Our intelligence layer unifies your existing architecture, accelerating
