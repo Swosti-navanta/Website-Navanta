@@ -4,10 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import type { ComponentType, ReactNode } from "react";
 import {
   ArrowsLeftRight,
+  Brain,
+  Cpu,
   Database,
   Factory,
   Fan,
   Package,
+  SquaresFour,
   Truck,
   type Icon,
 } from "@phosphor-icons/react";
@@ -101,10 +104,10 @@ function DomainVisual({ active }: { active: boolean }) {
           ))}
         </div>
       </div>
-      <IndustryChip icon={Fan} label="HVAC" tilt="rotate-[-4deg]" active={active} className="left-[6%] top-[13%]" />
-      <IndustryChip icon={Factory} label="Manufacturing" tilt="rotate-[3deg]" active={active} className="right-[5%] top-[9%]" />
-      <IndustryChip icon={Package} label="Logistics" tilt="rotate-[3deg]" active={active} className="bottom-[14%] left-[7%]" />
-      <IndustryChip icon={Truck} label="Distribution" tilt="rotate-[-3deg]" active={active} className="bottom-[9%] right-[6%]" />
+      <IndustryChip icon={Fan} label="HVAC" tilt="rotate-[-4deg]" active={active} className="left-[6%] top-[6%]" />
+      <IndustryChip icon={Factory} label="Manufacturing" tilt="rotate-[3deg]" active={active} className="right-[5%] top-[8%]" />
+      <IndustryChip icon={Package} label="Logistics" tilt="rotate-[3deg]" active={active} className="bottom-[8%] left-[7%]" />
+      <IndustryChip icon={Truck} label="Distribution" tilt="rotate-[-3deg]" active={active} className="bottom-[6%] right-[6%]" />
     </div>
   );
 }
@@ -267,6 +270,7 @@ function OutcomeVisual({ active }: { active: boolean }) {
 
 type Pillar = {
   title: string;
+  icon: Icon;
   copy: string;
   chips: string[];
   visual: ComponentType<{ active: boolean }>;
@@ -275,18 +279,21 @@ type Pillar = {
 const PILLARS: Pillar[] = [
   {
     title: "Domain Expertise",
+    icon: SquaresFour,
     copy: "Navanta's team brings deep industry and function context, supply chain operators and AI engineers working as one.",
     chips: ["8+ industries", "30+ systems connected"],
     visual: DomainVisual,
   },
   {
     title: "Data Intelligence",
+    icon: Brain,
     copy: "Your data cleansed, unified, and reasoned over by the Lens, driving Agentic decisions and actions.",
     chips: ["734 SKUs reviewed / night", "50+ external signals"],
     visual: LensVisual,
   },
   {
     title: "Outcome Based",
+    icon: Cpu,
     copy: "We put our fees where our forecasts are, the majority of Navanta's fee is tied to measured outcomes.",
     chips: ["75% fees tied to outcomes", "12–16 weeks to launch"],
     visual: OutcomeVisual,
@@ -338,7 +345,12 @@ function PillarCard({
       </div>
 
       <div className="px-6 pb-6 pt-5">
-        <h3 className="text-[20px] font-medium text-zinc-900">{pillar.title}</h3>
+        <div className="flex items-center gap-3">
+          <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
+            <pillar.icon size={18} className="text-[#5C3D97]" />
+          </span>
+          <h3 className="text-[20px] font-medium text-zinc-900">{pillar.title}</h3>
+        </div>
         {/* 0fr → 1fr row reveal: the copy measures itself — no magic
             max-height numbers — and pushes the title up as it opens. Pinned
             open below md, where there is no hover to lean on. Tailwind v4's
@@ -396,7 +408,7 @@ export default function WhyUs() {
         {/* One FadeIn around the whole row — the cards must stay direct flex
             children for the grow transition to distribute widths. */}
         <FadeIn delay={0.1}>
-          <div className="mt-12 flex flex-col gap-6 md:h-[500px] md:flex-row">
+          <div className="mt-12 flex flex-col gap-6 md:h-[420px] md:flex-row">
             {PILLARS.map((p, i) => (
               <PillarCard
                 key={p.title}

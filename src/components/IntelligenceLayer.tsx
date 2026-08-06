@@ -1968,10 +1968,12 @@ function DashboardDeck({
   screens,
   active,
   tabKey,
+  onSelect,
 }: {
   screens: React.ComponentType[];
   active: number;
   tabKey: string;
+  onSelect?: (i: number) => void;
 }) {
   const n = screens.length;
   /* The back card sits behind and to the right, scaled down so it's inset top and
@@ -1999,6 +2001,7 @@ function DashboardDeck({
           const isFront = i === active;
           const isBack = i === (active + 1) % n;
           const shown = isFront || isBack;
+          const clickable = isBack && !!onSelect;
           return (
             <motion.div
               key={`${tabKey}-${i}`}
@@ -2010,7 +2013,16 @@ function DashboardDeck({
                 opacity: shown ? 1 : 0,
               }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              style={{ zIndex: isFront ? 10 : 1, pointerEvents: isFront ? "auto" : "none" }}
+              /* The waiting card's visible sliver is a tap target: clicking it
+                 promotes it to the front instead of waiting out the timer. */
+              onClick={clickable ? () => onSelect(i) : undefined}
+              role={clickable ? "button" : undefined}
+              aria-label={clickable ? "Show next dashboard" : undefined}
+              style={{
+                zIndex: isFront ? 10 : 1,
+                pointerEvents: shown ? "auto" : "none",
+                cursor: clickable ? "pointer" : undefined,
+              }}
             >
               <div className="relative h-full w-full overflow-hidden rounded-2xl">
                 <ScaledDashFill>
@@ -2163,7 +2175,12 @@ export default function IntelligenceLayer() {
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
               >
-                <DashboardDeck screens={screens} active={dashIdx} tabKey={tab.key} />
+                <DashboardDeck
+                  screens={screens}
+                  active={dashIdx}
+                  tabKey={tab.key}
+                  onSelect={setDashIdx}
+                />
               </div>
             </motion.div>
           </AnimatePresence>
