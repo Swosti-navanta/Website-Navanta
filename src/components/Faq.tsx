@@ -2,13 +2,17 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Plus, Minus } from "@phosphor-icons/react";
+import { Plus, Minus, ArrowRight } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
+import { OpenDemoButton } from "./DemoModal";
 
-const FAQS = [
+type Faq = { q: string; a: string; cta?: boolean };
+
+const FAQS: Faq[] = [
   {
     q: "Can I see a live demo on my own data?",
     a: "Yes. Book a call and within a week we'll show Navanta running on your industry's data, planning, procurement, and order flows using your own systems, not a generic sandbox.",
+    cta: true,
   },
   {
     q: "How long does implementation take?",
@@ -71,9 +75,17 @@ export default function Faq() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                     >
-                      <p className="px-6 pb-6 pl-16 text-[14.5px] leading-relaxed text-zinc-500">
-                        {f.a}
-                      </p>
+                      <div className="px-6 pb-6 pl-16">
+                        <p className="text-[14.5px] leading-relaxed text-zinc-500">
+                          {f.a}
+                        </p>
+                        {f.cta && (
+                          <OpenDemoButton className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-5 py-2.5 text-[13.5px] font-medium text-white transition-colors hover:bg-zinc-800">
+                            Request a Demo
+                            <ArrowRight size={14} weight="bold" />
+                          </OpenDemoButton>
+                        )}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
