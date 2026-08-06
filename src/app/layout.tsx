@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 import { DemoModalProvider } from "@/components/DemoModal";
-import { FeedbackWidget } from "@/components/FeedbackWidget";
 import "./globals.css";
 
 const inter = Inter({
@@ -27,7 +26,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <SmoothScroll />
         <DemoModalProvider>{children}</DemoModalProvider>
-        <FeedbackWidget />
       </body>
     </html>
   );

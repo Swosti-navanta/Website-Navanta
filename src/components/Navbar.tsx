@@ -11,7 +11,6 @@ const NAV_LINKS = [
   { label: "Intelligence", href: "/#intelligence" },
   { label: "Outcomes", href: "/#outcomes" },
   { label: "About", href: "/about" },
-  { label: "Career", href: "/careers" },
 ];
 
 /* Harvey-style scroll behavior (matched to the reference recording):

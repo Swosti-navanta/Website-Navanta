@@ -119,7 +119,7 @@ export default function AboutPage() {
                   <p className="mt-6 text-[15.5px] leading-relaxed text-zinc-500">
                     Navanta connects the systems enterprises already own, ERPs,
                     planning tools, supplier networks, external signals, into one
-                    governed intelligence layer, then puts AI agents to work on
+                    governed intelligence layer, then put AI Agents to work on
                     planning, procurement, and customer operations. Value lands in
                     weeks, is proven in the client&apos;s own numbers, and compounds
                     from there.
@@ -168,23 +168,6 @@ export default function AboutPage() {
                 </FadeIn>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* Pull quote, editorial break */}
-        <section className="py-28 sm:py-36">
-          <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
-            <FadeIn>
-              <div className="mx-auto max-w-3xl">
-                <p className="text-[26px] font-medium leading-snug tracking-tight text-zinc-900 sm:text-[34px]">
-                  &ldquo;The systems already exist. What&apos;s been missing is the
-                  intelligence layer that makes them act as one.&rdquo;
-                </p>
-                <p className="mt-6 text-[13.5px] text-zinc-400">
-                  Why Navanta exists
-                </p>
-              </div>
-            </FadeIn>
           </div>
         </section>
 

@@ -12,7 +12,6 @@ const EMAIL = "admin@navanta.ai";
 
 const COMPANY_LINKS = [
   { label: "About", href: "/about" },
-  { label: "Career", href: "/careers" },
   { label: "Contact", href: "/contact" },
 ];
 
