@@ -12,23 +12,173 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   X,
   CaretLeft,
+  CaretRight,
   CheckCircle,
   ArrowRight,
+  GlobeSimple,
 } from "@phosphor-icons/react";
+import DemoBrandPanel from "./DemoBrandPanel";
 
 /* ── Content (Navanta-specific; swap freely) ─────────────────────────────── */
 
-// Placeholder available slots (UI-only).
-const DATES = ["Mon 3", "Tue 4", "Wed 5", "Thu 6", "Fri 7", "Mon 10"];
+// Placeholder available times (UI-only).
 const TIMES = ["9:00 AM", "10:30 AM", "1:00 PM", "2:30 PM", "4:00 PM"];
 
-const KPIS = [
-  { value: "12–16 wks", label: "kickoff to launch" },
-  { value: "30+", label: "enterprise systems" },
-  { value: "50+", label: "supply-chain signals" },
-];
-
 const STEPS = ["Date & Time", "Your Details"] as const;
+
+/* How far out demos can be booked, and which days are open. Weekends are
+   closed; bookings run from tomorrow through BOOKING_WINDOW_DAYS ahead. */
+const BOOKING_WINDOW_DAYS = 21;
+
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+const WEEKDAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+
+/* Local-date → yyyy-mm-dd. Built from the calendar-date parts (not toISOString,
+   which would shift across the UTC boundary), so lexical string compares line
+   up with calendar days. */
+function toISODate(d: Date) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/* yyyy-mm → sortable month index, for bounding calendar navigation. */
+function monthIndexOf(iso: string) {
+  const [y, m] = iso.split("-").map(Number);
+  return y * 12 + (m - 1);
+}
+
+/* "2026-02-03" → "Tue, Feb 3" for the summary line. Parsed as local parts so
+   the weekday/day never drift by a timezone. */
+function formatFriendly(iso: string) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+/* ── Calendar ────────────────────────────────────────────────────────────── */
+
+function Calendar({
+  value,
+  onSelect,
+}: {
+  value: string | null;
+  onSelect: (iso: string) => void;
+}) {
+  // "now"-derived state is set on the client only, so the server render and the
+  // first client render match (no hydration mismatch) and dates stay correct.
+  const [mounted, setMounted] = useState(false);
+  const [view, setView] = useState({ y: 2025, m: 0 });
+  const [minISO, setMinISO] = useState("");
+  const [maxISO, setMaxISO] = useState("");
+
+  useEffect(() => {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const min = new Date(now);
+    min.setDate(min.getDate() + 1); // first bookable day is tomorrow
+    const max = new Date(now);
+    max.setDate(max.getDate() + BOOKING_WINDOW_DAYS);
+    setMinISO(toISODate(min));
+    setMaxISO(toISODate(max));
+    // Open on the month that actually holds availability.
+    setView({ y: min.getFullYear(), m: min.getMonth() });
+    setMounted(true);
+  }, []);
+
+  // Reserve the calendar's height before mount so the modal doesn't jump.
+  if (!mounted) return <div className="h-[316px]" aria-hidden />;
+
+  const first = new Date(view.y, view.m, 1);
+  const startOffset = (first.getDay() + 6) % 7; // Monday-first column offset
+  const daysInMonth = new Date(view.y, view.m + 1, 0).getDate();
+
+  const cells: (Date | null)[] = [];
+  for (let i = 0; i < startOffset; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(view.y, view.m, d));
+
+  const viewIdx = view.y * 12 + view.m;
+  const canPrev = viewIdx > monthIndexOf(minISO);
+  const canNext = viewIdx < monthIndexOf(maxISO);
+
+  const step = (dir: -1 | 1) =>
+    setView((v) => {
+      const m = v.m + dir;
+      if (m < 0) return { y: v.y - 1, m: 11 };
+      if (m > 11) return { y: v.y + 1, m: 0 };
+      return { y: v.y, m };
+    });
+
+  return (
+    <div>
+      <div className="mb-4 flex items-center justify-center gap-5">
+        <button
+          type="button"
+          onClick={() => canPrev && step(-1)}
+          disabled={!canPrev}
+          aria-label="Previous month"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EBE8F3] text-[#5C3D97] transition-colors hover:bg-[#dcd5ec] disabled:cursor-not-allowed disabled:opacity-30"
+        >
+          <CaretLeft size={14} weight="bold" />
+        </button>
+        <p className="min-w-[150px] text-center text-[14px] font-semibold text-zinc-900">
+          {MONTHS[view.m]} {view.y}
+        </p>
+        <button
+          type="button"
+          onClick={() => canNext && step(1)}
+          disabled={!canNext}
+          aria-label="Next month"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EBE8F3] text-[#5C3D97] transition-colors hover:bg-[#dcd5ec] disabled:cursor-not-allowed disabled:opacity-30"
+        >
+          <CaretRight size={14} weight="bold" />
+        </button>
+      </div>
+
+      <div className="mb-1.5 grid grid-cols-7 text-center text-[10.5px] font-medium tracking-[0.05em] text-zinc-400">
+        {WEEKDAYS.map((w) => (
+          <span key={w}>{w}</span>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-7 gap-y-1.5">
+        {cells.map((cell, i) => {
+          if (!cell) return <span key={`pad-${i}`} aria-hidden />;
+          const cellISO = toISODate(cell);
+          const weekend = cell.getDay() === 0 || cell.getDay() === 6;
+          const disabled = weekend || cellISO < minISO || cellISO > maxISO;
+          const selected = value === cellISO;
+          return (
+            <div key={cellISO} className="flex items-center justify-center">
+              <button
+                type="button"
+                onClick={() => !disabled && onSelect(cellISO)}
+                disabled={disabled}
+                aria-pressed={selected}
+                className={`flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-medium transition-colors ${
+                  selected
+                    ? "bg-[#5C3D97] text-white"
+                    : disabled
+                      ? "cursor-not-allowed text-zinc-300"
+                      : "bg-[#EBE8F3] text-[#5C3D97] hover:bg-[#dcd5ec]"
+                }`}
+              >
+                {cell.getDate()}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 /* ── Context so any CTA can open the modal ───────────────────────────────── */
 
@@ -75,9 +225,24 @@ export function DemoModalProvider({ children }: { children: React.ReactNode }) {
 
 function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [step, setStep] = useState(0);
-  const [date, setDate] = useState<string | null>(null);
+  const [date, setDate] = useState<string | null>(null); // yyyy-mm-dd
   const [time, setTime] = useState<string | null>(null);
   const [booked, setBooked] = useState(false);
+  const [tz, setTz] = useState<string>("");
+
+  // Detected timezone label, client-side only (avoids hydration drift).
+  useEffect(() => {
+    try {
+      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const now = new Date().toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+      });
+      setTz(`${zone.replace(/_/g, " ")} · ${now}`);
+    } catch {
+      /* no-op — timezone line is a nicety, not required */
+    }
+  }, [isOpen]);
 
   // Reset when it closes, and lock body scroll while open. Esc closes.
   useEffect(() => {
@@ -202,41 +367,53 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                       exit={{ opacity: 0, x: -14 }}
                       transition={{ duration: 0.22 }}
                     >
-                      <p className="mb-2 text-[13px] font-medium text-zinc-700">Select a date</p>
-                      <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-                        {DATES.map((d) => (
-                          <button
-                            key={d}
-                            onClick={() => setDate(d)}
-                            className={`rounded-lg border py-3 text-[13px] font-medium transition-all ${
-                              date === d
-                                ? "border-[#5C3D97] bg-[#5C3D97] text-white"
-                                : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
-                            }`}
+                      <p className="mb-3 text-[13px] font-medium text-zinc-700">Select a date</p>
+                      <Calendar
+                        value={date}
+                        onSelect={(iso) => {
+                          setDate(iso);
+                          setTime(null); // a new day clears the prior time pick
+                        }}
+                      />
+
+                      {tz && (
+                        <div className="mt-4 flex items-center gap-1.5 border-t border-zinc-100 pt-3 text-[11.5px] text-zinc-400">
+                          <GlobeSimple size={13} />
+                          <span>{tz}</span>
+                        </div>
+                      )}
+
+                      <AnimatePresence initial={false}>
+                        {date && (
+                          <motion.div
+                            key="times"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                            className="overflow-hidden"
                           >
-                            {d}
-                          </button>
-                        ))}
-                      </div>
-                      <p className="mb-2 mt-8 text-[13px] font-medium text-zinc-700">
-                        Available times
-                      </p>
-                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                        {TIMES.map((t) => (
-                          <button
-                            key={t}
-                            onClick={() => setTime(t)}
-                            disabled={!date}
-                            className={`rounded-lg border py-2.5 text-[13px] font-medium transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
-                              time === t
-                                ? "border-[#5C3D97] bg-[#f7f4fc] text-[#5C3D97] ring-1 ring-[#5C3D97]"
-                                : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
-                            }`}
-                          >
-                            {t}
-                          </button>
-                        ))}
-                      </div>
+                            <p className="mb-2 mt-6 text-[13px] font-medium text-zinc-700">
+                              Available times
+                            </p>
+                            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                              {TIMES.map((t) => (
+                                <button
+                                  key={t}
+                                  onClick={() => setTime(t)}
+                                  className={`rounded-lg border py-2.5 text-[13px] font-medium transition-all ${
+                                    time === t
+                                      ? "border-[#5C3D97] bg-[#f7f4fc] text-[#5C3D97] ring-1 ring-[#5C3D97]"
+                                      : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
+                                  }`}
+                                >
+                                  {t}
+                                </button>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </motion.div>
                   ) : (
                     <motion.form
@@ -283,7 +460,7 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                 <div className="mt-4">
                   {date && time && (
                     <p className="mb-2.5 text-center text-[12.5px] text-zinc-400">
-                      {date}, {time}
+                      {formatFriendly(date)}, {time}
                     </p>
                   )}
                   <button
@@ -305,44 +482,9 @@ function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
             </div>
           </div>
 
-          {/* Right, brand image with KPI chips (placeholder until final asset) */}
-          <div className="relative hidden overflow-hidden bg-zinc-900 md:block">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/figma/footer-railyard.jpg"
-              alt=""
-              aria-hidden
-              className="absolute inset-0 h-full w-full object-cover opacity-90"
-            />
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30"
-            />
-            <div className="relative flex h-full flex-col justify-between p-10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/navanta-logo.svg" alt="Navanta" className="h-8 w-auto" />
-
-              <div>
-                <div className="flex flex-wrap gap-2.5">
-                  {KPIS.map((k) => (
-                    <div
-                      key={k.label}
-                      className="rounded-xl border border-white/15 bg-white/10 px-3.5 py-2.5 backdrop-blur-md"
-                    >
-                      <p className="text-[18px] font-semibold leading-none text-white">
-                        {k.value}
-                      </p>
-                      <p className="mt-1 text-[11px] leading-tight text-white/70">
-                        {k.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <p className="mt-6 max-w-md text-[17px] font-medium leading-snug text-white">
-                  The supply chain intelligence layer for industrial enterprises.
-                </p>
-              </div>
-            </div>
+          {/* Right, shared brand panel (matches the contact page) */}
+          <div className="hidden md:block">
+            <DemoBrandPanel />
           </div>
         </motion.div>
       )}

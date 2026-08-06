@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
 import DemoForm from "@/components/DemoForm";
+import DemoBrandPanel from "@/components/DemoBrandPanel";
 import FadeIn from "@/components/FadeIn";
 import {
   MapPin,
@@ -123,29 +124,8 @@ export default function ContactPage() {
               </FadeIn>
 
               <FadeIn delay={0.08}>
-                <div className="relative h-[420px] overflow-hidden rounded-2xl lg:h-full lg:min-h-[640px]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/figma/footer-railyard.jpg"
-                    alt="Industrial rail yard"
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/25" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/navanta-logo.svg"
-                    alt="Navanta"
-                    className="absolute left-6 top-6 h-8 w-auto"
-                  />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <p className="text-[20px] font-medium leading-snug text-white sm:text-[24px]">
-                      12–16 weeks from kickoff to operational launch, fixed fee,
-                      measured in your numbers.
-                    </p>
-                    <p className="mt-2 text-[13px] text-white/60">
-                      The supply chain intelligence layer for industrial enterprises
-                    </p>
-                  </div>
+                <div className="h-[420px] overflow-hidden rounded-2xl lg:h-full lg:min-h-[640px]">
+                  <DemoBrandPanel />
                 </div>
               </FadeIn>
             </div>

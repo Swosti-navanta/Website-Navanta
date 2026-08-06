@@ -227,16 +227,21 @@ export default function Footer() {
               </address>
               <a
                 href={`mailto:${EMAIL}`}
-                className="mt-2 inline-block text-[13.5px] leading-relaxed text-white/55 underline-offset-4 transition-colors hover:text-white hover:underline"
+                className="group relative mt-2 inline-block text-[13.5px] leading-relaxed text-white/55 transition-colors hover:text-white"
               >
                 {EMAIL}
+                <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
               </a>
             </div>
             <ul className="space-y-3">
               {COMPANY_LINKS.map((l) => (
                 <li key={l.label}>
-                  <a href={l.href} className="text-[15px] text-white/80 underline-offset-4 transition-colors hover:text-white hover:underline">
+                  <a
+                    href={l.href}
+                    className="group relative inline-block text-[15px] text-white/80 transition-colors hover:text-white"
+                  >
                     {l.label}
+                    <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
                   </a>
                 </li>
               ))}
@@ -244,8 +249,12 @@ export default function Footer() {
             <ul className="space-y-3">
               {PRODUCT_LINKS.map((l) => (
                 <li key={l.label}>
-                  <a href={l.href} className="text-[15px] text-white/80 underline-offset-4 transition-colors hover:text-white hover:underline">
+                  <a
+                    href={l.href}
+                    className="group relative inline-block text-[15px] text-white/80 transition-colors hover:text-white"
+                  >
                     {l.label}
+                    <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
                   </a>
                 </li>
               ))}
