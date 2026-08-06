@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="7.0295" height="7.0295" viewBox="0 0 7.0295 7.0295" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="star/simple/smoothcorner">
+<path d="M3.51475 0L3.71387 1.20888C3.89197 2.2901 4.7394 3.13753 5.82062 3.31563L7.0295 3.51475L5.82062 3.71387C4.7394 3.89197 3.89197 4.7394 3.71387 5.82062L3.51475 7.0295L3.31563 5.82062C3.13753 4.7394 2.2901 3.89197 1.20888 3.71387L0 3.51475L1.20888 3.31563C2.2901 3.13753 3.13753 2.2901 3.31563 1.20888L3.51475 0Z" fill="url(#paint0_linear_1957_7169)"/>
+<path d="M3.51475 0L3.71387 1.20888C3.89197 2.2901 4.7394 3.13753 5.82062 3.31563L7.0295 3.51475L5.82062 3.71387C4.7394 3.89197 3.89197 4.7394 3.71387 5.82062L3.51475 7.0295L3.31563 5.82062C3.13753 4.7394 2.2901 3.89197 1.20888 3.71387L0 3.51475L1.20888 3.31563C2.2901 3.13753 3.13753 2.2901 3.31563 1.20888L3.51475 0Z" fill="url(#paint1_linear_1957_7169)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1957_7169" x1="6.9083" y1="4.18991e-07" x2="-0.116872" y2="6.78293" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint1_linear_1957_7169" x1="6.15868" y1="6.22044" x2="-0.0894314" y2="0.219297" gradientUnits="userSpaceOnUse">
+<stop stop-color="#581C87"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+</defs>
+</svg>

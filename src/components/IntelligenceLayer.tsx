@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, useLayoutEffect, useRef, useState } from "react";
+import { Children, Fragment, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useTransform } from "framer-motion";
 import {
   Package,
@@ -19,19 +19,14 @@ import {
   Star,
   ArrowsClockwise,
   ArrowRight,
-  Sparkle,
   CaretDown,
-  Gauge,
-  Receipt,
-  Factory,
-  ChartLineUp,
-  Sliders,
   Gear,
   type Icon,
 } from "@phosphor-icons/react";
 import FadeIn from "./FadeIn";
 import MobileTabDropdown from "./MobileTabDropdown";
 import { useAdvanceTimer } from "@/hooks/useAdvanceTimer";
+import LensStar from "./LensStar";
 
 type Callout = { icon: Icon; title: string; body: string };
 
@@ -42,61 +37,17 @@ type FeatureGroup = { name: string; icon: Icon; desc: string; features: Callout[
 type TabDef = {
   key: string;
   label: string;
+  icon: Icon;
   heading: string;
   groups: FeatureGroup[];
 };
 
 const TABS: TabDef[] = [
   {
-    key: "central",
-    label: "Centralized Intelligence",
-    heading: "Centralized Planning and Buying Intelligence",
-    groups: [
-      {
-        name: "Parts Planning",
-        icon: SquaresFour,
-        desc: "Every SKU classified and scored overnight, planners review only the exceptions that matter.",
-        features: [
-          {
-            icon: SquaresFour,
-            title: "Unified Visibility",
-            body: "Real-time inventory, demand, supply and PO insight across all locations.",
-          },
-          {
-            icon: Brain,
-            title: "Intelligent Analysis",
-            body: "AI models detect signals, risks, opportunities and optimal actions.",
-          },
-          {
-            icon: UserCircleCheck,
-            title: "Planner in the Loop",
-            body: "Cost-optimized vendor POs and exceptions routed to you for approval.",
-          },
-        ],
-      },
-      {
-        name: "Autonomous Buying",
-        icon: Lightning,
-        desc: "Lens executes routine buys by confidence level, and learns from every decision the planner makes.",
-        features: [
-          {
-            icon: Lightning,
-            title: "Agentic Actions",
-            body: "Lens plans and executes stocking decisions by confidence level.",
-          },
-          {
-            icon: GraduationCap,
-            title: "Continuous Learning",
-            body: "Every decision improves future recommendations and outcomes.",
-          },
-        ],
-      },
-    ],
-  },
-  {
     key: "orders",
-    label: "Inventory & Order Intelligence",
-    heading: "Customer Inventory and Order Intelligence",
+    label: "Customer Growth",
+    icon: Package,
+    heading: "Customer Growth Intelligence",
     groups: [
       {
         name: "Order Tracking",
@@ -140,27 +91,58 @@ const TABS: TabDef[] = [
     ],
   },
   {
-    key: "procurement",
-    label: "Procurement Control",
-    heading: "Procurement Control Tower",
+    key: "central",
+    label: "Supply Resilience",
+    icon: SquaresFour,
+    heading: "Supply Resilience Intelligence",
     groups: [
       {
-        name: "Spend Intelligence",
-        icon: Brain,
-        desc: "Spend, contracts, and vendors unified, price variance, leakage, and missed discounts surfaced.",
+        name: "Parts Planning",
+        icon: SquaresFour,
+        desc: "Every SKU classified and scored overnight, planners review only the exceptions that matter.",
         features: [
           {
             icon: SquaresFour,
             title: "Unified Visibility",
-            body: "Spend, contract, and vendor data from every ERP, spreadsheet, and site, one source of truth.",
+            body: "Real-time inventory, demand, supply and PO insight across all locations.",
           },
           {
             icon: Brain,
             title: "Intelligent Analysis",
-            body: "Data-driven signals replace habit buying, price variance, leakage, and missed discounts surfaced.",
+            body: "AI models detect signals, risks, opportunities and optimal actions.",
+          },
+          {
+            icon: UserCircleCheck,
+            title: "Planner in the Loop",
+            body: "Cost-optimized vendor POs and exceptions routed to you for approval.",
           },
         ],
       },
+      {
+        name: "Autonomous Buying",
+        icon: Lightning,
+        desc: "Lens executes routine buys by confidence level, and learns from every decision the planner makes.",
+        features: [
+          {
+            icon: Lightning,
+            title: "Agentic Actions",
+            body: "Lens plans and executes stocking decisions by confidence level.",
+          },
+          {
+            icon: GraduationCap,
+            title: "Continuous Learning",
+            body: "Every decision improves future recommendations and outcomes.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: "procurement",
+    label: "Operational Efficiency",
+    icon: Brain,
+    heading: "Operational Efficiency Control Tower",
+    groups: [
       {
         name: "Sourcing & Award",
         icon: CheckCircle,
@@ -180,6 +162,23 @@ const TABS: TabDef[] = [
             icon: GraduationCap,
             title: "Continuous Learning",
             body: "A continuous engine, not one-off reports, savings tracked live, never stale.",
+          },
+        ],
+      },
+      {
+        name: "Spend Intelligence",
+        icon: Brain,
+        desc: "Spend, contracts, and vendors unified, price variance, leakage, and missed discounts surfaced.",
+        features: [
+          {
+            icon: SquaresFour,
+            title: "Unified Visibility",
+            body: "Spend, contract, and vendor data from every ERP, spreadsheet, and site, one source of truth.",
+          },
+          {
+            icon: Brain,
+            title: "Intelligent Analysis",
+            body: "Data-driven signals replace habit buying, price variance, leakage, and missed discounts surfaced.",
           },
         ],
       },
@@ -209,62 +208,93 @@ const canvasBlock = {
   },
 };
 
+/* Sidebar rail — one entry per dashboard, in deck order, using each group's own icon
+   from TABS. That way the highlighted rail glyph is always the same glyph shown beside
+   the open group in the information column, rather than an unrelated stand-in. */
+const RAIL_ICONS = [
+  Package,         // Order Tracking
+  MagnifyingGlass, // Customer Workspace
+  SquaresFour,     // Parts Planning
+  Lightning,       // Autonomous Buying
+  CheckCircle,     // Sourcing & Award
+  Brain,           // Spend Intelligence
+] as const;
+
 function DashShell({
   page,
   controls,
+  nav = 0,
   children,
 }: {
   page: string;
   controls?: React.ReactNode;
+  /** Index of the rail item this dashboard lights up. */
+  nav?: number;
   children: React.ReactNode;
 }) {
   return (
     <div className="flex h-[720px] w-full max-w-[1060px] overflow-hidden rounded-2xl bg-white shadow-[0_32px_90px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
       <div className="flex w-full">
-        {/* App sidebar — grouped nav with brand mark on top, gear + avatar pinned bottom */}
-        <div className="flex w-11 flex-shrink-0 flex-col items-center border-r border-zinc-100 py-3">
-          {/* Brand mark */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/navanta-mark.png" alt="" aria-hidden className="h-6 w-auto" />
+        {/* App sidebar — built to the product's side-navigation spec (Figma node
+            1:1595): 48px rail on a #E4E5E7 rule, 36px items at 8px radius with 20px
+            glyphs, #E4E4E7 on the active item, and a 32px #005B89 avatar pinned
+            below a full-width divider. */}
+        <div
+          className="flex flex-shrink-0 flex-col items-center justify-between border-r border-[#E4E5E7] bg-white"
+          style={{ width: 48, paddingInline: 6, paddingBlock: 8 }}
+        >
+          <div className="flex w-full flex-1 flex-col items-center" style={{ gap: 12 }}>
+            {/* Brand mark */}
+            <div className="flex w-full flex-shrink-0 items-center justify-center" style={{ height: 52 }}>
+              {/* Supplied small-icon artwork: 32x27 vector with proper margins, so it
+                  neither crops nor needs shrinking to fake padding. Its 1.19:1 ratio
+                  matches the design's 26.13 x 19.93 monogram lockup. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/navanta-mark-small.svg"
+                alt=""
+                aria-hidden
+                className="object-contain"
+                style={{ width: 26, height: 22 }}
+              />
+            </div>
 
-          {/* Primary nav */}
-          <div className="mt-4 flex flex-col items-center gap-1.5">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-100 ring-1 ring-zinc-200">
-              <SquaresFour size={13} weight="fill" className="text-zinc-700" />
-            </span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Receipt size={14} weight="bold" className="text-[#71717A]" />
-            </span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Gauge size={14} weight="bold" className="text-[#71717A]" />
-            </span>
+            {/* Primary nav */}
+            <div className="flex w-full flex-1 flex-col items-center" style={{ gap: 8, paddingBlock: 12 }}>
+              {RAIL_ICONS.map((Ico, i) => {
+                const active = i === nav;
+                return (
+                  <span
+                    key={i}
+                    className={`flex flex-shrink-0 items-center justify-center rounded-lg ${
+                      active ? "bg-[#E4E4E7]" : ""
+                    }`}
+                    style={{ width: 36, height: 36 }}
+                  >
+                    <Ico
+                      size={20}
+                      weight={active ? "fill" : "regular"}
+                      className={active ? "text-[#18181B]" : "text-[#71767A]"}
+                    />
+                  </span>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="my-3 h-px w-6 bg-zinc-100" />
-
-          <div className="flex flex-col items-center gap-1.5">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Factory size={14} weight="bold" className="text-[#71717A]" />
+          {/* Settings, divider, avatar */}
+          <div className="flex w-full flex-shrink-0 flex-col items-center justify-center" style={{ gap: 8, paddingBlock: 8 }}>
+            <span
+              className="flex flex-shrink-0 items-center justify-center rounded-lg"
+              style={{ width: 36, height: 36 }}
+            >
+              <Gear size={20} className="text-[#71767A]" />
             </span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <ChartLineUp size={14} weight="bold" className="text-[#71717A]" />
-            </span>
-          </div>
-
-          <div className="my-3 h-px w-6 bg-zinc-100" />
-
-          <div className="flex flex-col items-center gap-1.5">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Sliders size={14} weight="bold" className="text-[#71717A]" />
-            </span>
-          </div>
-
-          {/* Bottom cluster */}
-          <div className="mt-auto flex flex-col items-center gap-2 pt-4">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md">
-              <Gear size={14} weight="bold" className="text-[#71717A]" />
-            </span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3b5bdb] text-[9.5px] font-semibold text-white">
+            <div className="h-px w-full bg-[#E4E5E7]" />
+            <span
+              className="flex flex-shrink-0 items-center justify-center rounded-full bg-[#005B89] font-medium text-[#FAFAFA]"
+              style={{ width: 32, height: 32, fontSize: 12, lineHeight: "16px" }}
+            >
               FL
             </span>
           </div>
@@ -285,7 +315,11 @@ function DashShell({
             variants={canvasStagger}
             initial="hidden"
             animate="visible"
-            className="flex flex-1 flex-col gap-3 overflow-hidden bg-zinc-50/70 p-4"
+            className="flex flex-1 flex-col gap-3 overflow-hidden p-4"
+            style={{
+              background:
+                "linear-gradient(183deg, rgba(25, 0, 0, 0.12) 3.06%, rgba(25, 0, 0, 0.08) 97.34%)",
+            }}
           >
             {Children.map(children, (child) => (
               <motion.div variants={canvasBlock}>{child}</motion.div>
@@ -306,16 +340,37 @@ function Select({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* Branded AI entry point — mirrors the "Ask …" button in the product */
+/* Branded AI entry point — a 1:1 take on the product's button (Figma node 630:257):
+   28px tall, 12px side padding, 6px gap, 8px radius, and the design's own
+   172.79deg blue → indigo gradient rather than an approximated one. */
 function AskLens() {
   return (
-    <span className="flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-gradient-to-b from-[#2a2e7a] to-[#151647] px-3.5 py-2 text-[12px] font-semibold text-white shadow-[0_4px_10px_rgba(21,22,71,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] ring-1 ring-white/10">
-      <Sparkle size={14} weight="fill" className="text-[#c8b6ff]" /> Ask Lens
+    <span
+      className="flex items-center justify-center whitespace-nowrap font-medium text-white"
+      style={{
+        height: 28,
+        paddingInline: 12,
+        gap: 6,
+        borderRadius: 8,
+        fontSize: 12,
+        lineHeight: "16px",
+        letterSpacing: "-0.3px",
+        backgroundImage:
+          "linear-gradient(172.79deg, rgb(29, 74, 134) 9.818%, rgb(61, 52, 139) 77.763%)",
+        filter:
+          "drop-shadow(0 1px 1.5px rgba(0,0,0,0.1)) drop-shadow(0 1px 1px rgba(0,0,0,0.1))",
+      }}
+    >
+      <LensStar size={14} /> Ask Lens
     </span>
   );
 }
 
-/* White content panel on the canvas */
+/* White content panel on the canvas — the product's table-shell chrome (Figma node
+   1869:33785): 12px radius on white with a 1px hairline plus a soft 4px lift, the same
+   pair the Lens Summary card uses. Replaces the flat zinc-100 ring so panels separate
+   cleanly from the tinted canvas behind them. Column headings follow the design's
+   13/18 semibold, and row rules use its Border/light #F4F4F5. */
 function Panel({
   title,
   right,
@@ -328,10 +383,16 @@ function Panel({
   className?: string;
 }) {
   return (
-    <div className={`rounded-xl bg-white p-3.5 ring-1 ring-zinc-100 ${className ?? ""}`}>
+    <div
+      className={`bg-white p-3.5 ${className ?? ""}`}
+      style={{
+        borderRadius: 12,
+        boxShadow: "0 0 1px 0 rgba(0,0,0,0.25), 0 1px 4px 0 rgba(0,0,0,0.06)",
+      }}
+    >
       {(title || right) && (
         <div className="mb-3 flex items-center justify-between gap-2">
-          <p className="text-[12px] font-semibold text-zinc-900">{title}</p>
+          <p className="text-[13px] font-semibold leading-[18px] text-[#18181B]">{title}</p>
           {right}
         </div>
       )}
@@ -340,28 +401,135 @@ function Panel({
   );
 }
 
-/* Violet-tinted AI summary panel — the "Lens Summary" */
+/* The product's AI summary card (Figma node 1865:7234): a 150.44deg violet → white
+   wash, 12px radius, and the paired-star lockup beside a 14/22 title over a 12/18
+   caption. Shared by the Lens Summary and the Lens Brief panels so all three read
+   as one component. `flush` children sit edge-to-edge for the divided row list. */
+function LensStarPair() {
+  return (
+    <span className="relative block shrink-0" style={{ width: 18, height: 18 }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/lens/star-lg.svg"
+        alt=""
+        aria-hidden
+        className="absolute block max-w-none"
+        style={{ left: 0.7, top: 1.3, width: 16.763, height: 16.763 }}
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/lens/star-sm.svg"
+        alt=""
+        aria-hidden
+        className="absolute block max-w-none"
+        style={{ left: 12, top: -0.4, width: 7.03, height: 7.03 }}
+      />
+    </span>
+  );
+}
+
+/** One divided row: count, label (optionally with the open-out glyph), caption. */
+function LensRow({
+  count,
+  label,
+  caption,
+  linkOut,
+  last,
+}: {
+  count: string;
+  label: string;
+  caption: string;
+  linkOut?: boolean;
+  last?: boolean;
+}) {
+  return (
+    <div
+      className={`flex w-full items-start ${last ? "" : "border-b border-[#F4F4F5]"}`}
+      style={{ paddingInline: 16, paddingBlock: 12, gap: 8 }}
+    >
+      <p
+        className="shrink-0 whitespace-nowrap font-semibold text-[#18181B]"
+        style={{ fontSize: 14, lineHeight: "22px" }}
+      >
+        {count}
+      </p>
+      <div className="flex min-w-px flex-1 flex-col items-start justify-center">
+        <span className="flex items-center" style={{ gap: 4 }}>
+          <p
+            className="whitespace-nowrap font-normal text-[#18181B]"
+            style={{ fontSize: 14, lineHeight: "22px" }}
+          >
+            {label}
+          </p>
+          {linkOut && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src="/lens/arrow-out.svg"
+              alt=""
+              aria-hidden
+              className="block max-w-none shrink-0"
+              style={{ width: 10.938, height: 10.938 }}
+            />
+          )}
+        </span>
+        <p
+          className="whitespace-nowrap font-normal text-[#52525C]"
+          style={{ fontSize: 12, lineHeight: "18px" }}
+        >
+          {caption}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function LensPanel({
   title,
   headline,
   children,
   className,
+  flush,
 }: {
   title: string;
   headline?: string;
   children?: React.ReactNode;
   className?: string;
+  flush?: boolean;
 }) {
   return (
     <div
-      className={`rounded-xl border border-[#e4dcf3] bg-gradient-to-b from-[#faf7ff] to-[#f3edfb] p-3.5 ${className ?? ""}`}
+      className={`flex flex-col overflow-clip ${className ?? ""}`}
+      style={{
+        gap: 8,
+        borderRadius: 12,
+        backgroundImage:
+          "linear-gradient(150.44deg, rgb(245, 240, 255) 4.737%, rgb(255, 255, 255) 39.119%)",
+        boxShadow: "0 0 1px 0 rgba(0,0,0,0.25), 0 1px 4px 0 rgba(0,0,0,0.06)",
+      }}
     >
-      <div className="flex items-center gap-1.5">
-        <Sparkle size={13} weight="fill" className="text-[#5C3D97]" />
-        <p className="text-[12px] font-semibold text-zinc-900">{title}</p>
+      <div
+        className="flex w-full items-start"
+        style={{ paddingInline: 16, paddingTop: 12, paddingBottom: children ? 0 : 12, gap: 8 }}
+      >
+        <span className="flex items-center" style={{ paddingBlock: 4 }}>
+          <LensStarPair />
+        </span>
+        <div className="flex flex-col items-start justify-center">
+          <p className="font-medium text-[#181A1B]" style={{ fontSize: 14, lineHeight: "22px" }}>
+            {title}
+          </p>
+          {headline && (
+            <p className="font-normal text-[#52525C]" style={{ fontSize: 12, lineHeight: "18px" }}>
+              {headline}
+            </p>
+          )}
+        </div>
       </div>
-      {headline && <p className="mt-1.5 text-[11px] leading-relaxed text-zinc-600">{headline}</p>}
-      {children}
+      {children && (
+        <div className={flush ? "w-full" : "w-full"} style={flush ? undefined : { paddingInline: 16, paddingBottom: 12 }}>
+          {children}
+        </div>
+      )}
     </div>
   );
 }
@@ -583,6 +751,7 @@ function PlanningDashboard() {
   return (
     <DashShell
       page="Parts Planning"
+      nav={2}
       controls={
         <>
           <Select>Texas (TX)</Select>
@@ -592,7 +761,7 @@ function PlanningDashboard() {
         </>
       }
     >
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_343px]">
         {/* Unified Visibility, the network classified in one live view */}
         <Panel
           title="ABC × XYZ classification"
@@ -628,29 +797,23 @@ function PlanningDashboard() {
         </Panel>
 
         {/* Intelligent Analysis, the overnight Lens review */}
-        <LensPanel title="Lens Summary" headline="Reviewed 734 SKUs overnight, every signal scored and ranked by impact.">
-          <div className="mt-3 flex flex-col gap-2">
-            <div className="rounded-lg bg-white/70 px-3 py-2.5 ring-1 ring-[#e8e2f4]">
-              <p className="text-[17px] font-semibold leading-none text-zinc-900">57</p>
-              <p className="mt-1.5 text-[10px] leading-snug text-zinc-500">
-                Exceptions need you, 10 critical · 37 high · 10 medium
-              </p>
-            </div>
-            <div className="rounded-lg bg-white/70 px-3 py-2.5 ring-1 ring-[#e8e2f4]">
-              <p className="text-[17px] font-semibold leading-none text-zinc-900">12</p>
-              <p className="mt-1.5 text-[10px] leading-snug text-zinc-500">
-                Ready for PO review, 4 branch transfers · 8 alternate vendors
-              </p>
-            </div>
-            <div className="rounded-lg bg-white/70 px-3 py-2.5 ring-1 ring-[#e8e2f4]">
-              <p className="flex items-center gap-1 text-[17px] font-semibold leading-none text-zinc-900">
-                <TrendUp size={13} className="text-emerald-600" /> +18%
-              </p>
-              <p className="mt-1.5 text-[10px] leading-snug text-zinc-500">
-                Demand shift on SKU-4482, WoW across 4 stores
-              </p>
-            </div>
-          </div>
+        <LensPanel
+          flush
+          title="Lens Summary"
+          headline="Reviewed 734 SKUs overnight · Jun 12, 2026"
+        >
+          <LensRow
+            count="57"
+            label="Exceptions need you"
+            caption="10 Critical · 37 High · 10 Medium"
+          />
+          <LensRow
+            count="12"
+            label="Ready for PO review"
+            caption="4 branch transfers · 8 alternate vendors"
+            linkOut
+            last
+          />
         </LensPanel>
       </div>
 
@@ -721,6 +884,7 @@ function BuyingDashboard() {
   return (
     <DashShell
       page="Buying"
+      nav={3}
       controls={
         <>
           <Select>Texas (TX)</Select>
@@ -736,7 +900,7 @@ function BuyingDashboard() {
         <KpiPanel
           label={
             <>
-              <Sparkle size={10} weight="fill" className="text-[#5C3D97]" /> Auto-approval rate · 30d
+              <LensStar size={10} /> Auto-approval rate · 30d
             </>
           }
           value="85%"
@@ -833,29 +997,457 @@ function BuyingDashboard() {
    Dashboard 1 · Order Tracking, one live view of the order, alerts pushed
    before the customer asks, issues fixed in context (Visibility ·
    Notifications · Resolution). */
-function OrderTrackingDashboard() {
+/* ── Order Status panel · Figma node 392:5177 ────────────────────────────────
+   The portal authors this at its own scale: 940px wide, 14px body, 44px step
+   markers. The deck renders it in a column roughly half that, so rather than
+   re-proportioning the panel every dimension is multiplied by OS_S — type,
+   markers, padding, radii and the dash pitch alike — and it shrinks as one
+   piece. 11/14 is the factor that lands the design's 14px body on the deck's
+   11px body, which is what keeps it consistent with the panels beside it. */
+const OS_S = 11 / 14;
+const os = (n: number) => +(n * OS_S).toFixed(3);
+const OSA = "/portal/order-status";
+
+/* Only the artwork Figma exports: the #008234 disc, its white check, the grey
+   D4D6D8 ring, and the 14px success glyph. The three connector lines it also
+   exports are byte-identical (1px, black @30%, 5/5 dash) and differ only in the
+   frozen frame's widths, so they are drawn as a repeating gradient instead —
+   that holds the authored 5/5 pitch at whatever width the column ends up. */
+function OrderStatusPanel() {
   const steps = [
     { label: "Open", date: "Jan 12", done: true },
-    { label: "In process", date: "Jan 16", done: true },
-    { label: "Shipped", date: "—", done: false },
-    { label: "Delivered", date: "—", done: false },
+    { label: "In Process", date: "", done: false },
+    { label: "Shipped", date: "", done: false },
+    { label: "Delivered", date: "", done: false },
   ];
+
+  return (
+    <Panel
+      title="Order Status"
+      right={
+        <p className="text-[#52525C]" style={{ fontSize: os(14), lineHeight: `${os(21)}px` }}>
+          4 Items
+        </p>
+      }
+    >
+      {/* Figma insets the stepper 24px against the header's 16px, so it carries
+          the 8px difference on top of the Panel's own padding. */}
+      <div
+        className="flex w-full items-start"
+        style={{ gap: os(12), paddingInline: os(8), paddingBottom: os(16) }}
+      >
+        {steps.map((s, i) => (
+          <Fragment key={s.label}>
+            {i > 0 && (
+              <div
+                className="relative flex-1"
+                style={{ minWidth: 1, height: os(44.072) }}
+              >
+                {/* The rule sits at the marker's vertical centre and overhangs the
+                    row gap on both sides, so the dashes read as one continuous
+                    line between columns. The labels are wider than the markers,
+                    which is what leaves the dashes short of each circle. */}
+                <span
+                  aria-hidden
+                  className="absolute block"
+                  style={{
+                    left: -os(12),
+                    right: -os(12),
+                    top: "50%",
+                    height: 1,
+                    marginTop: -0.5,
+                    backgroundImage: `repeating-linear-gradient(to right, rgba(0,0,0,0.3) 0 ${os(5)}px, transparent ${os(5)}px ${os(10)}px)`,
+                  }}
+                />
+              </div>
+            )}
+            <div className="flex shrink-0 flex-col items-center">
+              <span
+                className="relative block shrink-0"
+                style={{ width: os(44.072), height: os(44.072) }}
+              >
+                {s.done ? (
+                  <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`${OSA}/ellipse.svg`}
+                      alt=""
+                      aria-hidden
+                      className="absolute block max-w-none"
+                      style={{ left: os(7.036), top: os(7.036), width: os(30), height: os(30) }}
+                    />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`${OSA}/check.svg`}
+                      alt=""
+                      aria-hidden
+                      className="absolute block max-w-none"
+                      style={{
+                        left: os(17.156),
+                        top: os(18.707),
+                        width: os(10.0902),
+                        height: os(7.37289),
+                      }}
+                    />
+                  </>
+                ) : (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={`${OSA}/radio-empty.svg`}
+                    alt=""
+                    aria-hidden
+                    className="absolute inset-0 block h-full w-full max-w-none"
+                  />
+                )}
+              </span>
+              <span className="flex flex-col items-center whitespace-nowrap">
+                <p
+                  className="text-center text-[#333333]"
+                  style={{ fontSize: os(14), lineHeight: `${os(22)}px` }}
+                >
+                  {s.label}
+                </p>
+                {/* Figma reserves the date line on every step so all four labels
+                    share a baseline; only Open carries a value. */}
+                <p
+                  className="text-[#71767A]"
+                  style={{
+                    fontSize: os(13),
+                    lineHeight: `${os(18.46)}px`,
+                    letterSpacing: os(0.13),
+                  }}
+                >
+                  {s.date || "\u00A0"}
+                </p>
+              </span>
+            </div>
+          </Fragment>
+        ))}
+      </div>
+
+      <div
+        className="flex w-full flex-col items-start"
+        style={{
+          gap: os(4),
+          borderRadius: os(12),
+          backgroundColor: "#EEFDF3",
+          paddingInline: os(12),
+          paddingBlock: os(8),
+        }}
+      >
+        <span className="flex items-center whitespace-nowrap" style={{ gap: os(4) }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`${OSA}/check-circle.svg`}
+            alt=""
+            aria-hidden
+            className="block max-w-none shrink-0"
+            style={{ width: os(14), height: os(14) }}
+          />
+          <p
+            className="font-medium text-[#18181B]"
+            style={{ fontSize: os(14), lineHeight: `${os(22)}px` }}
+          >
+            On Schedule
+          </p>
+        </span>
+        <span className="flex items-center whitespace-nowrap" style={{ gap: os(4) }}>
+          <p className="text-[#333333]" style={{ fontSize: os(14), lineHeight: `${os(21)}px` }}>
+            Order ETA:
+          </p>
+          <p className="text-[#18181B]" style={{ fontSize: os(14), lineHeight: `${os(22)}px` }}>
+            Feb 1, 2026
+          </p>
+        </span>
+      </div>
+    </Panel>
+  );
+}
+
+/* ── Order Information panel · Figma node 1118:20640 ─────────────────────────
+   Same OS_S scale as the Order Status panel beside it, so the two read as one
+   screen. The design's identifiers are all vendor-neutral here: the portal
+   mock names a distributor, a retailer and a carrier by brand, and the site
+   ships none of them. The map tile the design places beside the address is
+   dropped for the same reason — it is licensed third-party imagery of a real
+   place — which also buys back the height the rail needs. */
+const OII = "/portal/order-info";
+
+/* Figma nests each glyph as a percentage-inset rect inside its 14 or 16px box.
+   Keeping the insets as percentages means the artwork stays put at any scale.
+   The exports carry their own fill (#52525C / #71767A / #979B9F), which is why
+   these are images rather than icon-font components. */
+function OIGlyph({
+  src,
+  inset = "0",
+  size = os(14),
+}: {
+  src: string;
+  inset?: string;
+  size?: number;
+}) {
+  return (
+    <span className="relative block shrink-0" style={{ width: size, height: size }}>
+      <span className="absolute block" style={{ inset }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 block h-full w-full max-w-none"
+        />
+      </span>
+    </span>
+  );
+}
+
+const OI_INSET = {
+  hash: "10.94% 7.81% 10.92% 7.81%",
+  copy: "10.94%",
+  calendar: "4.69% 10.94% 10.94% 10.94%",
+  warehouse: "14.05% 1.48% 20.31% 1.56%",
+  user: "7.8% 7.89% 10.81% 7.74%",
+  mappin: "4.69% 14.06%",
+} as const;
+
+function OIField({
+  icon,
+  inset,
+  label,
+  value,
+  copy,
+  labelColor = "#71767A",
+  valueColor = "#212121",
+  grow = true,
+}: {
+  icon: string;
+  inset: string;
+  label: string;
+  value: React.ReactNode;
+  copy?: boolean;
+  labelColor?: string;
+  valueColor?: string;
+  grow?: boolean;
+}) {
+  return (
+    <div
+      className={`flex flex-col items-start ${grow ? "flex-1" : ""}`}
+      style={{ gap: os(4), paddingBlock: os(4), minWidth: grow ? 1 : undefined }}
+    >
+      <span className="flex items-center" style={{ gap: os(6) }}>
+        <OIGlyph src={`${OII}/${icon}.svg`} inset={inset} />
+        <p
+          className="whitespace-nowrap"
+          style={{ fontSize: os(14), lineHeight: `${os(21)}px`, color: labelColor }}
+        >
+          {label}
+        </p>
+      </span>
+      <span className="flex items-center" style={{ gap: os(8) }}>
+        <span
+          className="font-medium"
+          style={{ fontSize: os(14), lineHeight: `${os(21)}px`, color: valueColor }}
+        >
+          {value}
+        </span>
+        {copy && <OIGlyph src={`${OII}/copy.svg`} inset={OI_INSET.copy} />}
+      </span>
+    </div>
+  );
+}
+
+/* Section header: an #F4F4F6 pill with a 16px glyph and, bled off its right
+   edge, the dot-grid wash Figma calls "Union" — 4px squares under an #F0F0F0
+   gradient that fades out leftward. */
+function OISection({
+  icon,
+  title,
+  children,
+}: {
+  icon: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex w-full flex-col items-start">
+      <div
+        className="relative flex w-full items-center overflow-clip"
+        style={{ gap: os(8), padding: os(8), borderRadius: os(8), backgroundColor: "#F4F4F6" }}
+      >
+        <OIGlyph src={`${OII}/${icon}.svg`} size={os(16)} />
+        <p
+          className="whitespace-nowrap font-medium text-[#181A1B]"
+          style={{ fontSize: os(14), lineHeight: `${os(21)}px` }}
+        >
+          {title}
+        </p>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`${OII}/union.svg`}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute block max-w-none"
+          style={{ right: 0, top: os(-0.14), width: os(92.48), height: os(37.286) }}
+        />
+      </div>
+      <div className="flex w-full flex-col items-start" style={{ gap: os(8), paddingBlock: os(8) }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function OIRow({
+  divider,
+  column,
+  children,
+}: {
+  divider?: boolean;
+  column?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={`flex w-full ${column ? "flex-col items-start" : "items-start justify-between"}`}
+      style={{
+        paddingInline: os(8),
+        paddingBlock: column ? os(4) : undefined,
+        gap: column ? os(4) : undefined,
+        borderBottom: divider ? "1px solid #E4E5E7" : undefined,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function OrderInformationPanel() {
+  return (
+    <Panel title="Order Information">
+      {/* Figma insets the body 12px against the header's 16px and closes it at 8px,
+          where the Panel shell pads a flat 14px all round — the negative margins
+          pull the body back onto the design's own edges. */}
+      <div
+        className="flex flex-col items-start"
+        style={{
+          gap: os(8),
+          marginTop: os(20) - 12,
+          marginInline: -(14 - os(12)),
+          marginBottom: -(14 - os(8)),
+        }}
+      >
+        <OISection icon="notepad" title="Order Identity">
+          <OIRow divider>
+            <OIField
+              icon="hash"
+              inset={OI_INSET.hash}
+              label="Distributor Order #"
+              value="3097082"
+              copy
+              labelColor="#52525C"
+              valueColor="#18181B"
+            />
+            <OIField
+              icon="hash"
+              inset={OI_INSET.hash}
+              label="Customer Order No."
+              value="23981029"
+              copy
+              labelColor="#52525C"
+              valueColor="#18181B"
+            />
+          </OIRow>
+          <OIRow>
+            <OIField
+              icon="calendar"
+              inset={OI_INSET.calendar}
+              label="PO Date"
+              value="Jan 12, 2026"
+              copy
+              labelColor="#52525C"
+              valueColor="#18181B"
+            />
+            <OIField
+              icon="hash"
+              inset={OI_INSET.hash}
+              label="Buyer PO Number"
+              value="20561746"
+              copy
+              labelColor="#52525C"
+              valueColor="#18181B"
+            />
+          </OIRow>
+        </OISection>
+
+        <OISection icon="truck" title="Shipping">
+          <OIRow divider>
+            <OIField
+              icon="warehouse"
+              inset={OI_INSET.warehouse}
+              label="Order Warehouse:"
+              value="DC-04 · Central"
+            />
+            <OIField
+              icon="user"
+              inset={OI_INSET.user}
+              label="Ship to"
+              value="8119 · Matt Powers"
+              copy
+            />
+          </OIRow>
+          <OIRow divider column>
+            <OIField
+              icon="user"
+              inset={OI_INSET.user}
+              label="Shipper"
+              value="Contract LTL"
+              copy
+              grow={false}
+            />
+          </OIRow>
+          <OIRow>
+            <OIField
+              icon="mappin"
+              inset={OI_INSET.mappin}
+              label="Address"
+              grow={false}
+              value={
+                <>
+                  <span className="block">1247 Industrial Parkway</span>
+                  <span className="block">Building C, Dock 7</span>
+                </>
+              }
+            />
+          </OIRow>
+        </OISection>
+
+        <OISection icon="storefront" title="Store Reference">
+          <OIRow>
+            <OIField
+              icon="user"
+              inset={OI_INSET.user}
+              label="Store Tag PO"
+              value="S: LTL-4471"
+              copy
+            />
+            <OIField icon="user" inset={OI_INSET.user} label="Store No." value="5639" copy />
+          </OIRow>
+        </OISection>
+      </div>
+    </Panel>
+  );
+}
+
+function OrderTrackingDashboard() {
   const status = (
     <span className="flex items-center gap-1.5">
       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> In process
     </span>
   );
-  const info: [string, string][] = [
-    ["Halstead order #", "3097082"],
-    ["Customer PO", "23981029"],
-    ["PO date", "Jan 12, 2026"],
-    ["Warehouse", "Savannah"],
-    ["Ship to", "8119 · Matt Powers"],
-    ["Shipper", "DHL"],
-  ];
   return (
     <DashShell
       page="Order Tracking · #3096652"
+      nav={0}
       controls={
         <>
           <GhostBtn>Raise an issue</GhostBtn>
@@ -865,96 +1457,65 @@ function OrderTrackingDashboard() {
         </>
       }
     >
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+      {/* The Figma order-detail rail runs the full height of the canvas, so the
+          notification feed and the issue thread sit under the product table
+          rather than stacked beneath it. */}
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_343px]">
         <div className="flex min-w-0 flex-col gap-3">
           {/* Unified Visibility, the order, every line and ETA */}
-          <Panel title="Order status" right={<p className="text-[10px] text-zinc-400">4 items · placed Jan 12</p>}>
-            <div className="flex items-start">
-              {steps.map((s, i) => (
-                <div key={s.label} className="flex flex-1 flex-col items-center">
-                  <div className="flex w-full items-center">
-                    <div className={`h-px flex-1 ${i === 0 ? "bg-transparent" : s.done ? "bg-emerald-500" : "bg-zinc-200"}`} />
-                    {s.done ? (
-                      <CheckCircle size={19} weight="fill" className="flex-shrink-0 text-emerald-500" />
-                    ) : (
-                      <span className="h-4 w-4 flex-shrink-0 rounded-full border-2 border-zinc-200 bg-white" />
-                    )}
-                    <div
-                      className={`h-px flex-1 ${
-                        i === steps.length - 1 ? "bg-transparent" : steps[i + 1].done ? "bg-emerald-500" : "bg-zinc-200"
-                      }`}
-                    />
-                  </div>
-                  <p className={`mt-1.5 text-[10.5px] font-medium ${s.done ? "text-zinc-900" : "text-zinc-400"}`}>
-                    {s.label}
-                  </p>
-                  <p className="text-[9.5px] text-zinc-400">{s.date}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-[11px] font-medium text-emerald-700">
-              In process, order ETA: Feb 1, 2026
-            </div>
-          </Panel>
+          <OrderStatusPanel />
           <Panel title="Products · 4">
             <MiniTable
               head={["SKU", "Product", "Status", "Qty", "ETA"]}
               rows={[
-                ["I4445101L7", "Barlee Brook plank", status, "240", "Mar 05"],
-                ["I4445102L7", "Barlee Brook plank", status, "160", "Mar 05"],
+                ["I4445101L7", "Oak plank 8mm", status, "240", "Mar 05"],
+                ["I4445102L7", "Oak plank 10mm", status, "160", "Mar 05"],
                 ["I4445108L2", "Oak stair nose 42″", status, "80", "Mar 03"],
               ]}
             />
           </Panel>
-        </div>
 
-        <div className="flex min-w-0 flex-col gap-3">
-          <Panel title="Order information">
-            <div className="flex flex-col gap-2">
-              {info.map(([k, v]) => (
-                <div key={k} className="flex items-center justify-between gap-2">
-                  <p className="text-[10.5px] text-zinc-400">{k}</p>
-                  <p className="text-[11px] font-medium text-zinc-800">{v}</p>
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+            {/* Proactive Notifications, pushed before the customer asks */}
+            <Panel title="Notifications" right={<Chip tone="violet">Proactive</Chip>}>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <div className="flex items-start gap-2.5 rounded-lg bg-zinc-50 p-2.5">
+                  <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
+                    <WarningCircle size={13} className="text-[#5C3D97]" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-medium text-zinc-900">Delay flagged</p>
+                    <p className="mt-0.5 text-[10px] leading-snug text-zinc-500">
+                      ETA slipped 2 days, customer notified 09:12
+                    </p>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </Panel>
-
-          {/* Proactive Notifications, pushed before the customer asks */}
-          <Panel title="Notifications" right={<Chip tone="violet">Proactive</Chip>}>
-            <div className="flex flex-col gap-2">
-              <div className="flex items-start gap-2.5 rounded-lg bg-zinc-50 p-2.5">
-                <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-                  <WarningCircle size={13} className="text-[#5C3D97]" />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[11px] font-medium text-zinc-900">Delay flagged</p>
-                  <p className="mt-0.5 text-[10px] leading-snug text-zinc-500">
-                    ETA slipped 2 days, customer notified 09:12
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2.5 rounded-lg bg-zinc-50 p-2.5">
-                <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-                  <BellRinging size={13} className="text-[#5C3D97]" />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[11px] font-medium text-zinc-900">Back in stock · SKU-7719</p>
-                  <p className="mt-0.5 text-[10px] leading-snug text-zinc-500">3 waiting customers alerted</p>
+                <div className="flex items-start gap-2.5 rounded-lg bg-zinc-50 p-2.5">
+                  <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
+                    <BellRinging size={13} className="text-[#5C3D97]" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-medium text-zinc-900">Back in stock · SKU-7719</p>
+                    <p className="mt-0.5 text-[10px] leading-snug text-zinc-500">
+                      3 waiting customers alerted
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Panel>
+            </Panel>
 
-          {/* Guided Resolution, raised in context, fixed on one thread */}
-          <Panel title="Issue #1842" right={<Chip tone="green">Resolved</Chip>}>
-            <p className="text-[10.5px] leading-relaxed text-zinc-600">
-              Short shipment on SKU-8841, Lens matched invoice, ASN, and receipt,
-              queued 2 replacement units, and credit was issued. Fixed in 26 min,
-              one thread, zero handoffs.
-            </p>
-          </Panel>
+            {/* Guided Resolution, raised in context, fixed on one thread */}
+            <Panel title="Issue #1842" right={<Chip tone="green">Resolved</Chip>}>
+              <p className="text-[10.5px] leading-relaxed text-zinc-600">
+                Short shipment on SKU-8841, Lens matched invoice, ASN, and receipt,
+                queued 2 replacement units, and credit was issued. Fixed in 26 min,
+                one thread, zero handoffs.
+              </p>
+            </Panel>
+          </div>
         </div>
+
+        <OrderInformationPanel />
       </div>
       <Caption>
         Every line, shipment, and ETA in one view, alerts pushed before the customer asks, issues fixed in context.
@@ -985,6 +1546,7 @@ function WorkspaceDashboard() {
   return (
     <DashShell
       page="Riverside HW · Workspace"
+      nav={1}
       controls={
         <>
           <Select>All categories</Select>
@@ -1003,7 +1565,7 @@ function WorkspaceDashboard() {
         </span>
       </div>
 
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_343px]">
         <Panel title="Results · 3 matches">
           <div className="flex flex-col gap-2">
             {results.map((r) => (
@@ -1098,6 +1660,7 @@ function SpendDashboard() {
   return (
     <DashShell
       page="Spend Intelligence"
+      nav={5}
       controls={
         <>
           <Select>All sub-categories</Select>
@@ -1209,6 +1772,7 @@ function SourcingDashboard() {
   return (
     <DashShell
       page="Sourcing Event · Fasteners"
+      nav={4}
       controls={
         <>
           <Chip tone="green">4 of 4 bids in</Chip>
@@ -1329,10 +1893,12 @@ function SourcingDashboard() {
 const DASHBOARDS: Record<string, React.ComponentType[]> = {
   central: [PlanningDashboard, BuyingDashboard],
   orders: [OrderTrackingDashboard, WorkspaceDashboard],
-  procurement: [SpendDashboard, SourcingDashboard],
+  procurement: [SourcingDashboard, SpendDashboard],
 };
 
-const DASH_MS = 9000;
+/* Dwell per dashboard before the deck advances and the progress rule refills.
+   Long enough to actually read a panel rather than watch the bar race. */
+const DASH_MS = 15000;
 
 /* Left-rail group item — icon + title; the active one reveals its one-line
    summary and its bottom divider doubles as the advance timer. */
@@ -1352,14 +1918,30 @@ function GroupItem({
       <button
         onClick={onSelect}
         aria-expanded={open}
-        className="group flex w-full items-center gap-3.5 pb-2.5 pt-5 text-left"
+        /* Collapsed, the heading sits straight on the divider and needs its own
+           breathing room; open, the description below already supplies it via pb-4.
+           The transition matches the reveal's duration/easing so they move together. */
+        className={`group flex w-full items-center pt-5 text-left transition-[padding] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          open ? "pb-0" : "pb-2.5"
+        }`}
       >
-        <group.icon
-          size={22}
-          className={`flex-shrink-0 transition-colors duration-300 ${
-            open ? "text-white" : "text-zinc-600 group-hover:text-zinc-400"
-          }`}
-        />
+        {/* Only the open group carries its icon. Width and margin animate alongside
+            opacity so the label slides across rather than the glyph popping in on top
+            of it; the wrapper clips during the width tween. Timing matches the panel
+            reveal below. */}
+        <motion.span
+          aria-hidden
+          initial={false}
+          animate={{
+            width: open ? 22 : 0,
+            marginRight: open ? 14 : 0,
+            opacity: open ? 1 : 0,
+          }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-shrink-0 items-center overflow-hidden"
+        >
+          <group.icon size={22} className="flex-shrink-0 text-white" />
+        </motion.span>
         <span
           className={`text-[19px] font-medium tracking-tight transition-colors duration-300 sm:text-[22px] ${
             open ? "text-white" : "text-zinc-500 group-hover:text-zinc-300"
@@ -1452,7 +2034,13 @@ function DashboardDeck({
   tabKey: string;
 }) {
   const n = screens.length;
-  const OFFSET = 30; // px the back card peeks down-right
+  /* The back card sits behind and to the right, scaled down so it's inset top and
+     bottom rather than shifted diagonally. BACK_X is the raw translate; scaling
+     pulls the right edge back in by (1 - BACK_SCALE) / 2, so the visible peek is
+     BACK_X minus that — the values below land ~6% of the stage width. */
+  const BACK_SCALE = 0.9;
+  const BACK_X = "11%";
+  const PEEK = "6%"; // reserved so the peek isn't clipped by the column
 
   // Stable stack: every screen stays mounted and simply animates between the
   // "front" and "back" slots as `active` changes. The card in the back slot
@@ -1460,10 +2048,7 @@ function DashboardDeck({
   // behind it — a continuous, one-after-another advance rather than a
   // crossfade, and the internal panel cascade never replays mid-rotation.
   return (
-    <div
-      className="relative"
-      style={{ paddingRight: OFFSET, paddingBottom: OFFSET }}
-    >
+    <div className="relative" style={{ paddingRight: PEEK }}>
       {/* Stage reserves the front card's footprint via a fixed aspect ratio;
           the cards are absolutely stacked inside it. */}
       <div
@@ -1480,8 +2065,8 @@ function DashboardDeck({
               className="absolute inset-0"
               initial={false}
               animate={{
-                x: isFront ? 0 : OFFSET,
-                y: isFront ? 0 : OFFSET,
+                x: isFront ? 0 : BACK_X,
+                scale: isFront ? 1 : BACK_SCALE,
                 opacity: shown ? 1 : 0,
               }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -1556,7 +2141,7 @@ export default function IntelligenceLayer() {
           </p>
 
           {/* Tabs — custom dropdown on mobile, pills on md+ */}
-          <div className="mt-6">
+          <div className="mt-6 md:hidden">
             <MobileTabDropdown
               items={TABS}
               active={active}
@@ -1573,13 +2158,34 @@ export default function IntelligenceLayer() {
                     setActive(i);
                     setDashIdx(0);
                   }}
-                  className={`rounded-full px-5 py-2.5 text-[14px] transition-colors ${
-                    i === active
-                      ? "bg-white font-medium text-zinc-900"
-                      : "text-zinc-400 hover:text-white"
+                  className={`relative flex items-center rounded-full px-5 py-2.5 text-[14px] font-medium transition-colors ${
+                    i === active ? "text-zinc-900" : "text-zinc-400 hover:text-white"
                   }`}
                 >
-                  {t.label}
+                  {i === active && (
+                    <motion.span
+                      layoutId="intelligence-tab-pill"
+                      className="absolute inset-0 rounded-full"
+                      /* Liquid-glass: unlike the light sections, there IS a rich
+                         gradient behind this pill, so the backdrop blur + saturate
+                         actually refract it. Translucent white base, bright top
+                         hairline, faint dark underline, and a lifted shadow. */
+                      style={{
+                        backgroundColor: "rgba(255,255,255,0.72)",
+                        backgroundImage:
+                          "linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.28) 46%, rgba(255,255,255,0.10) 58%, rgba(255,255,255,0.22) 100%)",
+                        backdropFilter: "blur(20px) saturate(180%)",
+                        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+                        boxShadow:
+                          "inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.45), 0 2px 6px rgba(0,0,0,0.20), 0 10px 26px rgba(0,0,0,0.22)",
+                      }}
+                      transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-2">
+                    <t.icon size={16} weight="regular" />
+                    {t.label}
+                  </span>
                 </button>
               ))}
             </div>

@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkle } from "@phosphor-icons/react";
+import LensStar from "./LensStar";
 import FadeIn from "./FadeIn";
 
 const RAW = "/lens/card-raw.png";
@@ -286,7 +286,7 @@ export default function LensIntro() {
             {/* model name + ON/OFF toggle */}
             <div className="absolute inset-x-0 top-5 z-40 flex items-center justify-center gap-4">
               <span className="flex items-center gap-2 text-[15px] font-medium text-white">
-                <Sparkle size={16} weight="fill" className="text-white/80" />
+                <LensStar size={16} />
                 {CONCEPTS[concept]}
               </span>
               <button

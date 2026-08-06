@@ -1,0 +1,18 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Notepad" clip-path="url(#clip0_1954_18976)">
+<g id="Vector">
+</g>
+<path id="Vector_2" opacity="0.2" d="M3 2.5H13V12.5C13 12.8978 12.842 13.2794 12.5607 13.5607C12.2794 13.842 11.8978 14 11.5 14H4.5C4.10218 14 3.72064 13.842 3.43934 13.5607C3.15804 13.2794 3 12.8978 3 12.5V2.5Z" fill="#18181B"/>
+<path id="Vector_3" d="M6 8H10" stroke="#18181B" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M6 10H10" stroke="#18181B" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M3 2.5H13V12.5C13 12.8978 12.842 13.2794 12.5607 13.5607C12.2794 13.842 11.8978 14 11.5 14H4.5C4.10218 14 3.72064 13.842 3.43934 13.5607C3.15804 13.2794 3 12.8978 3 12.5V2.5Z" stroke="#18181B" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_6" d="M5 1.5V3.5" stroke="#18181B" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_7" d="M8 1.5V3.5" stroke="#18181B" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_8" d="M11 1.5V3.5" stroke="#18181B" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_1954_18976">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
+</svg>
