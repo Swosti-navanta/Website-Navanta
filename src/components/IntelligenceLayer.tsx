@@ -1475,44 +1475,6 @@ function OrderTrackingDashboard() {
             />
           </Panel>
 
-          <div className="grid min-w-0 gap-3 sm:grid-cols-2">
-            {/* Proactive Notifications, pushed before the customer asks */}
-            <Panel title="Notifications" right={<Chip tone="violet">Proactive</Chip>}>
-              <div className="grid gap-2 sm:grid-cols-2">
-                <div className="flex items-start gap-2.5 rounded-lg bg-zinc-50 p-2.5">
-                  <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-                    <WarningCircle size={13} className="text-[#5C3D97]" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[11px] font-medium text-zinc-900">Delay flagged</p>
-                    <p className="mt-0.5 text-[10px] leading-snug text-zinc-500">
-                      ETA slipped 2 days, customer notified 09:12
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5 rounded-lg bg-zinc-50 p-2.5">
-                  <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#EBE8F3]">
-                    <BellRinging size={13} className="text-[#5C3D97]" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[11px] font-medium text-zinc-900">Back in stock · SKU-7719</p>
-                    <p className="mt-0.5 text-[10px] leading-snug text-zinc-500">
-                      3 waiting customers alerted
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Panel>
-
-            {/* Guided Resolution, raised in context, fixed on one thread */}
-            <Panel title="Issue #1842" right={<Chip tone="green">Resolved</Chip>}>
-              <p className="text-[10.5px] leading-relaxed text-zinc-600">
-                Short shipment on SKU-8841, Lens matched invoice, ASN, and receipt,
-                queued 2 replacement units, and credit was issued. Fixed in 26 min,
-                one thread, zero handoffs.
-              </p>
-            </Panel>
-          </div>
         </div>
 
         <OrderInformationPanel />

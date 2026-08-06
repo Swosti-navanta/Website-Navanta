@@ -204,7 +204,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer id="contact" className="bg-[#0c0b0a] text-white">
+    <footer id="contact" className="rounded-t-[40px] bg-[#0c0b0a] text-white">
       <div className="mx-auto max-w-[1560px] px-6 pb-8 pt-24 lg:px-10">
         {/* Big primary links */}
         <FadeIn>

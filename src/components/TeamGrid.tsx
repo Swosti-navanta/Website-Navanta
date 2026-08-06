@@ -46,7 +46,7 @@ export default function TeamGrid() {
         return (
         <FadeIn key={i} delay={(i % 4) * 0.06}>
           <div className="group">
-            <div className="relative aspect-square overflow-hidden rounded-xl bg-[#181818]">
+            <div className="relative aspect-square overflow-hidden rounded-[14px] bg-[#181818]">
               {m.img ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
