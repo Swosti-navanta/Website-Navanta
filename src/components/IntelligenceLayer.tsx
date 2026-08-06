@@ -1483,7 +1483,7 @@ function WorkspaceDashboard() {
   ];
   const saved = [
     { icon: PushPin, label: "Oak plank family", meta: "12 SKUs · pinned" },
-    { icon: Star, label: "Riverside HW · reorder pack", meta: "Q3 favorites" },
+    { icon: Star, label: "Meridian HW · reorder pack", meta: "Q3 favorites" },
     { icon: ArrowsClockwise, label: "Auto-reorder · SKU-8841", meta: "every 4 wks" },
   ];
   const quarters = [
@@ -1494,7 +1494,7 @@ function WorkspaceDashboard() {
   ] as const;
   return (
     <DashShell
-      page="Riverside HW · Workspace"
+      page="Meridian HW · Workspace"
       nav={1}
       controls={
         <>
