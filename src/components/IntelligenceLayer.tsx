@@ -654,14 +654,14 @@ function Chip({
   children: React.ReactNode;
 }) {
   const tones = {
-    violet: "bg-[#EBE8F3] text-[#5C3D97]",
-    amber: "bg-amber-100 text-amber-700",
-    green: "bg-emerald-100 text-emerald-700",
-    zinc: "bg-zinc-100 text-zinc-500",
-    red: "bg-red-100 text-red-600",
+    violet: "text-[#5C3D97]",
+    amber: "text-amber-700",
+    green: "text-emerald-700",
+    zinc: "text-zinc-500",
+    red: "text-red-600",
   } as const;
   return (
-    <span className={`whitespace-nowrap rounded-md px-2 py-1 text-[10.5px] font-medium ${tones[tone]}`}>
+    <span className={`whitespace-nowrap text-[10.5px] font-medium ${tones[tone]}`}>
       {children}
     </span>
   );
@@ -838,7 +838,7 @@ function PlanningDashboard() {
           head={["Product", "Branch", "Exception", "Req. qty", "Value", "Lens insight", ""]}
           rows={[
             [
-              sku("30-60049-20PK24", "Carrier 90 evaporator coil"),
+              sku("SKU-4482", "Evaporator coil"),
               <Chip key="b" tone="zinc">DAL · AY</Chip>,
               <Chip key="e" tone="red">Critical</Chip>,
               "12 units",
@@ -847,7 +847,7 @@ function PlanningDashboard() {
               <GhostBtn key="a">Review</GhostBtn>,
             ],
             [
-              sku("30-60049-20PK18", "Carrier 90 evaporator coil"),
+              sku("SKU-4418", "Evaporator coil"),
               <Chip key="b" tone="zinc">DAL · AY</Chip>,
               <Chip key="e" tone="amber">High</Chip>,
               "8 units",
@@ -856,7 +856,7 @@ function PlanningDashboard() {
               <GhostBtn key="a">Review</GhostBtn>,
             ],
             [
-              sku("30-58811-04PK06", "Copeland scroll compressor"),
+              sku("SKU-5811", "Scroll compressor"),
               <Chip key="b" tone="zinc">HOU · BX</Chip>,
               <Chip key="e" tone="zinc">Medium</Chip>,
               "5 units",
@@ -1617,7 +1617,7 @@ function SpendDashboard() {
       {/* Unified Visibility, one source of truth */}
       <LensPanel
         title="Lens Brief"
-        headline="Scan covered 4 MRO categories and surfaced 29 opportunities, ranked by evidence strength. Scanned MRO, $109.3M of $761.6M indirect spend."
+        headline="Scan covered 4 categories and surfaced 29 opportunities, ranked by evidence strength. $109.3M of $761.6M indirect spend."
       >
         <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
           {sources.map((s) => (
@@ -1635,7 +1635,7 @@ function SpendDashboard() {
         </div>
       </LensPanel>
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-5">
-        <KpiTile value="$109.3M" label="Total MRO spend" />
+        <KpiTile value="$109.3M" label="Total spend" />
         <KpiTile value="$44.7M" label="Addressable · contestable" />
         <KpiTile value="$2.18M–$3.52M" label="Savings potential" />
         <KpiTile value="29" label="Opportunities" />

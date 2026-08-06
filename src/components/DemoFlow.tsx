@@ -345,7 +345,7 @@ export default function DemoFlow({
                             onClick={() => setTime(t)}
                             className={`rounded-lg border py-2.5 text-[13px] font-medium transition-all ${
                               time === t
-                                ? "border-[#5C3D97] bg-[#f7f4fc] text-[#5C3D97] ring-1 ring-[#5C3D97]"
+                                ? "border-2 border-[#5C3D97] bg-[#f7f4fc] text-[#5C3D97]"
                                 : "border-zinc-200 text-zinc-700 hover:border-zinc-300"
                             }`}
                           >

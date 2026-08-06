@@ -20,8 +20,8 @@ const STATS = [
 ];
 
 const PHOTOS = [
-  { src: "/figma/challenges-photo.jpg", alt: "Industrial operations floor" },
-  { src: "/hero/poster.jpg", alt: "Warehouse operations" },
+  { src: "/figma/about-logistics.jpg", alt: "Logistics crew handling packages" },
+  { src: "/figma/about-loading.jpg", alt: "Workers loading a delivery truck" },
   { src: "/figma/footer-railyard.jpg", alt: "Rail freight yard" },
 ];
 
