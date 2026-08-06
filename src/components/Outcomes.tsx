@@ -742,18 +742,51 @@ function FillRateMock() {
 
 /* 3 · Decisions in days */
 const QUEUE_TABLE: {
-  action: string;
-  detail: string;
+  product: string;
+  scope: string;
   conf: string;
   bar: string;
-  state: string;
-  tone: "good" | "warn";
+  action: string;
 }[] = [
-  { action: "Reorder SKU-4482", detail: "240 units", conf: "88%", bar: "bar-88", state: "Auto", tone: "good" },
-  { action: "Rebalance SKU-8841", detail: "3 stores", conf: "84%", bar: "bar-84", state: "Auto", tone: "good" },
-  { action: "Reorder SKU-2210", detail: "80 units", conf: "81%", bar: "bar-81", state: "Review", tone: "warn" },
-  { action: "Rebalance SKU-6650", detail: "2 stores", conf: "75%", bar: "bar-75", state: "Review", tone: "warn" },
+  { product: "SKU-432", scope: "240 units", conf: "88%", bar: "bar-88", action: "Reorder" },
+  { product: "SKU-344", scope: "3 stores", conf: "84%", bar: "bar-84", action: "Reorder" },
+  { product: "SKU-332", scope: "80 units", conf: "81%", bar: "bar-81", action: "Reorder" },
+  { product: "SKU-324", scope: "2 stores", conf: "75%", bar: "bar-75", action: "Reorder" },
 ];
+
+/* Dropdown-style "Reorder ⌄" pill for the action column — light border,
+   caret trailing, matches the site's neutral input surface. */
+function PActionPill({ label }: { label: string }) {
+  return (
+    <span
+      className="inline-flex items-center whitespace-nowrap rounded-md border border-solid border-[#E5E7EB] bg-white font-medium text-[#181A1B]"
+      style={{
+        gap: U(4),
+        paddingInline: U(6),
+        paddingBlock: U(3),
+        fontSize: U(7),
+        lineHeight: 1.2,
+        borderWidth: U(0.5),
+      }}
+    >
+      {label}
+      {/* Inline chevron — an SVG on a square viewBox renders crisply at these
+          tiny sizes, unlike the imported asset which fudges its own aspect. */}
+      <svg
+        aria-hidden
+        viewBox="0 0 12 12"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ width: U(7), height: U(7) }}
+      >
+        <path d="M3 4.5 L6 7.5 L9 4.5" />
+      </svg>
+    </span>
+  );
+}
 
 function ActionQueueMock() {
   return (
@@ -766,9 +799,9 @@ function ActionQueueMock() {
           className="flex min-w-px flex-1 flex-col items-start"
           style={{ gap: U(1), paddingRight: U(8) }}
         >
-          <PTh>Action</PTh>
+          <PTh>Product</PTh>
           {QUEUE_TABLE.map((r, i) => (
-            <PTd key={i}>{r.action}</PTd>
+            <PTd key={i}>{r.product}</PTd>
           ))}
         </div>
         <div
@@ -777,7 +810,7 @@ function ActionQueueMock() {
         >
           <PTh>Scope</PTh>
           {QUEUE_TABLE.map((r, i) => (
-            <PTd key={i}>{r.detail}</PTd>
+            <PTd key={i}>{r.scope}</PTd>
           ))}
         </div>
         <div
@@ -803,10 +836,10 @@ function ActionQueueMock() {
           className="flex shrink-0 flex-col items-start"
           style={{ gap: U(1), paddingRight: U(8) }}
         >
-          <PTh>Status</PTh>
+          <PTh>Action</PTh>
           {QUEUE_TABLE.map((r, i) => (
             <PTd key={i} raw>
-              <PChip tone={r.tone}>{r.state}</PChip>
+              <PActionPill label={r.action} />
             </PTd>
           ))}
         </div>

@@ -97,53 +97,6 @@ const TABS: TabDef[] = [
     heading: "Supply Resilience Intelligence",
     groups: [
       {
-        name: "Parts Planning",
-        icon: SquaresFour,
-        desc: "Every SKU classified and scored overnight, planners review only the exceptions that matter.",
-        features: [
-          {
-            icon: SquaresFour,
-            title: "Unified Visibility",
-            body: "Real-time inventory, demand, supply and PO insight across all locations.",
-          },
-          {
-            icon: Brain,
-            title: "Intelligent Analysis",
-            body: "AI models detect signals, risks, opportunities and optimal actions.",
-          },
-          {
-            icon: UserCircleCheck,
-            title: "Planner in the Loop",
-            body: "Cost-optimized vendor POs and exceptions routed to you for approval.",
-          },
-        ],
-      },
-      {
-        name: "Autonomous Buying",
-        icon: Lightning,
-        desc: "Lens executes routine buys by confidence level, and learns from every decision the planner makes.",
-        features: [
-          {
-            icon: Lightning,
-            title: "Agentic Actions",
-            body: "Lens plans and executes stocking decisions by confidence level.",
-          },
-          {
-            icon: GraduationCap,
-            title: "Continuous Learning",
-            body: "Every decision improves future recommendations and outcomes.",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    key: "procurement",
-    label: "Operational Efficiency",
-    icon: Brain,
-    heading: "Operational Efficiency Control Tower",
-    groups: [
-      {
         name: "Sourcing & Award",
         icon: CheckCircle,
         desc: "Volume pooled into consolidated, competitive buys, every award validated and savings tracked live.",
@@ -179,6 +132,53 @@ const TABS: TabDef[] = [
             icon: Brain,
             title: "Intelligent Analysis",
             body: "Data-driven signals replace habit buying, price variance, leakage, and missed discounts surfaced.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: "procurement",
+    label: "Inventory Optimisation",
+    icon: Brain,
+    heading: "Inventory Optimisation Control Tower",
+    groups: [
+      {
+        name: "Parts Planning",
+        icon: SquaresFour,
+        desc: "Every SKU classified and scored overnight, planners review only the exceptions that matter.",
+        features: [
+          {
+            icon: SquaresFour,
+            title: "Unified Visibility",
+            body: "Real-time inventory, demand, supply and PO insight across all locations.",
+          },
+          {
+            icon: Brain,
+            title: "Intelligent Analysis",
+            body: "AI models detect signals, risks, opportunities and optimal actions.",
+          },
+          {
+            icon: UserCircleCheck,
+            title: "Planner in the Loop",
+            body: "Cost-optimized vendor POs and exceptions routed to you for approval.",
+          },
+        ],
+      },
+      {
+        name: "Autonomous Buying",
+        icon: Lightning,
+        desc: "Lens executes routine buys by confidence level, and learns from every decision the planner makes.",
+        features: [
+          {
+            icon: Lightning,
+            title: "Agentic Actions",
+            body: "Lens plans and executes stocking decisions by confidence level.",
+          },
+          {
+            icon: GraduationCap,
+            title: "Continuous Learning",
+            body: "Every decision improves future recommendations and outcomes.",
           },
         ],
       },
@@ -645,10 +645,6 @@ function MiniTable({ head, rows }: { head: string[]; rows: React.ReactNode[][] }
   );
 }
 
-/* Screen-level caption — the one-line takeaway under each dashboard */
-function Caption({ children }: { children: React.ReactNode }) {
-  return <p className="px-0.5 text-[10.5px] text-zinc-400">{children}</p>;
-}
 
 function Chip({
   tone,
@@ -871,9 +867,6 @@ function PlanningDashboard() {
           ]}
         />
       </Panel>
-      <Caption>
-        One classified view of the network, signals scored overnight, and only the exceptions routed to your planner.
-      </Caption>
     </DashShell>
   );
 }
@@ -986,9 +979,6 @@ function BuyingDashboard() {
           ))}
         </div>
       </Panel>
-      <Caption>
-        Above the confidence bar, Lens buys on its own, every planner decision sharpens the next call.
-      </Caption>
     </DashShell>
   );
 }
@@ -1391,7 +1381,7 @@ function OrderInformationPanel() {
               icon="user"
               inset={OI_INSET.user}
               label="Ship to"
-              value="8119 · Matt Powers"
+              value="8119 · John Doe"
               copy
             />
           </OIRow>
@@ -1479,9 +1469,6 @@ function OrderTrackingDashboard() {
 
         <OrderInformationPanel />
       </div>
-      <Caption>
-        Every line, shipment, and ETA in one view, alerts pushed before the customer asks, issues fixed in context.
-      </Caption>
     </DashShell>
   );
 }
@@ -1601,9 +1588,6 @@ function WorkspaceDashboard() {
           </div>
         </div>
       </Panel>
-      <Caption>
-        Live availability, alternatives, and full detail 24/7, a workspace that sharpens with every visit.
-      </Caption>
     </DashShell>
   );
 }
@@ -1708,9 +1692,6 @@ function SpendDashboard() {
           ]}
         />
       </Panel>
-      <Caption>
-        Every ERP, spreadsheet, and site in one source of truth, price variance, leakage, and missed discounts quantified, not guessed.
-      </Caption>
     </DashShell>
   );
 }
@@ -1844,18 +1825,15 @@ function SourcingDashboard() {
           </div>
         </div>
       </Panel>
-      <Caption>
-        Sites stop buying alone, the company buys as one, people approve every award, and savings never go stale.
-      </Caption>
     </DashShell>
   );
 }
 
 /* Per-tab dashboards — one per feature group. */
 const DASHBOARDS: Record<string, React.ComponentType[]> = {
-  central: [PlanningDashboard, BuyingDashboard],
+  central: [SourcingDashboard, SpendDashboard],
   orders: [OrderTrackingDashboard, WorkspaceDashboard],
-  procurement: [SourcingDashboard, SpendDashboard],
+  procurement: [PlanningDashboard, BuyingDashboard],
 };
 
 /* Dwell per dashboard before the deck advances and the progress rule refills.

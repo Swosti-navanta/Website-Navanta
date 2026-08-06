@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
-import DemoForm from "@/components/DemoForm";
+import DemoFlow from "@/components/DemoFlow";
 import DemoBrandPanel from "@/components/DemoBrandPanel";
 import FadeIn from "@/components/FadeIn";
 import {
@@ -111,15 +111,8 @@ export default function ContactPage() {
           <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
               <FadeIn className="flex flex-col justify-center py-4">
-                <h2 className="font-medium tracking-tight text-zinc-900">
-                  Request a Demo
-                </h2>
-                <p className="mt-3 max-w-md text-[15.5px] leading-relaxed text-zinc-500">
-                  See Navanta on your data within a week, planning, procurement, and
-                  order flows running on your own systems.
-                </p>
-                <div className="mt-8 max-w-lg">
-                  <DemoForm />
+                <div className="max-w-lg">
+                  <DemoFlow formIdSuffix="contact" />
                 </div>
               </FadeIn>
 

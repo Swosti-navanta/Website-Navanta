@@ -42,7 +42,7 @@ const NOTES: Note[] = [
   {
     icon: Warning,
     title: "Supplier risk elevated",
-    body: "Kirby Risk on-time delivery fell to 91%, alternate supplier suggested",
+    body: "Supplier on-time delivery fell to 91%, alternate supplier suggested",
   },
   {
     icon: Package,
