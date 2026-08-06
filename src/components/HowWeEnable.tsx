@@ -111,12 +111,12 @@ export default function HowWeEnable() {
           <h2 className="font-medium tracking-tight text-zinc-900">
             How We Enable Value for Our Clients
           </h2>
-          <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-zinc-500">
+          <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-zinc-500">
             One intelligence layer, unifying the systems you already run.
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.1} className="mt-6">
+        <FadeIn delay={0.1} className="mt-8">
           {/* Diagram canvas */}
           <div className="rounded-2xl border border-zinc-100 bg-[radial-gradient(#c8c8cf_1.2px,transparent_1.2px)] [background-size:22px_22px] p-3 sm:p-6">
             <div className="mx-auto max-w-[1180px]">

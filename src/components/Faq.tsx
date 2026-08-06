@@ -44,16 +44,16 @@ export default function Faq() {
           <h2 className="font-medium tracking-tight text-zinc-900">
             FAQs
           </h2>
-          <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
+          <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-zinc-500">
             Everything you need to know about working with Navanta.
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.1} className="mt-10 space-y-3">
+        <FadeIn delay={0.1} className="mt-8 space-y-3">
           {FAQS.map((f, i) => {
             const isOpen = open.includes(i);
             return (
-              <div key={f.q} className="overflow-hidden rounded-2xl bg-white shadow-sm">
+              <div key={f.q} className="overflow-hidden rounded-2xl bg-white">
                 <button
                   onClick={() => toggle(i)}
                   className="flex w-full items-center gap-4 px-6 py-5 text-left"
@@ -61,7 +61,7 @@ export default function Faq() {
                   <span className="flex-shrink-0 text-zinc-500">
                     {isOpen ? <Minus size={20} /> : <Plus size={20} />}
                   </span>
-                  <span className="text-[17px] font-medium text-zinc-900">{f.q}</span>
+                  <span className="text-[16px] font-medium text-zinc-900">{f.q}</span>
                 </button>
                 <AnimatePresence initial={false}>
                   {isOpen && (

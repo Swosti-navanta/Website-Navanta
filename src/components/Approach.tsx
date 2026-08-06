@@ -72,10 +72,10 @@ export default function Approach() {
     <section id="features" ref={sectionRef} className="overflow-hidden bg-white py-28">
       <div className="mx-auto max-w-[1560px] px-6 lg:px-10">
         <FadeIn>
-          <h2 className="mt-3 font-medium tracking-tight text-zinc-900">
+          <h2 className="font-medium tracking-tight text-zinc-900">
             From vision to value
           </h2>
-          <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-zinc-500">
+          <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-zinc-500">
             A repeatable, AI-led delivery framework.
           </p>
         </FadeIn>
@@ -83,7 +83,7 @@ export default function Approach() {
 
       {/* Full-bleed scroll-driven row, starts offset right, glides edge-to-edge,
           stops with the last card (Refine & Measure) at the right */}
-      <div ref={rowRef} className="mt-12 w-full overflow-hidden">
+      <div ref={rowRef} className="mt-8 w-full overflow-hidden">
         <motion.div
           style={{ x }}
           className="flex w-max gap-6 pl-6 pr-6 lg:pl-[20vw] lg:pr-10"

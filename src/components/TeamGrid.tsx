@@ -11,22 +11,22 @@ type Member = {
 
 type Slot = Member | null;
 
-/* Broader team grid — 4 across, 2 rows. Fill in each member's name, role, and
-   photo as they come in. Cards with no `img` show an initials placeholder;
-   `null` leaves the slot empty (renders a spacer, keeps the grid columns). */
+/* Broader team grid — 4 across, 3 rows. Order here is the display order. Leadership
+   fills the first row, with a `null` spacer holding its fourth column empty; the rest
+   follow in sequence. Cards with no `img` show an initials placeholder. */
 const TEAM: Slot[] = [
   { name: "Tanuj Gupta", role: "Co-Founder", img: "/team/tanuj.jpg" },
   { name: "Gaurav Kohli", role: "Co-Founder", img: "/team/gaurav.jpg" },
   { name: "Nitin Kumar", role: "Head of India Operations", img: "/team/nitin.jpg" },
   null,
-  { name: "Ashish Sharma", role: "Design Lead", img: "/team/ashish.jpg" },
-  { name: "Ashutosh Thakur", role: "Full Stack Developer", img: "/team/ashutosh.jpg" },
-  { name: "Mahi Gangal", role: "Product Engineer Intern", img: "/team/mahi.jpg" },
-  { name: "Pinki Raut", role: "Administrative Officer", img: "/team/pinki.jpg" },
-  { name: "Rishab Kumar", role: "Data Engineer", img: "/team/rishab.jpg" },
   { name: "Sharan Sasi", role: "Lead Data Scientist", img: "/team/sharan.jpg" },
-  { name: "Swosti Nayak", role: "Product Designer", img: "/team/swosti.jpg" },
   { name: "Vilakshna Bansal", role: "Product Manager", img: "/team/vilakshna.jpg" },
+  { name: "Ashish Sharma", role: "UX Lead", img: "/team/ashish.jpg" },
+  { name: "Ashutosh Thakur", role: "Full Stack Developer", img: "/team/ashutosh.jpg" },
+  { name: "Rishab Kumar", role: "Data Engineer", img: "/team/rishab.jpg" },
+  { name: "Swosti Nayak", role: "Product Designer", img: "/team/swosti.jpg" },
+  { name: "Pinki Raut", role: "Administrative Officer", img: "/team/pinki.jpg" },
+  { name: "Mahi Gangal", role: "Product Engineer Intern", img: "/team/mahi.jpg" },
 ];
 
 function initials(name: string) {

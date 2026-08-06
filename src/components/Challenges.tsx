@@ -88,7 +88,9 @@ const TABS: Tab[] = [
   },
 ];
 
-const DURATION = 8000;
+/* Dwell time per tab before auto-advancing. Long enough to read all three cards
+   without feeling like the section is racing ahead of you. */
+const DURATION = 12000;
 
 export default function Challenges() {
   const [tabIdx, setTabIdx] = useState(0);
@@ -107,14 +109,14 @@ export default function Challenges() {
           <h2 className="font-medium tracking-tight text-zinc-900">
             The Challenges
           </h2>
-          <p className="mt-3 text-[15px] text-zinc-500">
+          <p className="mt-3 text-[16px] text-zinc-500">
             From day one, our methodology and solutions work together across three pillars
           </p>
         </FadeIn>
 
         {/* Tabs — custom dropdown on mobile, pills on md+ */}
         <FadeIn>
-          <div className="mt-8">
+          <div className="mt-8 md:hidden">
             <MobileTabDropdown items={TABS} active={tabIdx} onChange={setTabIdx} />
           </div>
           <div className="mt-8 hidden md:inline-flex rounded-full border border-zinc-200 p-1">
@@ -122,14 +124,31 @@ export default function Challenges() {
               <button
                 key={t.key}
                 onClick={() => setTabIdx(i)}
-                className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-[14px] font-medium transition-colors ${
-                  i === tabIdx
-                    ? "bg-zinc-900 text-white"
-                    : "text-zinc-500 hover:text-zinc-700"
+                className={`relative flex items-center rounded-full px-5 py-2.5 text-[14px] font-medium transition-colors ${
+                  i === tabIdx ? "text-white" : "text-zinc-500 hover:text-zinc-700"
                 }`}
               >
-                <t.icon size={16} weight="regular" />
-                {t.label}
+                {i === tabIdx && (
+                  <motion.span
+                    layoutId="challenges-tab-pill"
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      /* Deliberately flat, to sit with the rest of the section — the surrounding
+                         cards and containers carry no drop shadows. Depth comes from a
+                         faint top sheen and a hairline, nothing that lifts the pill off
+                         the page. */
+                      backgroundColor: "#18181B",
+                      backgroundImage:
+                        "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 55%)",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.14)",
+                    }}
+                    transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                  <t.icon size={16} weight="regular" />
+                  {t.label}
+                </span>
               </button>
             ))}
           </div>
@@ -137,7 +156,7 @@ export default function Challenges() {
 
         {/* Cards */}
         <div
-          className="mt-10"
+          className="mt-8"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
@@ -163,7 +182,7 @@ export default function Challenges() {
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   className="flex flex-col rounded-2xl border border-zinc-100 bg-zinc-50 p-6"
                 >
-                  <div className="mb-5 h-14 w-14 overflow-hidden rounded-xl">
+                  <div className="mb-4 h-14 w-14 overflow-hidden rounded-xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`/figma/icons/${c.id}.png`}
@@ -172,8 +191,11 @@ export default function Challenges() {
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <h3 className="text-[17px] font-semibold text-zinc-900">{c.title}</h3>
-                  <p className="mt-2 text-[14px] leading-relaxed text-zinc-500">{c.body}</p>
+                  {/* leading-snug trims the title's half-leading so the visual gap to
+                      the body reads ~11px rather than the 16px the default 24px line
+                      box produced. Also matches the Outcomes card title. */}
+                  <h3 className="text-[16px] font-medium leading-snug text-zinc-900">{c.title}</h3>
+                  <p className="mt-1 text-[14px] leading-relaxed text-zinc-500">{c.body}</p>
                 </motion.div>
               ))}
             </motion.div>

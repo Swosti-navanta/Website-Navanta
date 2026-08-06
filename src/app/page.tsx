@@ -8,7 +8,6 @@ import IntelligenceLayer from "@/components/IntelligenceLayer";
 import HowWeEnable from "@/components/HowWeEnable";
 import Outcomes from "@/components/Outcomes";
 import Faq from "@/components/Faq";
-import Impact from "@/components/Impact";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -24,7 +23,6 @@ export default function Home() {
         <HowWeEnable />
         <Approach />
         <Faq />
-        <Impact />
       </main>
       <Footer />
     </>

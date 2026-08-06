@@ -51,6 +51,16 @@ export default function HeroV2() {
     v.setAttribute("webkit-playsinline", "");
     if (v.readyState === 0) v.load();
 
+    // Ease the footage down so it reads as ambient rather than busy. Re-applied on
+    // play/loadedmetadata because a reload or a resumed tab resets playbackRate.
+    const RATE = 0.65;
+    const applyRate = () => {
+      v.playbackRate = RATE;
+    };
+    applyRate();
+    v.addEventListener("loadedmetadata", applyRate);
+    v.addEventListener("play", applyRate);
+
     const tryPlay = () => {
       if (!v.paused) return;
       const p = v.play();
@@ -91,6 +101,8 @@ export default function HeroV2() {
     return () => {
       clearInterval(iv);
       clearTimeout(ivStop);
+      v.removeEventListener("loadedmetadata", applyRate);
+      v.removeEventListener("play", applyRate);
       mediaEvents.forEach((e) => v.removeEventListener(e, tryPlay));
       gestures.forEach((e) => window.removeEventListener(e, onGesture));
       document.removeEventListener("visibilitychange", onVisible);
@@ -125,7 +137,7 @@ export default function HeroV2() {
           left-weighted scrim for the text. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/30 to-black/12"
+        className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/82 to-black/68"
       />
       {/* Soft bottom fade into the next section */}
       <div
