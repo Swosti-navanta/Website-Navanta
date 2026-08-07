@@ -163,25 +163,47 @@ function Calendar({
   );
 }
 
-/* Small input used inside the details form. */
+/* Small input used inside the details form. Controlled, so the submit handler
+   reads state rather than scraping the DOM. */
 function Input({
   label,
   type,
+  name,
+  value,
+  onChange,
   required,
+  disabled,
 }: {
   label: string;
   type: string;
+  name: string;
+  value: string;
+  onChange: (v: string) => void;
   required?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <input
       type={type}
+      name={name}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
       required={required}
+      disabled={disabled}
+      autoComplete={AUTOCOMPLETE[name] ?? "on"}
       placeholder={label}
-      className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-[14px] text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-[#5C3D97]"
+      aria-label={label}
+      className="w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-[14px] text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-[#5C3D97] disabled:opacity-60"
     />
   );
 }
+
+const AUTOCOMPLETE: Record<string, string> = {
+  name: "name",
+  email: "email",
+  company: "organization",
+  phone: "tel",
+};
 
 /* ── The flow ────────────────────────────────────────────────────────────── */
 
@@ -207,15 +229,33 @@ export default function DemoFlow({
   const [time, setTime] = useState<string | null>(null);
   const [booked, setBooked] = useState(false);
   const [tz, setTz] = useState<string>("");
+  /* The IANA zone alone — `tz` above carries a clock time for display, which
+     would be meaningless in an email read hours later. */
+  const [zone, setZone] = useState<string>("");
+
+  const [fields, setFields] = useState({
+    name: "",
+    email: "",
+    company: "",
+    phone: "",
+    focus: "",
+    website: "", // honeypot — see the API route
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const set = (k: keyof typeof fields) => (v: string) =>
+    setFields((f) => ({ ...f, [k]: v }));
 
   useEffect(() => {
     try {
-      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const z = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const now = new Date().toLocaleTimeString(undefined, {
         hour: "numeric",
         minute: "2-digit",
       });
-      setTz(`${zone.replace(/_/g, " ")} · ${now}`);
+      setZone(z);
+      setTz(`${z.replace(/_/g, " ")} · ${now}`);
     } catch {
       /* no-op */
     }
@@ -223,7 +263,7 @@ export default function DemoFlow({
 
   const formId = `${idScope}-form-${formIdSuffix}`;
   const canAdvance =
-    (step === 0 && date !== null && time !== null) || step === 1;
+    (step === 0 && date !== null && time !== null) || (step === 1 && !submitting);
   const back = () => setStep((s) => Math.max(0, s - 1));
 
   const reset = () => {
@@ -231,6 +271,34 @@ export default function DemoFlow({
     setDate(null);
     setTime(null);
     setBooked(false);
+    setSubmitError(null);
+    setFields({ name: "", email: "", company: "", phone: "", focus: "", website: "" });
+  };
+
+  const submit = async () => {
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/demo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...fields, date, time, timezone: zone }),
+      });
+      const data = (await res.json().catch(() => null)) as { error?: string } | null;
+      if (!res.ok) {
+        throw new Error(data?.error ?? "Something went wrong. Please try again.");
+      }
+      setBooked(true);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error && err.message
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -286,11 +354,13 @@ export default function DemoFlow({
               >
                 <CheckCircle size={54} weight="fill" className="text-[#5C3D97]" />
                 <h3 className="mt-4 text-[20px] font-medium text-zinc-900">
-                  You&apos;re booked in
+                  Request received
                 </h3>
+                {/* No calendar is wired up yet, so this promises a human
+                    confirmation rather than an invite that never arrives. */}
                 <p className="mt-2 max-w-xs text-[14px] leading-relaxed text-zinc-500">
-                  A calendar invite and confirmation are on their way to your
-                  inbox. We&apos;ll come prepared with your use case in mind.
+                  A confirmation is on its way to your inbox. We&apos;ll be in
+                  touch shortly to lock in your time.
                 </p>
                 <button
                   onClick={() => (onDone ? onDone() : reset())}
@@ -367,21 +437,74 @@ export default function DemoFlow({
                 transition={{ duration: 0.22 }}
                 onSubmit={(e) => {
                   e.preventDefault();
-                  setBooked(true);
+                  void submit();
                 }}
                 className="space-y-4"
               >
-                <Input label="Full Name" type="text" required />
-                <Input label="Work Email" type="email" required />
-                <Input label="Company" type="text" required />
-                <Input label="Phone (optional)" type="tel" />
+                <Input
+                  label="Full Name"
+                  type="text"
+                  name="name"
+                  value={fields.name}
+                  onChange={set("name")}
+                  disabled={submitting}
+                  required
+                />
+                <Input
+                  label="Work Email"
+                  type="email"
+                  name="email"
+                  value={fields.email}
+                  onChange={set("email")}
+                  disabled={submitting}
+                  required
+                />
+                <Input
+                  label="Company"
+                  type="text"
+                  name="company"
+                  value={fields.company}
+                  onChange={set("company")}
+                  disabled={submitting}
+                  required
+                />
+                <Input
+                  label="Phone (optional)"
+                  type="tel"
+                  name="phone"
+                  value={fields.phone}
+                  onChange={set("phone")}
+                  disabled={submitting}
+                />
                 <textarea
+                  name="focus"
+                  value={fields.focus}
+                  onChange={(e) => set("focus")(e.target.value)}
+                  disabled={submitting}
                   placeholder="What would you like to focus on? (optional)"
+                  aria-label="What would you like to focus on?"
                   rows={3}
-                  className="w-full resize-none rounded-lg border border-zinc-200 bg-white px-4 py-3 text-[14px] text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-[#5C3D97]"
+                  className="w-full resize-none rounded-lg border border-zinc-200 bg-white px-4 py-3 text-[14px] text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-[#5C3D97] disabled:opacity-60"
+                />
+                {/* Honeypot — off-screen and skipped by tab order, so only a
+                    bot filling every field will touch it. */}
+                <input
+                  type="text"
+                  name="website"
+                  value={fields.website}
+                  onChange={(e) => set("website")(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden
+                  className="absolute left-[-9999px] h-0 w-0 opacity-0"
                 />
                 <label className="flex items-start gap-2 pt-1 text-[13px] text-zinc-600">
-                  <input type="checkbox" required className="mt-0.5 accent-[#5C3D97]" />
+                  <input
+                    type="checkbox"
+                    required
+                    disabled={submitting}
+                    className="mt-0.5 accent-[#5C3D97]"
+                  />
                   <span>
                     I agree to be contacted about my demo and accept the{" "}
                     <a href="/privacy" className="underline hover:text-[#5C3D97]">
@@ -390,6 +513,14 @@ export default function DemoFlow({
                     .
                   </span>
                 </label>
+                {submitError && (
+                  <p
+                    role="alert"
+                    className="rounded-lg bg-red-50 px-3.5 py-2.5 text-[13px] leading-relaxed text-red-700"
+                  >
+                    {submitError}
+                  </p>
+                )}
                 <button type="submit" className="hidden" />
               </motion.form>
             )}
@@ -415,8 +546,12 @@ export default function DemoFlow({
             disabled={!canAdvance}
             className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-zinc-900 px-5 py-4 text-[14.5px] font-medium text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-300"
           >
-            {step === 1 ? "Confirm Booking" : "Continue"}
-            <ArrowRight size={15} weight="bold" />
+            {step === 1
+              ? submitting
+                ? "Sending…"
+                : "Request Demo"
+              : "Continue"}
+            {!submitting && <ArrowRight size={15} weight="bold" />}
           </button>
         </div>
       )}
