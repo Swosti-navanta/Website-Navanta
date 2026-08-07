@@ -139,9 +139,9 @@ const TABS: TabDef[] = [
   },
   {
     key: "procurement",
-    label: "Inventory Optimisation",
+    label: "Inventory Optimization",
     icon: Brain,
-    heading: "Inventory Optimisation Control Tower",
+    heading: "Inventory Optimization Control Tower",
     groups: [
       {
         name: "Parts Planning",
@@ -1637,7 +1637,7 @@ function SpendDashboard() {
       {/* Unified Visibility, one source of truth */}
       <LensPanel
         title="Lens Brief"
-        headline="Scan covered 4 categories and surfaced 29 opportunities, ranked by evidence strength. $109.3M of $761.6M indirect spend."
+        headline="Scan covered 6 categories and surfaced 34 opportunities, ranked by evidence strength. $87.5M of $612.8M indirect spend."
       >
         <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
           {sources.map((s) => (
@@ -1655,22 +1655,22 @@ function SpendDashboard() {
         </div>
       </LensPanel>
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-5">
-        <KpiTile value="$109.3M" label="Total spend" />
-        <KpiTile value="$44.7M" label="Addressable · contestable" />
-        <KpiTile value="$2.18M–$3.52M" label="Savings potential" />
-        <KpiTile value="29" label="Opportunities" />
-        <KpiTile value="4 of 15" label="Categories scanned" />
+        <KpiTile value="$87.5M" label="Total spend" />
+        <KpiTile value="$38.2M" label="Addressable · contestable" />
+        <KpiTile value="$1.74M–$2.91M" label="Savings potential" />
+        <KpiTile value="34" label="Opportunities" />
+        <KpiTile value="6 of 18" label="Categories scanned" />
       </div>
 
       {/* Intelligent Analysis, the opportunity feed */}
-      <Panel title="Opportunities" right={<GhostBtn>High confidence ≥60% · 19</GhostBtn>}>
+      <Panel title="Opportunities" right={<GhostBtn>High confidence ≥60% · 22</GhostBtn>}>
         <div className="-mt-1 mb-3 border-b border-zinc-100">
           <SegTabs
             items={[
-              { label: "Feed", count: 26, active: true },
-              { label: "Act", count: 3 },
-              { label: "Parked", count: 1 },
-              { label: "Rejected", count: 1 },
+              { label: "Feed", count: 31, active: true },
+              { label: "Act", count: 5 },
+              { label: "Parked", count: 2 },
+              { label: "Rejected", count: 3 },
             ]}
           />
         </div>
@@ -1678,36 +1678,36 @@ function SpendDashboard() {
           head={["Opportunity", "Lever", "Spend", "Vendors", "Confidence", "Savings"]}
           rows={[
             [
-              opp("Consumable supplies", "OPP-011 · 3 days ago"),
+              opp("Fasteners & fixings", "OPP-023 · 2 days ago"),
               <Chip key="l" tone="zinc">Competitive RFP</Chip>,
-              "$691K",
-              "5",
-              <ConfBar key="c" pct={82} />,
-              <span key="s" className="font-medium text-zinc-900">$27k–36k</span>,
+              "$524K",
+              "6",
+              <ConfBar key="c" pct={85} />,
+              <span key="s" className="font-medium text-zinc-900">$31k–47k</span>,
             ],
             [
-              opp("Cutting tools", "OPP-014 · 5 days ago"),
+              opp("Hydraulic components", "OPP-026 · 4 days ago"),
               <Chip key="l" tone="zinc">Consolidation</Chip>,
-              "$1.2M",
-              "8",
-              <ConfBar key="c" pct={76} />,
-              <span key="s" className="font-medium text-zinc-900">$84k–120k</span>,
+              "$1.6M",
+              "7",
+              <ConfBar key="c" pct={79} />,
+              <span key="s" className="font-medium text-zinc-900">$96k–145k</span>,
             ],
             [
-              opp("Abrasives", "OPP-017 · 1 week ago"),
+              opp("Packaging materials", "OPP-029 · 6 days ago"),
               <Chip key="l" tone="zinc">Tiered pricing</Chip>,
-              "$438K",
-              "4",
-              <ConfBar key="c" pct={68} />,
-              <span key="s" className="font-medium text-zinc-900">$22k–31k</span>,
+              "$372K",
+              "5",
+              <ConfBar key="c" pct={71} />,
+              <span key="s" className="font-medium text-zinc-900">$18k–28k</span>,
             ],
             [
-              opp("Safety equipment", "OPP-019 · 1 week ago"),
+              opp("Lubricants & fluids", "OPP-031 · 1 week ago"),
               <Chip key="l" tone="zinc">Contract merge</Chip>,
-              "$310K",
-              "3",
-              <ConfBar key="c" pct={64} />,
-              <span key="s" className="font-medium text-zinc-900">$14k–19k</span>,
+              "$265K",
+              "4",
+              <ConfBar key="c" pct={66} />,
+              <span key="s" className="font-medium text-zinc-900">$12k–17k</span>,
             ],
           ]}
         />
@@ -2108,8 +2108,8 @@ export default function IntelligenceLayer() {
             Introducing Navanta Lens
           </h2>
           <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-zinc-400">
-            Our intelligence layer unifies your existing architecture, accelerating
-            time-to-value without the $100M sunk cost.
+            Our intelligence layer pairs data-driven insight with Agentic
+            automation to reimagine your supply chain operations.
           </p>
 
           {/* Tabs — custom dropdown on mobile, pills on md+ */}
