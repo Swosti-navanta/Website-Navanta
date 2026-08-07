@@ -47,9 +47,10 @@ export default function Footer() {
     };
   }, [scale]);
 
-  /* Two-stage reveal. Stage one: the page settles with the footer content on
-     screen and PEEK px of the image band showing below it. Stage two: the next
-     deliberate downward scroll eases the page to the very bottom.
+  /* Two-stage reveal. Stage one: a magnetic catch takes over CATCH px before
+     the rest position and decelerates into it, settling with the footer
+     content on screen and PEEK px of the image band showing below. Stage two:
+     the next deliberate downward scroll eases the page to the very bottom.
 
      The last version of this gate required 400ms of total input silence before
      the second scroll counted — a trackpad's momentum tail kept resetting that
@@ -66,17 +67,20 @@ export default function Footer() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const PEEK = 110; // px of the band visible at the stage-one rest
-    const DWELL_MS = 220; // ignore everything this soon after the pin — still the same flick
+    const CATCH = 160; // px before the rest where the magnet takes over
+    const SETTLE_S = 0.7; // how long the catch takes to ease in
+    const DWELL_MS = 220; // ignore everything this soon after settling — still the same flick
     const GAP_MS = 140; // quiet gap that marks a new gesture
     const BUDGET = 90; // px of intentional scroll that opens the gate
     const REVEAL_S = 1.0;
 
-    let stage: "open" | "gated" | "revealing" | "done" = "open";
-    let engagedAt = 0; // when the pin landed
+    let stage: "open" | "settling" | "gated" | "revealing" | "done" = "open";
+    let engagedAt = 0; // when the settle landed
     let lastDelta = 0; // previous wheel delta, for the rising-profile test
     let lastEventAt = 0;
     let counting = false; // a new gesture was detected — its deltas now count
     let budget = 0;
+    let lastY = 0; // previous scroll position, for direction
     let failsafe: ReturnType<typeof setTimeout> | undefined;
 
     const gateY = () =>
@@ -84,25 +88,48 @@ export default function Footer() {
     const bottomY = () =>
       document.documentElement.scrollHeight - window.innerHeight;
 
-    const pin = () => {
+    const arm = () => {
+      // The settle's failsafe must die here: if it fired after the next stage
+      // began, its stray re-arm would collide with a running reveal and kill
+      // the animation partway down.
+      if (failsafe) clearTimeout(failsafe);
+      failsafe = undefined;
       stage = "gated";
       engagedAt = performance.now();
       lastDelta = 0;
       lastEventAt = 0;
       counting = false;
       budget = 0;
+    };
+
+    /* The magnetic catch: instead of hard-stopping the glide at the gate, take
+       over a little early and decelerate into the rest position, so arriving
+       feels sticky rather than hitting a wall. */
+    const settle = () => {
+      stage = "settling";
       lenisRef.current?.stop();
-      lenisRef.current?.scrollTo(gateY(), { immediate: true, force: true });
+      lenisRef.current?.scrollTo(gateY(), {
+        duration: SETTLE_S,
+        immediate: reduced,
+        force: true,
+        onComplete: arm,
+      });
+      if (failsafe) clearTimeout(failsafe);
+      failsafe = setTimeout(arm, SETTLE_S * 1000 + 400);
     };
 
     const release = () => {
       stage = "open";
       if (failsafe) clearTimeout(failsafe);
+      // Kill any in-flight scrollTo before handing control back, so its tail
+      // doesn't fight the user's upward scroll.
+      lenisRef.current?.scrollTo(window.scrollY, { immediate: true, force: true });
       lenisRef.current?.start();
     };
 
     const startReveal = () => {
       stage = "revealing";
+      if (failsafe) clearTimeout(failsafe);
       // Lenis stays stopped so the gesture's tail can't fight the ease;
       // `force` runs the scroll anyway and onComplete hands control back.
       lenisRef.current?.scrollTo(bottomY(), {
@@ -127,8 +154,12 @@ export default function Footer() {
       // Short pages (band already visible at rest) get no gate at all.
       if (gy <= 0 || bottomY() - gy < 60) return;
       const y = window.scrollY;
-      if (stage === "open" && y >= gy - 1) {
-        pin();
+      const down = y > lastY;
+      lastY = y;
+      // Catch only on the way down — scrolling up through the zone must never
+      // drag the page back to the gate.
+      if (stage === "open" && down && y >= gy - CATCH) {
+        settle();
         return;
       }
       if (stage === "gated") {
@@ -142,8 +173,9 @@ export default function Footer() {
     };
 
     const onWheel = (e: WheelEvent) => {
-      if (stage === "revealing") {
+      if (stage === "revealing" || stage === "settling") {
         e.preventDefault(); // swallow the tail so it can't fight the ease
+        if (stage === "settling" && e.deltaY < 0) release(); // up = hand back
         return;
       }
       if (stage !== "gated") return;
@@ -177,7 +209,7 @@ export default function Footer() {
       touchY = e.touches[0].clientY;
     };
     const onTouchMove = (e: TouchEvent) => {
-      if (stage === "revealing") {
+      if (stage === "revealing" || stage === "settling") {
         e.preventDefault();
         return;
       }
@@ -201,6 +233,7 @@ export default function Footer() {
         lenisRef.current?.scrollTo(gateY(), { immediate: true, force: true });
     };
 
+    lastY = window.scrollY;
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
