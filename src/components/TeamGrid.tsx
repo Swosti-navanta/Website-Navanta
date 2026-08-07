@@ -17,16 +17,17 @@ type Slot = Member | null;
 const TEAM: Slot[] = [
   { name: "Tanuj Gupta", role: "Co-Founder", img: "/team/tanuj.jpg" },
   { name: "Gaurav Kohli", role: "Co-Founder", img: "/team/gaurav.jpg" },
-  { name: "Nitin Kumar", role: "Head of India Operations", img: "/team/nitin.jpg" },
+  { name: "Nitin Kumar", role: "President India Operations", img: "/team/nitin.jpg" },
   null,
+  { name: "Sebastian Irani", role: "Director Product Management", img: "/team/sebastian.jpg" },
   { name: "Sharan Sasi", role: "Lead Data Scientist", img: "/team/sharan.jpg" },
   { name: "Vilakshna Bansal", role: "Product Manager", img: "/team/vilakshna.jpg" },
   { name: "Ashish Sharma", role: "UX Lead", img: "/team/ashish.jpg" },
   { name: "Ashutosh Thakur", role: "Full Stack Developer", img: "/team/ashutosh.jpg" },
   { name: "Rishab Kumar", role: "Data Engineer", img: "/team/rishab.jpg" },
   { name: "Swosti Nayak", role: "Product Designer", img: "/team/swosti.jpg" },
+  { name: "Mahi Gangal", role: "Product Engineer", img: "/team/mahi.jpg" },
   { name: "Pinki Raut", role: "Administrative Officer", img: "/team/pinki.jpg" },
-  { name: "Mahi Gangal", role: "Product Engineer Intern", img: "/team/mahi.jpg" },
 ];
 
 function initials(name: string) {

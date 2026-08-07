@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, useMotionValue, useTransform, type MotionValue } from "framer-motion";
 
 const TEXT =
-  "Navanta turns supply chain chaos into confident decisions, one intelligence layer over the systems you already run, live in weeks, not years.";
+  "Navanta turns supply chain chaos into confident decisions, one intelligence layer over the systems you already run, live in weeks.";
 const WORDS = TEXT.split(" ");
 
 function Word({

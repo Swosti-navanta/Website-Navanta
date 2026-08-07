@@ -140,7 +140,7 @@ export default function AboutPage() {
                   The people who set the tempo.
                 </h2>
                 <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-white/55">
-                  A lifetime on the problem, and the passion hasn&apos;t faded. The leadership team at Navanta goes back more than a decade together, across multiple ventures and some of the hardest problems in supply chain. With over 20 years working alongside the world&apos;s largest global supply chains, the proof is in the work. And they&apos;re not done yet.
+                  A lifetime on the problem, and the passion hasn&apos;t faded. The leadership team at Navanta goes back more than a decade together, across multiple ventures and some of the hardest problems in supply chain. With over 20 years working alongside the world&apos;s largest global supply chains, the proof is in the work.
                 </p>
               </div>
             </FadeIn>

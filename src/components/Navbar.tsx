@@ -8,7 +8,7 @@ import { useDemoModal } from "./DemoModal";
 // Section links use "/#id" so they work from any page (jump home, then scroll).
 const NAV_LINKS = [
   { label: "Challenges", href: "/#challenges" },
-  { label: "Intelligence", href: "/#intelligence" },
+  { label: "Navanta Lens", href: "/#intelligence" },
   { label: "Outcomes", href: "/#outcomes" },
   { label: "About", href: "/about" },
 ];
